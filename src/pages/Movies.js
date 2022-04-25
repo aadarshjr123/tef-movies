@@ -45,7 +45,7 @@ function Movies() {
   // console.log(some);
   // console.log(some1);
   return (
-    <main class="w-full mt-28 lg:mt-48 border-2 border-black"> 
+    <main class="w-full mt-28 lg:mt-48 "> 
     <MoviesHomepage />
        {/* <OneMovie/> */}
        {       

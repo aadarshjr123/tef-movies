@@ -1,7 +1,7 @@
 import React from "react";
 
 export const Cardskeleton = () => (
-    <div class="  mt-36 lg:mt-24  flex w-full h-full flex-col  md:justify-start md:items-start  lg:justify-start lg:items-start rounded-md mx-auto ">
+    <div class="mt-36 lg:mt-48  flex w-full h-full flex-col  md:justify-start md:items-start  lg:justify-start lg:items-start rounded-md mx-auto ">
     {/* <div class="flex animate-pulse items-center h-full w-full justify-center space-x-5 "> */}
       {/* <div class="flex flex-col md:flex-row lg:flex-col w-80 md:w-full lg:w-3/4justify-center items-start h-auto md:h-28 lg:h-28  ">
         <div class="flex flex-col justify-center items-center md:justify-center md:items-start lg:justify-center lg:items-center w-60 md:w-60 lg:w-60 h-10 font-normal text-3xl md:text-4xl lg:text-5xl bg-gray-300 rounded-md "></div>

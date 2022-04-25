@@ -9,6 +9,7 @@ import { CardLayout_2 } from "../components/CardLayout_2";
 import { useQuery } from "@apollo/react-hooks";
 import { GetMovies } from "../query/GetMovies";
 import { FaGreaterThan } from 'react-icons/fa';
+import {Image, Video, Transformation} from 'cloudinary-react';
 
 export const MovieDetails = (movie) => {
   const [showModal, setShowModal] = React.useState(false);
@@ -20,24 +21,31 @@ export const MovieDetails = (movie) => {
   console.log(width,height)
   
   return (
-<div class=" mt-36 lg:mt-24 flex w-full h-auto  md:justify-center md:items-center  lg:justify-center lg:items-center ">
+<div class=" mt-36 lg:mt-48 flex w-full h-auto  md:justify-center md:items-center  lg:justify-center lg:items-center ">
     <div
       class="
+      
         m-4
+        ml-6
+        
         w-full
-        lg:m-20  
-            
         "
     >
       {/* {console.log(movie);} */}
-      <div class=" relative overflow-hidden h-450 lg:h-auto w-full  ">
-      <img
+      <div class=" relative overflow-hidden w-80 h-550 lg:h-auto lg:w-full  ">
+      <Image 
+                  // class="object-cover blur-3xl h-450 lg:h-110 w-full "
+                  cloud_name="tefdb"
+                  loading="lazy"
+                  format="webp"
             class="object-cover blur-3xl h-450 lg:h-110 w-full "
-            src={movie.movie[0].rectanglePosters[0].rectanglePosters}
-            alt="Mountain"
-          />
+            publicId={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+            >
+            <Transformation quality="85"/>
+          </Image>
       <div class=" absolute top-0 left-0 px-6 w-full py-2.5 rounded-md h-450 lg:h-full justify-center items-center  flex flex-col lg:flex-row">
-        <div class=" lg:hidden w-full lg:h-full lg:w-2/6  flex justify-center items-center">
+        <div class="lg:hidden w-full mt-10 lg:h-full lg:w-2/6  flex justify-center items-center">
           {/* <img
             class="object-fill w-48 md:w-80 lg:w-56 
         h-72 md:h-80 lg:h-80 "
@@ -47,7 +55,7 @@ export const MovieDetails = (movie) => {
           <CarouselPosters value={movie.movie[0].posters}/>
         </div>
         <div class=" lg:h-full lg:w-4/6 w-full lg:mt-5  flex flex-col justify-center ">
-          <div class=" text-white lg:text-left text-center mt-3 flex flex-col justify-center items-center md:justify-start md:items-start lg:justify-start lg:items-start w-full h-28 lg:h-auto md:w-4/5 lg:w-full font-extrabold text-xl md:text-lg lg:text-2xl">
+          <div class=" text-white lg:text-left text-center mt-3 flex flex-col justify-center items-center md:justify-start md:items-start lg:justify-start lg:items-start w-full h-16 lg:h-auto md:w-4/5 lg:w-full font-extrabold text-xl md:text-lg lg:text-2xl">
             {movie.movie[0].name}
           </div>
           <div class="flex lg:justify-start lg:items-center  justify-center items-center mt-2 text-white tracking-wider md:w-full lg:w-2/5 h-auto font-thin text-xs ">
@@ -207,12 +215,12 @@ export const MovieDetails = (movie) => {
       {/* Cast & Crew */}
 
       <div class=" m-10 md:m-10 lg:m-16" />
-      <div class="w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
+      <div class=" w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
         Trailer
       </div>
       <div class="m-5" />
 
-      <div class=" flex justify-center items-center md:justify-center md:items-center lg:justify-center lg:items-center w-full md:h-72 lg:h-96 md:w-full lg:w-full md:grow lg:grow  ">
+      <div class=" flex justify-center items-center md:justify-center md:items-center lg:justify-center lg:items-center w-80 md:h-72 lg:h-96 md:w-full lg:w-full md:grow lg:grow  ">
         {/* <div class="rounded-lg box-border h-96 w-220 p-4"> */}
         <ReactPlayer width='100%'
         // playing={true} 
@@ -226,36 +234,33 @@ export const MovieDetails = (movie) => {
       <div class=" w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
         Casts
       </div>
-      <div class="m-5 " />
+      <div class="m-10 " />
       <div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-82 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
         {movie.movie[0].casts.map((cast) => {
           console.log(cast)
           return cast.hasOwnProperty("image") ? (
-            <div class=" w-32 h-56 lg:w-40 lg:h-80 m-1 lg:m-2 ">
+            <div class=" w-32 h-56 lg:w-40 lg:h-96 m-1 lg:m-2 ">
               <div class=" flex box-border w-32 h-8 lg:w-40 lg:h-14 justify-center items-center  ">
                 <div class="font-normal text-xs text-center dark:text-white">
                   {cast.castName}
                 </div>
               </div>
-              <div class=" flex justify-center items-center h-40 lg:w-40 lg:h-56 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl  transition-shadow duration-300 ease-in-out">
+              <div class=" lg:ml-0 ml-1 lg:mt-0 mt-2   text-white rounded-md flex justify-center items-center w-28 h-36 lg:w-40 lg:h-56 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out">
                 {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
                 <img
-                  class=" rounded-lg object-fill lg:h-full md:h-full h-36 w-28 md:w-full lg:w-full"
+                  class=" rounded-lg  lg:h-full md:h-full h-full w-full md:w-full lg:w-full"
                   src={cast.image}
                   alt="cast"
                 />
                 {/* </a> */}
               </div>
-              <div class="lg:m-2"></div>
+              <div class="m-2"></div>
               <div class=" flex box-border w-32 h-8 lg:w-40 lg:h-14 justify-center items-center  ">
                 <div class="font-normal text-xs text-center dark:text-white">
                 {cast.CharacterName}
 
                 </div>
               </div>
-              {/* <div class=" font-mono text-xs  dark:text-white text-gray-600 text-center">
-                  {cast.CharacterName}
-                </div> */}
             </div>
           ) : (
             <div class=" w-32 h-56 lg:w-40 lg:h-96 m-1 lg:m-2 ">
@@ -265,7 +270,7 @@ export const MovieDetails = (movie) => {
                 </div>
               </div>
               {/* <div class="m-3"></div> */}
-              <div class="lg:ml-0 ml-1 lg:mt-0 mt-2  text-white rounded-md flex justify-center items-center w-28 h-36 lg:w-40 lg:h-56 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl  transition-shadow duration-300 ease-in-out  text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2">
+              <div class="lg:ml-0 ml-1 lg:mt-0 mt-2   text-white rounded-md flex justify-center items-center w-28 h-36 lg:w-40 lg:h-56 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl  transition-shadow duration-300 ease-in-out  text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2">
                 {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
                 TEFMovies
                 {/* </a> */}
@@ -331,12 +336,7 @@ export const MovieDetails = (movie) => {
 </div>
 
       <div class="m-10 md:m-10 lg:m-16" />
-
-      <div class="m-10 md:m-10 lg:m-16" />
-
-      <div class="m-5" />
-
-      <div class=" m-10 md:m-10 lg:m-16" />
+      {/* <div class=" m-10 md:m-10 lg:m-16" /> */}
       <div class=" w-full font-medium text-sm  dark:text-white">
         <p class="">Watch now</p>
         <div class=" flex flex-row space-x-4 grow items-center w-80 h-60 md:w-full lg:w-full md:h-60 lg:h-80 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
@@ -400,7 +400,7 @@ export const MovieDetails = (movie) => {
       </div>
       <div class=" w-full font-medium text-sm  dark:text-white ">
         <p class="">Popular movies</p>
-        <div class="  flex flex-row space-x-4 grow items-center w-96 h-80 md:w-full lg:w-full md:h-60 lg:h-110 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
+        <div class="  flex flex-row space-x-4 grow items-center w-80 h-80 md:w-full lg:w-full md:h-60 lg:h-110 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
         {
         //  latestDubbed(data)
         some.map((movies) => (

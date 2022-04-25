@@ -13,10 +13,9 @@ const scrollToTop = () =>{
 export const CardLayoutTvshow_2 = ({ user: { name, watchOn,storyline, posters,Type ,id},  }) => (
 
   <div
-  class=" flex justify-center items-center w-40 md:w-56 lg:w-52 h-60 md:h-90 lg:h-96 flex-nowrap lg:ml-10 md:ml-4 ml-5 "
+  class=" flex justify-center items-center w-40 md:w-56 lg:w-52 h-72 md:h-90 lg:h-96 flex-nowrap"
   >
-    {console.log(Type)}
-     <Link to={{
+      <Link to={{
     pathname: "/OneTvshow",
     search: `?${id}?${Type}`,
     state: { fromDashboard: true }
@@ -28,9 +27,10 @@ export const CardLayoutTvshow_2 = ({ user: { name, watchOn,storyline, posters,Ty
         <div class="font-bold text-xs text-center dark:text-white">{name}</div>
       </div>
       <div
-        class="mt-3 ml-4 animate-fade-in-down w-36 md:w-52 lg:w-48 h-44 md:h-72 lg:h-72 max-w-xs overflow-hidden  shadow-md bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out"
+        class="mt-3 ml-2 lg:ml-4 animate-fade-in-down w-36 md:w-52 lg:w-48 h-44 md:h-72 lg:h-72 max-w-xs overflow-hidden  shadow-md bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out"
       >
-        {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
+          {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
+           {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
           <img class=" h-full w-full" src={posters[0].posters} alt="Mountain" />
         {/* </a> */}
       </div>

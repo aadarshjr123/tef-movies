@@ -23,6 +23,8 @@ module.exports = {
         '300': '34rem',
         '400': '50rem',
         '450': '60rem',
+        '550': '65rem',
+
       },
       marginTop: {
         '18':'4rem',

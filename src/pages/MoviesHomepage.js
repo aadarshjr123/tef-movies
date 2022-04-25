@@ -77,7 +77,7 @@ export function MoviesHomepage() {
       <span class="movie--year text-sm md:text-xs lg:text-xs dark:text-white">{movies.movieInfo[0].releaseDate.split(",")[1]} | {movies.movieInfo[0].runtime}</span>
       <div class="m-1"></div>
       <div class="flex-grow ">
-        <p class="invisible md:visible lg:visible text-sm md:text-base lg:text-xs text-black leading-snug truncate-overflow">{movies.storyline}</p>
+        <p class="invisible md:visible lg:visible text-sm md:text-base lg:text-xs dark:text-white text-black leading-snug truncate-overflow">{movies.storyline}</p>
       </div>
       {/* <div class="m-1 "></div> */}
       {/* <div class=" h-10 justify-center items-center  button-container flex mb-4 border-4 border-black"> */}

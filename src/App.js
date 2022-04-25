@@ -78,7 +78,7 @@ export default function App() {
             
 
             {/* <div class="lg:m-4"></div> */}
-            <div class="lg:mt-4 lg:ml-0 ">
+            <div class="lg:mt-4 lg:ml-0 mt-1 ">
             <Toggle />
             </div>
            </div>

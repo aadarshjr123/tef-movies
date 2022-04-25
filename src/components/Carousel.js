@@ -131,11 +131,11 @@ export class Carousel extends Component {
                   </div> */}
                 </div>
                   </Link>
-                  <div class=" z-0 bg-opacity-30 h-10 md:h-full lg:h-10 carousel-caption top-44 lg:top-10 flex justify-center items-center md:block absolute text-center">
+                  <div class=" z-0 bg-opacity-30 h-10 md:h-full lg:h-10 carousel-caption top-36 lg:top-10 flex justify-center items-center md:block absolute text-center">
                 <p class="lg:text-xs" key={index}
                   className={
                     index === this.state.currentSlide
-                      ? "block -mt-5  lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-md font-mono "
+                      ? "block -mt-5  lg:w-full h-5 lg:h-10 object-cover text-xs lg:text-md font-mono "
                       : "hidden"
                   }>Available languages {slide.availLanguages.length}</p>
                 </div>

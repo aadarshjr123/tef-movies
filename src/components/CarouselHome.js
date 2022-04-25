@@ -72,12 +72,12 @@ export class CarouselHome extends Component {
             {this.props.value.map((slide, index) => {
               // console.log("Carosel",slide);
               return (
-                <div className="">
-                <div class=" z-0 bg-opacity-30 h-10 md:h-full lg:h-10 carousel-caption top-3 lg:top-3 flex justify-center items-center md:block absolute text-center ">
-                <h5 class="z-10 lg:text-xs" key={index}
+                <div>
+                <div class="h-10 md:h-full lg:h-10 carousel-caption top-3 lg:top-3 flex justify-center items-center md:block absolute text-center ">
+                <h5 class="lg:text-xs" key={index}
                   className={
                     index === this.state.currentSlide
-                      ? "z-10 block -mt-5 lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-xl font-bold "
+                      ? "block -mt-5 lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-xl font-bold "
                       : "hidden"
                   }>{slide.name}</h5>
                 </div>
@@ -110,11 +110,11 @@ export class CarouselHome extends Component {
 
                 </div>
                   </Link>
-                  <div class=" z-0 bg-opacity-30 h-10 md:h-full lg:h-10 carousel-caption top-40 lg:top-7 flex justify-center items-center md:block absolute text-center ">
+                  <div class=" z-0 bg-opacity-30 h-10 md:h-full lg:h-10 carousel-caption top-36 lg:top-7 flex justify-center items-center md:block absolute text-center ">
                 <p class="lg:text-xs" key={index}
                   className={
                     index === this.state.currentSlide
-                      ? "block  lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-md font-mono "
+                      ? "block  lg:w-full h-5 lg:h-10 object-cover text-xs lg:text-md font-mono "
                       : "hidden"
                   }>Available languages {slide.availLanguages.length}</p>
                 </div>
