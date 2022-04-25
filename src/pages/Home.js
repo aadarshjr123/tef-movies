@@ -119,10 +119,10 @@ image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650378036/70173f5b-9
   return (
 
     // console.log(data)
-    <div className="mt-44 w-full  ">
+    <div className=" mt-44 w-full  ">
       {/* Home */}
       {/* <h1 className="text-3xl"> */}
-      <div className=" w-full lg:h-300 ">
+      <div className=" w-full lg:h-110 ">
       <Homepage name="Tvshows"/>
       </div>
     {/* </h1> */}

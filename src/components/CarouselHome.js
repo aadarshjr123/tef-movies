@@ -63,7 +63,7 @@ export class CarouselHome extends Component {
     // console.log()
     return (
       <div className="m-3 lg:m-0 flex justify-center items-center ">
-        <div className="flex w-full md:h-96 lg:h-300 overflow-hidden relative rounded-md ">
+        <div className="flex w-full md:h-96 lg:h-110 overflow-hidden relative rounded-md ">
           {/* <AiOutlineLeft
             onClick={this.prevSlide}
             className="absolute left-0 text-3xl inset-y-1/2 text-white cursor-pointer"
