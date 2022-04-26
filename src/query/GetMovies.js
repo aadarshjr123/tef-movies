@@ -31,7 +31,6 @@ export const GetMovies = gql`
       genre {
           genre
       }
-      link
     }
     watchOn{
       watchOnLink

@@ -26,7 +26,6 @@ export const GetTvshows =(names) => gql`
       creator{
         creator
       }
-      link
       writer
       genre {
         genre

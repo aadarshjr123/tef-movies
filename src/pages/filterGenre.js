@@ -40,9 +40,9 @@ if (loading)
 return <h1>Loading</h1>;
 
   return (
-    <main class="w-full    mt-10"> 
-    <div class="m-10 md:m-5 lg:m-5"></div>
-    <div class="grid grid-cols-2  md:grid-cols-4  lg:grid-cols-4 -gap-4 gap-y-4  md:gap-4 lg:gap-4 ">
+    <main class="w-full flex justify-center lg:justify-start  mt-32 lg:mt-48"> 
+    {/* <div class="m-10 md:m-5 lg:m-5"></div> */}
+    <div class="grid grid-cols-2 md:grid-cols-6  lg:grid-cols-6 gap-y-6 gap-x-3  md:gap-4 lg:gap-4 ">
     {
       marvel.map((movies) => (
         //  <motion.div>

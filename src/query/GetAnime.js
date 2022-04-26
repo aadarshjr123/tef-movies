@@ -20,7 +20,6 @@ export const GetTvshows = gql`
     tvshowInfo {
       rating
       creator
-      link
       writer
       genre {
           genre
