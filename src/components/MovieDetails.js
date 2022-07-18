@@ -15,6 +15,7 @@ import grabLink from "youtube-thumbnail-grabber";
 export const MovieDetails = (movie) => {
   const [showModal, setShowModal] = React.useState(false);
   const [showVideoModal, setShowVideoModal] = React.useState(false);
+  const [videoLink, setVideoLink] = React.useState([]);
   const { loading, error, data } = useQuery(GetMovies);
   let some = data.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat).slice(0,5);
   console.log(some);
@@ -226,12 +227,18 @@ export const MovieDetails = (movie) => {
       </div>
       <div class="m-10 " />
       <div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
-        {movie.movie[0].movieInfo[0].link.map((links) => {
+        {movie.movie[0].movieInfo[0].link.map((links,index) => {
           // console.log(cast)
           return (
             <div class="space-y-2 w-32 h-56 lg:w-60 lg:h-60 m-1 lg:m-4 ">
               <div class=" lg:ml-0 ml-1 lg:mt-1 mt-2 text-white rounded-md flex justify-center items-center w-28 h-36 lg:w-56 lg:h-3/5 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out">
-                <a class="cursor-pointer" onClick={() => setShowVideoModal(true)}>
+                <a 
+                class="cursor-pointer"
+                onClick={() => {
+                  setShowVideoModal(true);
+                  console.log("linw 237",links.link);
+                  setVideoLink(links)
+                }}>
                 <img
                   class="lg:h-fit md:h-full h-full w-full md:w-full lg:w-fit"
                   src={`http://img.youtube.com/vi/${links.link.split("=")[1]}/maxresdefault.jpg`}
@@ -252,21 +259,15 @@ export const MovieDetails = (movie) => {
           >
             <div className=" relative lg:w-400 my-6 mx-auto max-w-3xl ">
               {/*content*/}
+              {/* {console.log("videoLink",videoLink)} */}
               <div className="dark:bg-black border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
-                {/* <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                  <h3 className=" dark:text-white ml-2 lg:text-3xl font-semibold">
-                  {movie.movie[0].name}
+                <div className="flex items-start justify-between p-5">
+                  <h3 className=" dark:text-white ml-2 lg:text-md font-semibold">
+                  {videoLink.title}
                   </h3>
-                  <button
-                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => setShowVideoModal(false)}
-                  >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
-                  </button>
-                </div> */}
+                 
+                </div>
                 {/*body*/}
 
                 <div class="  flex justify-center items-center md:justify-center md:items-center lg:justify-center lg:items-center w-80 md:h-72 lg:h-96 md:w-full lg:w-full md:grow lg:grow  ">
@@ -275,7 +276,7 @@ export const MovieDetails = (movie) => {
         // playing={true} 
         // pip={true }
         // stopOnUnmount={false}
-          height='100%' url={links.link} />
+          height='100%' url={videoLink.link} />
         </div>
       </div>
                 {/* <div className="dark:bg-black relative p-6 flex-auto">
@@ -284,7 +285,7 @@ export const MovieDetails = (movie) => {
                   </p>
                 </div> */}
                 {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                <div className="flex items-center justify-end p-6">
                   <button
                     className="text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 text-transparent rounded-sm bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2"
                     type="button"
