@@ -73,14 +73,14 @@ export class CarouselHome extends Component {
               // console.log("Carosel",slide);
               return (
                 <div>
-                <div class="h-10 md:h-full lg:h-10 carousel-caption top-3 lg:top-3 flex justify-center items-center md:block absolute text-center ">
+                {/* <div class="h-10 md:h-full lg:h-10 carousel-caption top-3 lg:top-3 flex justify-center items-center md:block absolute text-center ">
                 <h5 class="lg:text-xs" key={index}
                   className={
                     index === this.state.currentSlide
                       ? "block -mt-5 lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-xl font-bold "
                       : "hidden"
                   }>{slide.name}</h5>
-                </div>
+                </div> */}
                 {/* {console.log(this.state.name.length > 0 ? `?${slide.id}?Tvshows`:`?${slide.id}`)} */}
                 <Link to={{
                   pathname:  `${this.state.type}`,
@@ -89,35 +89,45 @@ export class CarouselHome extends Component {
                   key: index
                   // index: this.state.currentSlide
                 }}>
-                  <div class="">
-                   
-                <img
+                  <div class="flex flex-row">
+                  <div className={
+                    index === this.state.currentSlide
+                      ? "z-30 bg-black shadow-3xl flex justify-center items-center lg:w-2/4 object-cover text-sm lg:text-xl font-bold "
+                      : "hidden"
+                  }>
+                   <h5 class="text-white lg:text-xs" key={index}
+                  >{slide.name}</h5>
+                  </div> 
+                  <div className={
+                    index === this.state.currentSlide
+                      ? "block w-2/4 h-auto object-cover"
+                      : "hidden"
+                  }>
+                  <img
                   src={slide.rectanglePosters[0].rectanglePosters}
                   alt="This is a carousel slide"
                   key={index}
-                  className={
-                    index === this.state.currentSlide
-                      ? "block w-full h-auto object-cover"
-                      : "hidden"
-                  }
                   onMouseEnter={() => {
                     this.setState({ paused: true });
                   }}
                   onMouseLeave={() => {
                     this.setState({ paused: false });
                   }}
-                />
+                /> 
+
+                  </div> 
+     
 
                 </div>
                   </Link>
-                  <div class=" z-0 bg-opacity-30 h-10 md:h-full lg:h-10 carousel-caption top-36 lg:top-7 flex justify-center items-center md:block absolute text-center ">
+                  {/* <div class=" z-0 bg-opacity-30 h-10 md:h-full lg:h-10 carousel-caption top-36 lg:top-7 flex justify-center items-center md:block absolute text-center ">
                 <p class="lg:text-xs" key={index}
                   className={
                     index === this.state.currentSlide
                       ? "block  lg:w-full h-5 lg:h-10 object-cover text-xs lg:text-md font-mono "
                       : "hidden"
                   }>Available languages {slide.availLanguages.length}</p>
-                </div>
+                </div> */}
                   </div>
               );
             })}

@@ -29,7 +29,10 @@
     "react-tinder-card": "^1.4.5",
     "react-useanimations": "^2.0.8",
     "tw-elements": "^1.0.0-alpha11",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "youtube-thumbnail-api": "^1.0.2",
+    "youtube-thumbnail-grabber": "^1.0.2",
+    "youtube-thumbnails": "^1.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

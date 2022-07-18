@@ -26,6 +26,11 @@ export const GetMovies = gql`
         director
       }
       runtime
+      link {
+          title
+          link
+          date
+      }
       releaseDate
       dateFormat
       genre {

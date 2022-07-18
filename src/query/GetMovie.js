@@ -20,6 +20,11 @@ export const GetMovie = (names) => gql`
       }
       movieInfo{
         rating
+        link {
+          title
+          link
+          date
+      }
         director
         runtime
         releaseDate

@@ -5,6 +5,9 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      boxShadow: {
+        '3xl': '0 0 20px 10px rgba(0, 0, 0, 1)',
+      },
       colors: {
         hotstar: '#131A27',
       },
