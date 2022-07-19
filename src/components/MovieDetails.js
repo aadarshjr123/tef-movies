@@ -15,7 +15,9 @@ import grabLink from "youtube-thumbnail-grabber";
 export const MovieDetails = (movie) => {
   const [showModal, setShowModal] = React.useState(false);
   const [showVideoModal, setShowVideoModal] = React.useState(false);
+  const [showPostersModal, setShowPostersModal] = React.useState(false);
   const [videoLink, setVideoLink] = React.useState([]);
+  const [postersLink, setPostersLink] = React.useState("");
   const { loading, error, data } = useQuery(GetMovies);
   let some = data.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat).slice(0,5);
   console.log(some);
@@ -411,7 +413,76 @@ export const MovieDetails = (movie) => {
 </div>
 
       <div class="m-10 md:m-10 lg:m-16" />
-      {/* <div class=" m-10 md:m-10 lg:m-16" /> */}
+      <div class=" w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
+        Posters
+      </div>
+
+      <div class="m-10 " />
+      <div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-fit md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+        {movie.movie[0].posters.map((posters,index) => {
+          // console.log(cast)
+          return (
+            <div class=" w-32 h-56 lg:w-40 lg:h-60 m-1 lg:m-4 ">
+              {/* <div class=" lg:ml-0 ml-1 lg:mt-1 mt-2 text-white rounded-md flex justify-center items-center w-28 h-36 lg:w-56 lg:h-3/5 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out"> */}
+        <div class=" flex justify-center items-center h-40 lg:w-40 lg:h-56 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl  transition-shadow duration-300 ease-in-out">
+                
+                <a 
+                class="cursor-pointer"
+                onClick={() => {
+                  setShowPostersModal(true);
+                  console.log("linw 237",posters);
+                  setPostersLink(posters)
+                }}>
+                <img
+                  class="lg:h-fit md:h-full h-full w-full md:w-full lg:w-fit"
+                  src={posters.posters}
+                  alt="cast"
+                />
+                </a>
+              </div>
+
+              {showPostersModal ? (
+        <>
+          <div
+            className= " justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none "
+          >
+            <div className=" relative lg:w-150 lg:h-300 my-6 mx-auto max-w-3xl ">
+              {/*content*/}
+              {console.log("videoLink",postersLink.posters)}
+              <div className=" dark:bg-black h-full rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+
+                <div class=" flex justify-center items-center md:justify-center md:items-center lg:justify-center lg:items-center w-80 md:h-72 lg:h-52 md:w-full lg:w-full md:grow lg:grow  ">
+        {/* <div class=" rounded-lg box-border h-full w-full"> */}
+        <img
+                  class=" justify-center items-center lg:h-full md:h-full h-full w-full md:w-full lg:w-fit"
+                  src={postersLink.posters}
+                  alt="cast"
+                />
+        {/* </div> */}
+      </div>
+
+                <div className="flex items-center justify-end p-6">
+                  <button
+                    className="text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 text-transparent rounded-sm bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2"
+                    type="button"
+                    onClick={() => setShowPostersModal(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}         
+            </div>
+          )
+        })}
+      </div>
+
+
+      <div class=" m-10 md:m-10 lg:m-16" />
       <div class=" w-full font-medium text-sm  dark:text-white">
         <p class="">Watch now</p>
         <div class=" flex flex-row space-x-4 grow items-center w-80 h-60 md:w-full lg:w-full md:h-60 lg:h-80 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
