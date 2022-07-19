@@ -418,7 +418,7 @@ export const MovieDetails = (movie) => {
       </div>
 
       <div class="m-10 " />
-      <div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-fit md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+      <div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
         {movie.movie[0].posters.map((posters,index) => {
           // console.log(cast)
           return (

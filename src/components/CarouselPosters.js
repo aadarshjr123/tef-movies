@@ -53,7 +53,7 @@ export class CarouselPosters extends Component {
     // console.log()
     return (
       <div className="mt-10 m-5 md:m-10 lg:m-10 flex justify-center items-center ">
-        <div className="flex w-full md:w-20/12 lg:w-20/12 md:h-96 lg:h-96  overflow-hidden relative rounded-md ">
+        <div className="flex w-full md:w-20/12 lg:w-20/12 md:h-96 lg:h-80  overflow-hidden relative rounded-md ">
           {/* <AiOutlineLeft
             onClick={this.prevSlide}
             className="absolute left-0 text-3xl inset-y-1/2 text-white cursor-pointer"
@@ -113,7 +113,7 @@ export class CarouselPosters extends Component {
               );
             })}
           </Swipe>
-          <div className="absolute w-full flex justify-center bottom-0">
+          {/* <div className="border-2 border-white absolute w-full flex justify-center bottom-0">
             {this.props.value.map((element, index) => {
               return (
                 <div
@@ -129,7 +129,7 @@ export class CarouselPosters extends Component {
                 ></div>
               );
             })}
-          </div>
+          </div> */}
 
           {/* <AiOutlineRight
             onClick={this.nextSlide}
