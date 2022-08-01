@@ -487,10 +487,10 @@ export const MovieDetails = (movie) => {
         <p class="">Watch now</p>
         <div class=" flex flex-row space-x-4 grow items-center w-80 h-60 md:w-full lg:w-full md:h-60 lg:h-80 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
           {movie.movie[0].watchOn.map((i) => {
-            console.log(i)
+            console.log(i,"490")
             {
               return i.hasOwnProperty("image") ? (
-                <div class="mt-10 w-32 h-36 md:w-40 md:h-48 lg:w-40 lg:h-48 font-medium dark:border-gray-700 border-gray-500 text-sm border-1 rounded-lg ">
+                <div class="mt-10 w-32 h-40 md:w-40 md:h-52 lg:w-40 lg:h-52 font-medium dark:border-gray-700 border-gray-500 text-sm border-1 rounded-lg ">
                   <div class="flex justify-center items-center h-16 md:h-28 lg:h-28">
                     <img
                       class="rounded-lg object-fill h-10 md:h-20 lg:h-20 w-10 md:w-20 lg:w-20"
@@ -500,6 +500,9 @@ export const MovieDetails = (movie) => {
                   </div>
                   <div class="flex justify-center items-center ">
                     <hr class="w-32 dark:border-gray-700"></hr>
+                  </div>
+                  <div class="dark:text-white m-3 md:m-2 lg:m-2 flex justify-center items-center  text-xs md:text-sm lg:text-xs">
+                    <p>{i.watchOn.split("-")[1]}</p>
                   </div>
                   <div class="dark:text-white m-3 md:m-2 lg:m-2 flex justify-center items-center text-xs md:text-sm lg:text-sm">
                     <p>{i.perMonth}</p>
