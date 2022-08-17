@@ -10,14 +10,20 @@ import { CardLayoutTvshow_2 } from "../components/CardLayoutTvshow_2";
 import { useQuery } from "@apollo/react-hooks";
 import { GetTvshows } from "../query/GetTvshows";
 import { FaGreaterThan } from 'react-icons/fa';
+import Accordion from "./Accordion";
 
 export const TvshowDetails = (movie) => {
   const [showModal, setShowModal] = React.useState(false);
+  const [showPostersModal, setShowPostersModal] = React.useState(false);
+  const [showSeason, setShowSeason] = React.useState("Season 1");
   const { innerWidth: width, innerHeight: height } = window;
+  const [postersLink, setPostersLink] = React.useState("");
   const { loading, error, data } = useQuery(GetTvshows("Tvshows"));
   let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat).slice(0,5);
   console.log(some);
-  console.log(width,height)
+  console.log(movie);
+  console.log(width,height);
+
   return (
 <div class=" mt-36 lg:mt-48  flex w-full h-auto  md:justify-center md:items-center  lg:justify-center lg:items-center ">
     <div
@@ -31,7 +37,7 @@ export const TvshowDetails = (movie) => {
         "
     >
       {/* {console.log(movie);} */}
-      <div class="relative overflow-hidden w-80 h-550 lg:h-auto lg:w-full   ">
+      <div class=" relative overflow-hidden w-80 h-550 lg:h-auto lg:w-full   ">
       <Image 
             class="object-cover blur-3xl h-450 lg:h-110 w-full "
             cloud_name="tefdb"
@@ -221,13 +227,152 @@ export const TvshowDetails = (movie) => {
           height='100%' url={movie.movie[0].tvshowInfo[0].link} />
         {/* </div> */}
       </div>
-      <div class="m-10 md:m-10 lg:m-16" />
+      {/* <div class="m-10 md:m-10 lg:m-16" /> */}
+      {movie.movie[0].hasOwnProperty("seasons") ? (
+        <div>
+      <div class=" w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
+        Seasons
+      </div>
+      <div class=" flex-col flex mt-5 w-80 md:h-72 lg:h-auto md:w-full lg:w-full md:grow lg:grow  ">
 
-<div class="w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
+      
+
+    <div class="dropdown relative">
+      <button
+        class="
+        text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500
+          dropdown-toggle
+          px-6
+          py-2.5
+          bg-blue-600
+          text-white
+          font-medium
+          text-xs
+          leading-tight
+          uppercase
+          rounded
+          shadow-md
+          hover:bg-blue-700 hover:shadow-lg
+          focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+          active:bg-blue-800 active:shadow-lg active:text-white
+          transition
+          duration-150
+          ease-in-out
+          flex
+          items-center
+          whitespace-nowrap
+        "
+        type="button"
+        id="dropdownMenuButton1"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {showSeason}
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="caret-down"
+          class="w-2 ml-2"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 320 512"
+        >
+          <path
+            fill="currentColor"
+            d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+          ></path>
+        </svg>
+      </button>
+      <ul
+        class="
+          dropdown-menu
+          min-w-max
+          absolute
+          hidden
+          bg-white
+          text-base
+          z-50
+          float-left
+          py-2
+          list-none
+          text-left
+          rounded-lg
+          shadow-lg
+          mt-1
+          hidden
+          m-0
+          bg-clip-padding
+          border-none
+        "
+        aria-labelledby="dropdownMenuButton1"
+      >
+        {
+          
+          movie.movie[0].seasons.map((i) => {
+            return (
+              <div>
+                <li>
+          <a
+            class="
+              dropdown-item
+              text-sm
+              py-2
+              px-4
+              font-normal
+              block
+              w-full
+              whitespace-nowrap
+              bg-transparent
+              text-gray-700
+              hover:bg-gray-100
+            "
+            // href="#"
+            onClick={() => setShowSeason(i.season)}
+            >{i.season}
+            </a>
+        </li>
+              </div>
+              
+            )
+          })
+        }
+
+      </ul>
+      
+    </div>
+
+<div class=" mt-5 flex flex-col  w-full h-auto border-white dark:text-white">
+
+        {
+         movie.movie[0].seasons.map((i) => {
+          return i.season === showSeason ? (
+            i.episodes.map((j) => {
+                return (
+                <Accordion title={j.episodeName} content={j.episodeDescription} />
+                )
+            })
+          ) : (
+            <div>
+            <p></p>
+            </div>
+          )
+         }) 
+        }
+      </div>
+      </div>
+      </div>
+      )
+      : null}
+      <div class="m-5" />
+
+<div class="flex w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white lg:grow">
   Casts
 </div>
 <div class="m-10 " />
-<div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-82 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+<div class="m-10 " />
+
+<div class="lg:grow flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-82 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
         {movie.movie[0].casts.map((cast) => {
           console.log(cast)
           return cast.hasOwnProperty("image") ? (
@@ -328,6 +473,76 @@ export const TvshowDetails = (movie) => {
     );
   })}
 </div>
+
+<div class="m-10 md:m-10 lg:m-16" />
+      <div class=" w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
+        Posters
+      </div>
+
+      <div class="m-10 " />
+      <div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+        {movie.movie[0].posters.map((posters,index) => {
+          // console.log(cast)
+          return (
+            <div class=" w-32 h-56 lg:w-40 lg:h-60 m-1 lg:m-4 ">
+              {/* <div class=" lg:ml-0 ml-1 lg:mt-1 mt-2 text-white rounded-md flex justify-center items-center w-28 h-36 lg:w-56 lg:h-3/5 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out"> */}
+        <div class=" flex justify-center items-center h-40 lg:w-40 lg:h-56 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl  transition-shadow duration-300 ease-in-out">
+                
+                <a 
+                class="cursor-pointer"
+                onClick={() => {
+                  setShowPostersModal(true);
+                  console.log("linw 237",posters);
+                  setPostersLink(posters)
+                }}>
+                <img
+                  class="lg:h-fit md:h-full h-full w-full md:w-full lg:w-fit"
+                  src={posters.posters}
+                  alt="cast"
+                />
+                </a>
+              </div>
+
+              {showPostersModal ? (
+        <>
+          <div
+            className= " justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none "
+          >
+            <div className=" relative lg:w-150 lg:h-300 my-6 mx-auto max-w-3xl ">
+              {/*content*/}
+              {console.log("videoLink",postersLink.posters)}
+              <div className=" dark:bg-black h-full rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+
+                <div class=" flex justify-center items-center md:justify-center md:items-center lg:justify-center lg:items-center w-80 md:h-72 lg:h-52 md:w-full lg:w-full md:grow lg:grow  ">
+        {/* <div class=" rounded-lg box-border h-full w-full"> */}
+        <img
+                  class=" justify-center items-center lg:h-full md:h-full h-full w-full md:w-full lg:w-fit"
+                  src={postersLink.posters}
+                  alt="cast"
+                />
+        {/* </div> */}
+      </div>
+
+                <div className="flex items-center justify-end p-6">
+                  <button
+                    className="text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 text-transparent rounded-sm bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2"
+                    type="button"
+                    onClick={() => setShowPostersModal(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}         
+            </div>
+          )
+        })}
+      </div>
+
 <div class="m-10 md:m-10 lg:m-16" />
       <div class=" m-10 md:m-10 lg:m-16" />
       <div class=" w-full font-medium text-sm  dark:text-white">
@@ -337,7 +552,7 @@ export const TvshowDetails = (movie) => {
             console.log(i)
             {
               return i.hasOwnProperty("image") ? (
-                <div class="mt-10 w-32 h-36 md:w-40 md:h-48 lg:w-40 lg:h-48 font-medium dark:border-gray-700 border-gray-500 text-sm border-1 rounded-lg ">
+                <div class="mt-10 w-32 h-36 md:w-40 md:h-48 lg:w-40 lg:h-48 font-medium dark:border-gray-700 border-gray-500 text-sm  rounded-lg ">
                   <div class="flex justify-center items-center h-16 md:h-28 lg:h-28">
                     <img
                       class="rounded-lg object-fill h-10 md:h-20 lg:h-20 w-10 md:w-20 lg:w-20"
@@ -362,7 +577,7 @@ export const TvshowDetails = (movie) => {
                   </div>
                 </div>
               ) : (
-                <div class="mt-10 w-32 h-36 md:w-40 md:h-48 lg:w-40 lg:h-48  font-medium border-gray-500 text-sm border-1 rounded-lg ">
+                <div class="mt-10 w-32 h-36 md:w-40 md:h-48 lg:w-40 lg:h-48  font-medium border-gray-500 text-sm  rounded-lg ">
                   <div class="flex justify-center items-center h-16 md:h-28 lg:h-28">
                     <img
                       class="rounded-lg object-fill  h-10 md:h-20 lg:h-20"
