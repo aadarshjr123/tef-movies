@@ -29,6 +29,9 @@ const MovieDetailsss = (data,data2,data3) => {
           // console.log(j.image);
              i.image = j.image;
              i.perMonth = j.perMonth
+        } else if(i.watchOn.split("-")[0] === j.name){
+          i.image = j.image;
+             i.perMonth = j.perMonth
         }
     })
 })
