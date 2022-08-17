@@ -30,6 +30,11 @@ export const GetTvshows =(names) => gql`
       genre {
         genre
       }
+      link {
+        title
+        link
+        date
+    }
       originalTitle
       noOfseasons
       status

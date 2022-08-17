@@ -14,6 +14,8 @@ import Accordion from "./Accordion";
 
 export const TvshowDetails = (movie) => {
   const [showModal, setShowModal] = React.useState(false);
+  const [showVideoModal, setShowVideoModal] = React.useState(false);
+  const [videoLink, setVideoLink] = React.useState([]);
   const [showPostersModal, setShowPostersModal] = React.useState(false);
   const [showSeason, setShowSeason] = React.useState("Season 1");
   const { innerWidth: width, innerHeight: height } = window;
@@ -211,22 +213,93 @@ export const TvshowDetails = (movie) => {
       </div>
 
       {/* Cast & Crew */}
-
       <div class=" m-10 md:m-10 lg:m-16" />
       <div class=" w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
-        Trailer
+        Videos to watch
       </div>
-      <div class="m-5" />
+      <div class="m-10 " />
+      <div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+        {movie.movie[0].tvshowInfo[0].link.map((links,index) => {
+          // console.log(cast)
+          return (
+            <div class="space-y-2 w-32 h-56 lg:w-60 lg:h-60 m-1 lg:m-4 ">
+              <div class=" lg:ml-0 ml-1 lg:mt-1 mt-2 text-white rounded-md flex justify-center items-center w-28 h-36 lg:w-56 lg:h-3/5 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                <a 
+                class="cursor-pointer"
+                onClick={() => {
+                  setShowVideoModal(true);
+                  console.log("linw 237",links.link);
+                  setVideoLink(links)
+                }}>
+                <img
+                  class="lg:h-fit md:h-full h-full w-full md:w-full lg:w-fit"
+                  src={`http://img.youtube.com/vi/${links.link.split("=")[1]}/maxresdefault.jpg`}
+                  alt="cast"
+                />
+                </a>
+              </div>
+              <div class=" flex box-border w-32 h-8 lg:w-full lg:h-14 justify-center items-center  ">
+                <div class="font-normal text-xs text-center dark:text-white">
+                  {links.title}
+                </div>
+              </div>
 
-      <div class=" flex justify-center items-center md:justify-center md:items-center lg:justify-center lg:items-center w-80 md:h-72 lg:h-96 md:w-full lg:w-full md:grow lg:grow  ">
-        {/* <div class="rounded-lg box-border h-96 w-220 p-4"> */}
+              {showVideoModal ? (
+        <>
+          <div
+            className= " justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none "
+          >
+            <div className=" relative lg:w-400 my-6 mx-auto max-w-3xl ">
+              {/*content*/}
+              {/* {console.log("videoLink",videoLink)} */}
+              <div className="dark:bg-black border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                {/*header*/}
+                <div className="flex items-start justify-between p-5">
+                  <h3 className=" dark:text-white ml-2 lg:text-md font-semibold">
+                  {videoLink.title}
+                  </h3>
+                 
+                </div>
+                {/*body*/}
+
+                <div class="  flex justify-center items-center md:justify-center md:items-center lg:justify-center lg:items-center w-80 md:h-72 lg:h-96 md:w-full lg:w-full md:grow lg:grow  ">
+        <div class="rounded-lg box-border h-96 w-full p-4">
         <ReactPlayer width='100%'
         // playing={true} 
         // pip={true }
         // stopOnUnmount={false}
-          height='100%' url={movie.movie[0].tvshowInfo[0].link} />
-        {/* </div> */}
+          height='100%' url={videoLink.link} />
+        </div>
       </div>
+                {/* <div className="dark:bg-black relative p-6 flex-auto">
+                  <p className="dark:text-white  my-4 text-slate-500 text-xs lg:text-sm leading-relaxed">
+                  {movie.movie[0].storyline}
+                  </p>
+                </div> */}
+                {/*footer*/}
+                <div className="flex items-center justify-end p-6">
+                  <button
+                    className="text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 text-transparent rounded-sm bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2"
+                    type="button"
+                    onClick={() => setShowVideoModal(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}         
+            </div>
+          )
+        })}
+      </div>
+      {/* <div class="m-10 md:m-10 lg:m-16" /> */}
+
+      <div class=" m-10 md:m-10 lg:m-16" />
+
       {/* <div class="m-10 md:m-10 lg:m-16" /> */}
       {movie.movie[0].hasOwnProperty("seasons") ? (
         <div>
