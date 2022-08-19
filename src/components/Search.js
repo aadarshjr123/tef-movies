@@ -53,7 +53,7 @@ const SearchBox = () => {
             </div>
             </div>
         </button>
-    <div id="search-box" class={isActive ? "z-2 hidden fixed top-0 left-0 w-screen h-screen bg-gray-900 z-90" : "fixed top-0 left-0 w-screen h-screen bg-gray-900 z-90"}>
+    <div id="search-box" class={isActive ? "fixed top-0 left-0 w-screen h-screen bg-gray-900 z-90" : "z-2  hidden fixed top-0 left-0 w-screen h-screen bg-gray-900 z-90"}>
         {/* <button class="cursor-pointer text-6xl text-white hover:text-amber-500 absolute right-5 top-5" onClick={() => 
             {
                 setIsActive(true)
