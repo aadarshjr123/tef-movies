@@ -27,7 +27,7 @@ function FilterGenre() {
   data.getMovies.map((i) => {
     // console.log(i.movieInfo[0].genre);
     i.movieInfo[0].genre.map((j) => {
-      if( j.genre === ddd)
+      if( j.genre.split(" ").join("") === ddd)
       {
         marvel.push(i);
       }
@@ -35,17 +35,25 @@ function FilterGenre() {
   })
   console.log(marvel);
 
+
+
 if (error) return <h1>Something went wrong!</h1>;
 if (loading) 
-return <h1>Loading</h1>;
+return <h1 class="border-1">Loading</h1>;
 
   return (
+    
     <main class="w-full flex justify-center lg:justify-start  mt-32 lg:mt-48"> 
     {/* <div class="m-10 md:m-5 lg:m-5"></div> */}
     <div class="grid grid-cols-2 md:grid-cols-6  lg:grid-cols-6 gap-y-6 gap-x-3  md:gap-4 lg:gap-4 ">
     {
+      marvel.length <=0 ? <div class="ml-44 w-400 justify-center text-center">
+        <h1 class="m-40 justify-center text-2xl dark:text-white">Sorry,We are updating as soon as we can.</h1>
+        </div>
+        :
       marvel.map((movies) => (
         //  <motion.div>
+
            <CardLayout  user={movies}/>
         //  </motion.div >
          ))

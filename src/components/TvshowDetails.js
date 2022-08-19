@@ -306,7 +306,7 @@ export const TvshowDetails = (movie) => {
       <div class=" w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
         Seasons
       </div>
-      <div class=" flex-col flex mt-5 w-80 md:h-72 lg:h-auto md:w-full lg:w-full md:grow lg:grow  ">
+      <div class=" flex-col flex mt-5 w-80 md:h-72 lg:h-auto md:w-full lg:w-11/12 md:grow lg:grow  ">
 
       
 
@@ -415,7 +415,7 @@ export const TvshowDetails = (movie) => {
       
     </div>
 
-<div class=" mt-5 flex flex-col  w-full h-auto border-white dark:text-white">
+<div class="m-10 flex flex-col w-80 md:w-full lg:w-full h-auto border-white dark:text-white">
 
         {
          movie.movie[0].seasons.map((i) => {

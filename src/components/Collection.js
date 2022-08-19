@@ -21,11 +21,11 @@ export const Collection = (collection) => (
   <div
   class=" flex justify-center items-center w-40 md:w-56 lg:w-52 h-60 md:h-52 lg:h-52 flex-nowrap"
   >
-    {console.log(collection.collection)}
+    {console.log("coll",collection.collection.name.split(" ").join(""))}
     <Link
       to={{
         pathname: "/PopularGenre",
-        search: `?${collection.collection.name}`,
+        search: `?${collection.collection.name.split(" ").join("")}`,
         state: { fromDashboard: true },
       }}
       onClick={scrollToTop}

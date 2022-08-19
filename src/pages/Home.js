@@ -7,6 +7,7 @@ import { CardLayoutTvshow_3 } from "../components/CardLayoutTvshow_3";
 import { Cardskeleton } from "../Skeleton/Cardskeleton";
 import { HomepageSkeleton } from "../Skeleton/HomepageSkeleton";
 import { GetMovies } from "../query/GetMovies";
+import { GetCollections } from "../query/GetCollections";
 import { CardLayout } from "../components/CardLayout";
 import { Collection } from "../components/Collection";
 
@@ -15,10 +16,12 @@ const Tvshows =  () => {
   const { loading, error, data } = useQuery(GetTvshows("Tvshows"));
   // const = useQuery(GetTvshows("Tvshows"));
   const { loading:MoviesLoading, error:MoviesError, data:MoviesData }  = useQuery(GetMovies);
+  const { loading:CollectionLoading, error:CollectionError, data:CollectionData }  = useQuery(GetCollections);
+
 
     // console.log()
-    if (error || MoviesError) return <h1>{error}</h1>;
-    if (loading || MoviesLoading) 
+    if (error || MoviesError || CollectionLoading) return <h1>{error}</h1>;
+    if (loading || MoviesLoading || CollectionError) 
     return <HomepageSkeleton />
     // if (data) 
     // return <HomepageSkeleton />
@@ -32,7 +35,7 @@ const Tvshows =  () => {
     //   })
     //   return arrayTvshows;
     // }
-  console.log(MoviesData);
+  console.log("38",CollectionData);
   let marvel = [];
   // MoviesData.getMovies.map((i) => {
   //   // console.log(i.movieInfo[0].genre);
@@ -158,8 +161,12 @@ image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650378036/70173f5b-9
     <div class="m-4"></div>
     <div class="m-2 lg:m-0  space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
      {
-         collection.map((collection) =>
-           <Collection  collection={collection}/>
+        
+         CollectionData.getCollections.map((collection) => {
+           if(collection.type === 'genre'){
+             <Collection  collection={collection}/>
+           }
+         }
          )
       }
      </div>
@@ -171,8 +178,11 @@ image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650378036/70173f5b-9
     <div class="m-4"></div>
     <div class="m-2 lg:m-0 space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
      {
-         genereCollection.map((collection) =>
-           <Collection  collection={collection}/>
+         genereCollection.map((collection) => {
+          if(collection.type === 'collection'){
+            <Collection  collection={collection}/>
+          }
+         }
          )
       }
      </div>
