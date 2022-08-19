@@ -25,6 +25,7 @@ import facebook from 'react-useanimations/lib/facebook';
 import youtube from 'react-useanimations/lib/youtube';
 
 import FilterGenre from './pages/filterGenre';
+import SearchBox from './components/Search';
 
 const queryClient = new QueryClient()
 
@@ -39,7 +40,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
     <div class="">
 
-<div class=" relative mt-5 md:m-10 lg:mt-5 h-full  max-w-screen-2xl max-w-screen overflow-hidden ">
+<div class="z-10 relative mt-5 md:m-10 lg:mt-5 h-full  max-w-screen-2xl max-w-screen overflow-hidden ">
     <div className=' fixed top-0 left-0 right-0 md:m-0 lg:m-0 h-36 md:h-44 lg:h-44 w-full flex flex-col space-y-10 lg:space-y-0 lg:flex-row justify-center items-center bg-white dark:bg-hotstar z-20'>
     {/* <img class="w-1/3 h-5 md:h-14 lg:h-14 "
            src={Logo}
@@ -50,29 +51,8 @@ export default function App() {
             <div class="lg:flex lg:justify-start items-start lg:w-4/5 ">
             <Navbar />
             </div>
-            <div class="relative h-12 w-10">
-            <div class="bottom-0 absolute dark ">
-            <div class="bottom-0  invisible md:visible lg:visible ml-10 lg:mt-4 lg:ml-0 ">
-            <UseAnimations animation={searchToX} size={32} strokeColor="#fff"/>
-            </div>
-            </div>
-            {/* <div class="lg:invisible"> */}
-            <div class="bottom-0  absolute dark:invisible invisible md:visible lg:visible ml-10 lg:mt-4 lg:ml-0 ">
-            <UseAnimations animation={searchToX} size={32}/>
-            </div>
-            </div>
-            
-            {/* </div> */}
-            <div class="relative h-12 w-10 ">
-
-            <div class="bottom-3 absolute lg:invisible md:invisible visible lg:mt-4 lg:ml-0 ">
-            <UseAnimations animation={searchToX} size={20} />
-            </div>
-            <div class="bottom-3 absolute dark lg:invisible ">
-            <div class="bottom-3 lg:invisible md:invisible visible lg:mt-4 lg:ml-0 ">
-            <UseAnimations animation={searchToX} size={20} strokeColor="#fff"/>
-            </div>
-            </div>
+            <div class="z-20">
+            <SearchBox/>
             </div>
 
             

@@ -62,7 +62,7 @@ export class CarouselHome extends Component {
     // console.log( `${this.state.type}`, this.state.name.length > 0 ? `?6241e21?Tvshows`:`?6241e21`,)
     // console.log()
     return (
-      <div className="m-3 lg:m-0 flex justify-center items-center ">
+      <div className="-z-50 m-3 lg:m-0 flex justify-center items-center ">
         <div className="flex w-full md:h-96 lg:h-110 overflow-hidden relative rounded-md ">
           {/* <AiOutlineLeft
             onClick={this.prevSlide}
