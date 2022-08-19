@@ -20,8 +20,8 @@ const Tvshows =  () => {
 
 
     // console.log()
-    if (error || MoviesError || CollectionLoading) return <h1>{error}</h1>;
-    if (loading || MoviesLoading || CollectionError) 
+    if (error || MoviesError || CollectionError) return <h1>{error}</h1>;
+    if (loading || MoviesLoading || CollectionLoading) 
     return <HomepageSkeleton />
     // if (data) 
     // return <HomepageSkeleton />
@@ -47,50 +47,18 @@ const Tvshows =  () => {
   //   })
   // })
 
-  let collection = [{
-      name: 'marvel',
-      image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650376487/009afde4-1fd0-409e-8db6-7a04e0f1b62d_ch3lq8.webp'
-  },
-  {
-    name: 'spider man',
-    image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650376662/e8f281fd-085b-4f5f-af11-b8aed0f34ccc_enwhxb.webp'
-},
-{
-  name: 'star wars',
-  image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650376663/795252df-0c05-4ebc-97cf-99cdbbbe91c1_tprian.webp'
-},
-{
-  name: 'pixar',
-  image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650376662/8db2f408-1e82-4220-9fa1-66676cb5ccb9_zxe4dn.webp'
-},
-{
-  name: 'Dc',
-  image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650376662/9d02485c-6e5d-44ae-8de9-a12bce828d63_u6o6kq.webp'
-}
-]
+  let collection = []
+  let genereCollection = []
+  CollectionData.getCollections.map((i) => {
+    if(i.type === 'genre') {
+      collection.push(i)
+    } else if(i.type === 'collection') {
+      genereCollection.push(i)
+    }
+  })
 
 
-let genereCollection = [{
-  name: 'Comedy',
-  image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650378035/8269beb6-8b78-4f17-8369-e1c644403613_vsbuup.webp'
-},
-{
-name: 'Action',
-image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650378035/a7b00252-3fee-4316-b2c7-8ef740172ef4_gmvzco.webp'
-},
-{
-name: 'Family',
-image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650378035/3f8c0905-e96f-44ec-a9ba-6b75242076f4_igu21m.webp'
-},
-{
-name: 'Horror',
-image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650378035/d18b8ada-97d7-45fe-b731-3189341b2d53_k9jx6h.webp'
-},
-{
-name: 'Fantasy',
-image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650378036/70173f5b-913d-4741-87be-12acce0db2af_trmk07.webp'
-}
-]
+
 
 
   console.log("marvel",marvel);
@@ -162,11 +130,9 @@ image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650378036/70173f5b-9
     <div class="m-2 lg:m-0  space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
      {
         
-         CollectionData.getCollections.map((collection) => {
-           if(collection.type === 'genre'){
+        collection.map((collection) => 
              <Collection  collection={collection}/>
-           }
-         }
+           
          )
       }
      </div>
@@ -178,11 +144,9 @@ image: 'https://res.cloudinary.com/dgrljsghp/image/upload/v1650378036/70173f5b-9
     <div class="m-4"></div>
     <div class="m-2 lg:m-0 space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
      {
-         genereCollection.map((collection) => {
-          if(collection.type === 'collection'){
+         genereCollection.map((collection) => 
             <Collection  collection={collection}/>
-          }
-         }
+         
          )
       }
      </div>
