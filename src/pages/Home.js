@@ -65,7 +65,7 @@ const Tvshows =  () => {
 
   let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
   let some1 = MoviesData.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat);
-
+  console.log(some);
   let netflix = [];
   let Amazon = [];
   let Hotstar = [];

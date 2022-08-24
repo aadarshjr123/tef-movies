@@ -5,6 +5,7 @@ import baffle from 'baffle';
 import Anime from './pages/Anime';
 import Movies from "./pages/Movies";
 import Tvshows from './pages/Tvshows';
+// import SearchBox from './components/Search';
 import Home from './pages/Home';
 import FilterMovie from './pages/filterMovie';
 import FilterTvshow from './pages/filterTvshow';
@@ -25,7 +26,7 @@ import facebook from 'react-useanimations/lib/facebook';
 import youtube from 'react-useanimations/lib/youtube';
 
 import FilterGenre from './pages/filterGenre';
-import SearchBox from './components/Search';
+import SearchBox from './pages/Search';
 
 const queryClient = new QueryClient()
 
@@ -51,10 +52,41 @@ export default function App() {
             <div class="lg:flex lg:justify-start items-start lg:w-4/5 ">
             <Navbar />
             </div>
-            <div class="z-20">
+            {/* <div class="z-20">
             <SearchBox/>
+            </div> */}
+             <div class="z-50 relative h-12 w-10">
+            <div class="bottom-0 absolute dark ">
+            <div class="bottom-0  invisible md:visible lg:visible ml-10 lg:mt-4 lg:ml-0 " >
+            <a href='/Search'>
+            <UseAnimations animation={searchToX} size={32} strokeColor="#fff" />
+              </a>
             </div>
+            </div>
+            {/* <div class="lg:invisible"> */}
+            <div class="bottom-0  absolute dark:invisible invisible md:visible lg:visible ml-10 lg:mt-4 lg:ml-0 " >
+            <a href='/Search'>
+            <UseAnimations animation={searchToX} size={32} />
+            </a>
+            </div>
+            </div>
+            
+            {/* </div> */}
+            <div class="relative h-12 w-10 ">
 
+            <div class="bottom-3 absolute lg:invisible md:invisible visible lg:mt-4 lg:ml-0 " >
+            <a href='/Search'>
+            <UseAnimations animation={searchToX} size={20} />
+            </a>
+            </div>
+            <div class="bottom-3 absolute dark lg:invisible ">
+            <div class="bottom-3 lg:invisible md:invisible visible lg:mt-4 lg:ml-0 " >
+            <a href='/Search'>
+            <UseAnimations animation={searchToX} size={20} strokeColor="#fff" />
+            </a>
+            </div>
+            </div>
+            </div>
             
 
             {/* <div class="lg:m-4"></div> */}
@@ -63,7 +95,7 @@ export default function App() {
             </div>
            </div>
     </div>
-    <div className='h-auto '>
+    <div className='h-auto'>
      <BrowserRouter>
        <Switch>
          <Route exact path="/">
@@ -78,6 +110,7 @@ export default function App() {
          <Route path='/PopularTvshows' component={FilterTvshow} />
          <Route path='/OneMovie' component={OneMovie} />
          <Route path='/OneTvshow' component={OneTvshow} />
+         <Route path='/Search' exact component={SearchBox} />
        </Switch>
      </BrowserRouter>
     </div>

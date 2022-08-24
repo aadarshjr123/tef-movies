@@ -10,6 +10,9 @@ import { motion  } from "framer-motion";
 
 
 function FilterGenre() {
+  console.log("start");
+  const { loading, error, data } = useQuery(GetMovies);
+  console.log("start1");
   let ddd
   if(window.location.href.split("?")[1]) {
     ddd = window.location.href.split("?")[1];
@@ -19,7 +22,6 @@ function FilterGenre() {
     console.log("no params");
   }
 
-  const { loading, error, data } = useQuery(GetMovies);
   const [filterData, setFilterData] = useState([]);
   const [filterState, setFilterState] = useState(false);
   let marvel = [];
