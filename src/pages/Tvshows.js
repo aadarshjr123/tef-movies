@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useRef, useState} from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { GetTvshows } from "../query/GetTvshows";
 import { TVShowHomepage } from "./TVShowHomepage";
@@ -6,10 +6,19 @@ import { CardLayoutTvshow } from "../components/CardLayoutTvshow";
 import { CardLayoutTvshow_3 } from "../components/CardLayoutTvshow_3";
 import { Cardskeleton } from "../Skeleton/Cardskeleton";
 import { HomepageSkeleton } from "../Skeleton/HomepageSkeleton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretLeft, faCaretRight } from "@fortawesome/fontawesome-free-solid";
 
 const Tvshows =  () => {
   const { loading, error, data } = useQuery(GetTvshows("Tvshows"));
+
+
     // console.log()
+    const ref = useRef(null);
+    const ref1 = useRef(null);
+    const ref2 = useRef(null);
+    const ref3 = useRef(null);
+
     if (error) return <h1>{error}</h1>;
     if (loading) 
     return <HomepageSkeleton />
@@ -26,7 +35,8 @@ const Tvshows =  () => {
     //   return arrayTvshows;
     // }
 
-  let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat).slice(0,5);
+  let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
+
   let netflix = [];
   let Amazon = [];
   let Hotstar = [];
@@ -44,10 +54,38 @@ const Tvshows =  () => {
       }
     })
   })
+
+  // if(some.length <=5 ) {
+  //   setmovieone(true);
+  // } 
+
+  // if(netflix.length <=5 ) {
+  //   setmovietwo(true);
+  // }
+  // if(Amazon.length <=5 ) {
+    
+  //   console.log(Amazon.length);
+  //   // setmoviethree(true);
+  // }
+
+  // if(Hotstar.length <=5 ) {
+  //   setmoviefour(true);
+  // }
     // let some = await tvshowfilter();
     // if(data)
     // return console.log(tvshowfilter());
-
+    const scroll = (scrollOffset) => {
+      ref.current.scrollLeft += scrollOffset;
+    };
+    const scroll1 = (scrollOffset) => {
+      ref1.current.scrollLeft += scrollOffset;
+    };
+    const scroll2 = (scrollOffset) => {
+      ref2.current.scrollLeft += scrollOffset;
+    };
+    const scroll3 = (scrollOffset) => {
+      ref3.current.scrollLeft += scrollOffset;
+    };
   return (
 
     // console.log(data)
@@ -59,52 +97,91 @@ const Tvshows =  () => {
      <div class="m-16"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Latest dubbed tvshoes</h3>  
     <div class="m-4"></div>
-    <div class="m-5 lg:m-0 space-x-1 flex h-full overflow-x-scroll hide-scroll-bar ">
+    <div class="flex flex-row" >
+      {
+        some.length <=5 ? null :  <button  class="w-20" onClick={() => scroll(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+}
+    <div ref={ref} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+    
     {
          some.map((movies) => (
            <CardLayoutTvshow  user={movies}/>
          ))
       }
      </div>
+     {
+        some.length <=5 ? null :  <button class="w-20" onClick={() => scroll(1000)}><FontAwesomeIcon color="white" size="3x" icon={faCaretRight} /></button>
+     }
+    </div>
 
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Netflix tvshows</h3>  
     <div class="m-4"></div>
-    <div class="m-5 lg:m-0 space-x-1 flex h-full overflow-x-scroll hide-scroll-bar ">
+    <div class="flex flex-row" >
     {
-         netflix.slice(0,5).map((movies) => (
+        netflix.length <=5  ? null :  <button  class="w-20" onClick={() => scroll1(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+}
+    <div ref={ref1} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+    
+    {
+         netflix.map((movies) => (
            <CardLayoutTvshow_3  user={movies}/>
          ))
       }
-     </div>
+      </div>
+      {
+         netflix.length <=5 ? null :   <button class="w-20" onClick={() => scroll1(1000)}><FontAwesomeIcon color="white" size="3x" icon={faCaretRight} /></button>
+   
+      }
+    </div>
 
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Amazon prime tvshows</h3>  
     <div class="m-4"></div>
-    <div class="m-5 lg:m-0 space-x-1 flex h-full overflow-x-scroll hide-scroll-bar">
+    <div class="flex flex-row" >
     {
-         Amazon.slice(0,5).map((movies) => (
+        Amazon.length <=5 ? null :  <button  class="w-20" onClick={() => scroll2(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+}
+    <div ref={ref2} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+    
+    {
+         Amazon.map((movies) => (
            <CardLayoutTvshow_3  user={movies}/>
          ))
       }
-     </div>
+         </div>
+         {
+         Amazon.length <=5 ? null :  <button class="w-20" onClick={() => scroll2(1000)}><FontAwesomeIcon color="white" size="3x" icon={faCaretRight} /></button>
+    
+         }
+    </div>
 
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Hotstar tvshows</h3>  
     <div class="m-4"></div>
-    <div class="m-5 lg:m-0 space-x-1 flex h-full overflow-x-scroll hide-scroll-bar">
+    <div class="flex flex-row" >
     {
-         Hotstar.slice(0,5).map((movies) => (
+         Hotstar.length <=5 ? null :  <button  class="w-20" onClick={() => scroll3(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+}
+    <div ref={ref3} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+    
+    {
+         Hotstar.map((movies) => (
            <CardLayoutTvshow_3  user={movies}/>
          ))
       }
-     </div>
+             </div>
+             {
+               Hotstar.length <=5 ? null :  <button class="w-20" onClick={() => scroll3(1000)}><FontAwesomeIcon color="white" size="3x" icon={faCaretRight} /></button>
+    
+             }
+    </div>
 
      </div>
      

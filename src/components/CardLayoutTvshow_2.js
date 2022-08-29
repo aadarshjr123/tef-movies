@@ -2,6 +2,8 @@ import React from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { GetMovies } from "../query/GetMovies";
 import { Link } from "react-router-dom";
+import {Image, Video, Transformation} from 'cloudinary-react';
+
 const scrollToTop = () =>{
   window.scrollTo({
     top: 0, 
@@ -31,7 +33,18 @@ export const CardLayoutTvshow_2 = ({ user: { name, watchOn,storyline, posters,Ty
       >
           {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
            {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
-          <img class=" h-full w-full" src={posters[0].posters} alt="Mountain" />
+          {/* <img class=" h-full w-full" src={posters[0].posters} alt="Mountain" /> */}
+          <Image 
+            class=" h-full w-full"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={posters[0].posters}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
         {/* </a> */}
       </div>
     </div>

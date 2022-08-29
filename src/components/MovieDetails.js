@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import ReactPlayer from "react-player";
 import logo from "../tomatometer-fresh.149b5e8adc3.svg";
 import logo1 from "../favicon_desktop_32x32._CB1582158068_.png";
@@ -11,8 +11,18 @@ import { GetMovies } from "../query/GetMovies";
 import { FaGreaterThan } from 'react-icons/fa';
 import {Image, Video, Transformation} from 'cloudinary-react';
 import grabLink from "youtube-thumbnail-grabber";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretLeft, faCaretRight } from "@fortawesome/fontawesome-free-solid";
 
 export const MovieDetails = (movie) => {
+  const ref = useRef(null);
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+  const ref3 = useRef(null);
+  const ref4 = useRef(null);
+  const ref5 = useRef(null);
+
+
   const [showModal, setShowModal] = React.useState(false);
   const [showVideoModal, setShowVideoModal] = React.useState(false);
   const [showPostersModal, setShowPostersModal] = React.useState(false);
@@ -28,19 +38,33 @@ export const MovieDetails = (movie) => {
 
 
   // console.log()
-
+  const scroll = (scrollOffset) => {
+    ref.current.scrollLeft += scrollOffset;
+  };
+  const scroll1 = (scrollOffset) => {
+    ref1.current.scrollLeft += scrollOffset;
+  };
+  const scroll2 = (scrollOffset) => {
+    ref2.current.scrollLeft += scrollOffset;
+  };
+  const scroll3 = (scrollOffset) => {
+    ref3.current.scrollLeft += scrollOffset;
+  };
+  const scroll4 = (scrollOffset) => {
+    ref4.current.scrollLeft += scrollOffset;
+  };
+  const scroll5 = (scrollOffset) => {
+    ref5.current.scrollLeft += scrollOffset;
+  };
   return (
 <div class=" mt-36 lg:mt-48 flex w-full h-auto  md:justify-center md:items-center  lg:justify-center lg:items-center ">
     <div
       class="
-      
         m-4
         ml-6
-        
         w-full
         "
     >
-      {/* {console.log(movie);} */}
       <div class=" relative overflow-hidden w-80 h-550 lg:h-auto lg:w-full  ">
       <Image 
                   // class="object-cover blur-3xl h-450 lg:h-110 w-full "
@@ -185,6 +209,17 @@ export const MovieDetails = (movie) => {
                   src={logo1}
                   alt="Mountain"
                 />
+                      {/* <Image 
+            class=" rounded-lg object-fill"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={logo1}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image> */}
               </div>
               {/* <p class="text-white text-sm font-thin  flex justify-center items-center h-1/4">Rating</p> */}
               <p class=" text-white text-sm font-thin flex justify-center items-center h-2/4">
@@ -228,7 +263,12 @@ export const MovieDetails = (movie) => {
         Videos to watch
       </div>
       <div class="m-10 " />
-      <div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+      <div class="flex flex-row" >
+        {
+          movie.movie[0].movieInfo[0].link.length <=5 ? null : <button  class="w-20" onClick={() => scroll5(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+        }
+
+      <div ref={ref5} class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
         {movie.movie[0].movieInfo[0].link.map((links,index) => {
           // console.log(cast)
           return (
@@ -306,13 +346,22 @@ export const MovieDetails = (movie) => {
           )
         })}
       </div>
+      {
+        movie.movie[0].movieInfo[0].link.length <=5 ? null : <button  class="w-20" onClick={() => scroll5(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+      }
+      </div>
+
       <div class="m-10 md:m-10 lg:m-16" />
 
       <div class=" w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
         Casts
       </div>
       <div class="m-10 " />
-      <div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-82 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+      <div class="flex flex-row" >
+        {
+          movie.movie[0].casts.length <=5 ? null : <button  class="w-20" onClick={() => scroll(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+        }
+      <div ref={ref} class="scroll-smooth flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-82 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
         {movie.movie[0].casts.map((cast) => {
           console.log(cast)
           return cast.hasOwnProperty("image") ? (
@@ -324,11 +373,22 @@ export const MovieDetails = (movie) => {
               </div>
               <div class=" lg:ml-0 ml-1 lg:mt-0 mt-2   text-white rounded-md flex justify-center items-center w-28 h-36 lg:w-40 lg:h-56 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out">
                 {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
-                <img
+                {/* <img
                   class=" rounded-lg  lg:h-full md:h-full h-full w-full md:w-full lg:w-full"
                   src={cast.image}
                   alt="cast"
-                />
+                /> */}
+                <Image 
+            class=" rounded-lg  lg:h-full md:h-full h-full w-full md:w-full lg:w-full"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={cast.image}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
                 {/* </a> */}
               </div>
               <div class="m-2"></div>
@@ -363,12 +423,20 @@ export const MovieDetails = (movie) => {
           );
         })}
       </div>
+      {
+        movie.movie[0].casts.length <=5 ? null : <button  class="w-20" onClick={() => scroll(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+      }
+      </div>
       <div class="m-10 md:m-10 lg:m-16" />
       <div class=" w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
   Crew
 </div>
 <div class="m-5" />
-<div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-72 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+<div class="flex flex-row" >
+  {
+    movie.movie[0].movieInfo[0].director.length <=5 ? null : <button  class="w-20" onClick={() => scroll1(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+  }      
+<div ref={ref1} class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-72 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
   {movie.movie[0].movieInfo[0].director.map((creator) => {
     console.log(creator)
     return creator.hasOwnProperty("image") ? (
@@ -380,11 +448,22 @@ export const MovieDetails = (movie) => {
         </div>
         <div class=" flex justify-center items-center h-40 lg:w-40 lg:h-56 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl  transition-shadow duration-300 ease-in-out">
           {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
-          <img
+          {/* <img
             class=" rounded-lg object-fill lg:h-full md:h-full h-36 w-28 md:w-full lg:w-full"
             src={creator.image}
             alt="cast"
-          />
+          /> */}
+          <Image 
+            class=" rounded-lg object-fill lg:h-full md:h-full h-36 w-28 md:w-full lg:w-full"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={creator.image}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
           {/* </a> */}
         </div>
         <div class="lg:m-2"></div>
@@ -411,14 +490,22 @@ export const MovieDetails = (movie) => {
     );
   })}
 </div>
-
+{
+  movie.movie[0].movieInfo[0].director.length <=5 ? null : <button  class="w-20" onClick={() => scroll1(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+}
+</div>
       <div class="m-10 md:m-10 lg:m-16" />
       <div class=" w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
         Posters
       </div>
 
       <div class="m-10 " />
-      <div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+      <div class="flex flex-row" >
+        {
+          movie.movie[0].posters.length <=5 ? null : <button  class="w-20" onClick={() => scroll2(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+        }
+
+      <div ref={ref3} class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
         {movie.movie[0].posters.map((posters,index) => {
           // console.log(cast)
           return (
@@ -433,11 +520,22 @@ export const MovieDetails = (movie) => {
                   console.log("linw 237",posters);
                   setPostersLink(posters)
                 }}>
-                <img
+                {/* <img
                   class="lg:h-fit md:h-full h-full w-full md:w-full lg:w-fit"
                   src={posters.posters}
                   alt="cast"
-                />
+                /> */}
+                     <Image 
+            class="lg:h-fit md:h-full h-full w-full md:w-full lg:w-fit"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={posters.posters}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
                 </a>
               </div>
 
@@ -453,11 +551,22 @@ export const MovieDetails = (movie) => {
 
                 <div class=" flex justify-center items-center md:justify-center md:items-center lg:justify-center lg:items-center w-80 md:h-72 lg:h-52 md:w-full lg:w-full md:grow lg:grow  ">
         {/* <div class=" rounded-lg box-border h-full w-full"> */}
-        <img
+        {/* <img
                   class=" justify-center items-center lg:h-full md:h-full h-full w-full md:w-full lg:w-fit"
                   src={postersLink.posters}
                   alt="cast"
-                />
+                /> */}
+                <Image 
+             class=" justify-center items-center lg:h-full md:h-full h-full w-full md:w-full lg:w-fit"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={postersLink.posters}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
         {/* </div> */}
       </div>
 
@@ -480,23 +589,43 @@ export const MovieDetails = (movie) => {
           )
         })}
       </div>
+      {
+        movie.movie[0].posters.length <=5 ? null : <button  class="w-20" onClick={() => scroll2(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+      }
 
+      </div>
 
       <div class=" m-10 md:m-10 lg:m-16" />
       <div class=" w-full font-medium text-sm  dark:text-white">
         <p class="">Watch now</p>
-        <div class=" flex flex-row space-x-4 grow items-center w-80 h-60 md:w-full lg:w-full md:h-60 lg:h-80 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
+        <div class="flex flex-row" >
+          {
+            movie.movie[0].watchOn.length <=5 ? null : <button  class="w-20" onClick={() => scroll2(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+          }
+
+        <div ref={ref3}class=" flex flex-row space-x-4 grow items-center w-80 h-60 md:w-full lg:w-full md:h-60 lg:h-80 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
           {movie.movie[0].watchOn.map((i) => {
             console.log(i,"490")
             {
               return i.hasOwnProperty("image") ? (
                 <div class="mt-10 w-32 h-40 md:w-40 md:h-52 lg:w-40 lg:h-52 font-medium dark:border-gray-700 border-gray-500 text-sm border-1 rounded-lg ">
                   <div class="flex justify-center items-center h-16 md:h-28 lg:h-28">
-                    <img
+                    {/* <img
                       class="rounded-lg object-fill h-10 md:h-20 lg:h-20 w-10 md:w-20 lg:w-20"
                       src={i.image}
                       alt="Mountain"
-                    />
+                    /> */}
+                    <Image 
+             class="rounded-lg object-fill h-10 md:h-20 lg:h-20 w-10 md:w-20 lg:w-20"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={i.image}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
                   </div>
                   <div class="flex justify-center items-center ">
                     <hr class="w-32 dark:border-gray-700"></hr>
@@ -525,6 +654,7 @@ export const MovieDetails = (movie) => {
                       src={logo2}
                       alt="Mountain"
                     />
+                    
                   </div>
                   <div class="flex justify-center items-center ">
                     <hr class="w-36"></hr>
@@ -546,16 +676,30 @@ export const MovieDetails = (movie) => {
             }
           })}
         </div>
+        {
+          movie.movie[0].watchOn.length <=5 ? null : <button  class="w-20" onClick={() => scroll3(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+        }
+        </div>
+
       </div>
       <div class=" w-full font-medium text-sm  dark:text-white ">
         <p class="">Popular movies</p>
-        <div class="  flex flex-row space-x-4 grow items-center w-80 h-80 md:w-full lg:w-full md:h-60 lg:h-110 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
+        <div class="flex flex-row" >
+          {
+            some.length <=5 ? null : <button  class="w-20" onClick={() => scroll4(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+          }
+
+        <div ref={ref4} class="  flex flex-row space-x-4 grow items-center w-80 h-80 md:w-full lg:w-full md:h-60 lg:h-110 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
         {
         //  latestDubbed(data)
         some.map((movies) => (
            <CardLayout_2  user={movies}/>
          ))
       }
+        </div>
+        {
+          some.length <=5 ? null : <button  class="w-20" onClick={() => scroll4(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+        }
         </div>
       </div>
     </div>

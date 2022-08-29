@@ -4,6 +4,7 @@ import { GetMovies } from "../query/GetMovies";
 import { Link } from "react-router-dom";
 import LazyLoad from 'react-lazy-load';
 import logo1 from "../009afde4-1fd0-409e-8db6-7a04e0f1b62d.webp";
+import {Image, Video, Transformation} from 'cloudinary-react';
 
 
 
@@ -38,11 +39,23 @@ export const Collection = (collection) => (
         class="mt-3 ml-2  lg:ml-4  animate-fade-in-down w-36 md:w-52 lg:w-48 h-44 md:h-48 lg:h-48 max-w-xs overflow-hidden  shadow-md bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out"
       >
           {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
-          <img
+          {/* <img
             class="h-full w-full"
             src={collection.collection.image}
             alt="Mountain"
-          />
+          /> */}
+
+<Image 
+            class="h-full w-full"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={collection.collection.image}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
         {/* </a> */}
       </div>
     </div>

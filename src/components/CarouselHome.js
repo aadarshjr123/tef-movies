@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Swipe from "react-easy-swipe";
 import { Link } from "react-router-dom";
+import {Image, Video, Transformation} from 'cloudinary-react';
 
 export class CarouselHome extends Component {
   constructor(props) {
@@ -103,7 +104,7 @@ export class CarouselHome extends Component {
                       ? "block w-2/4 h-auto object-cover"
                       : "hidden"
                   }>
-                  <img
+                  {/* <img
                   src={slide.rectanglePosters[0].rectanglePosters}
                   alt="This is a carousel slide"
                   key={index}
@@ -113,8 +114,24 @@ export class CarouselHome extends Component {
                   onMouseLeave={() => {
                     this.setState({ paused: false });
                   }}
-                /> 
-
+                />  */}
+     <Image 
+            cloud_name="tefdb"
+            key={index}
+            loading="lazy"
+            format="webp"
+            publicId={slide.rectanglePosters[0].rectanglePosters}
+            onMouseEnter={() => {
+              this.setState({ paused: true });
+            }}
+            onMouseLeave={() => {
+              this.setState({ paused: false });
+            }}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
                   </div> 
      
 

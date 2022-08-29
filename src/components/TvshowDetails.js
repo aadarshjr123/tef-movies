@@ -457,11 +457,22 @@ export const TvshowDetails = (movie) => {
               </div>
               <div class=" lg:ml-0 ml-1 lg:mt-0 mt-2   text-white rounded-md flex justify-center items-center w-28 h-36 lg:w-40 lg:h-56 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out">
                 {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
-                <img
+                {/* <img
                   class=" rounded-lg  lg:h-full md:h-full h-full w-full md:w-full lg:w-full"
                   src={cast.image}
                   alt="cast"
-                />
+                /> */}
+                  <Image 
+            class=" rounded-lg  lg:h-full md:h-full h-full w-full md:w-full lg:w-full"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={cast.image}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
                 {/* </a> */}
               </div>
               <div class="m-2"></div>
@@ -514,11 +525,22 @@ export const TvshowDetails = (movie) => {
       </div>
       <div class=" flex justify-center items-center h-40 lg:w-40 lg:h-56 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl  transition-shadow duration-300 ease-in-out">
           {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
-          <img
+          {/* <img
             class=" rounded-lg object-fill lg:h-full md:h-full h-36 w-28 md:w-full lg:w-full"
             src={creator.image}
             alt="cast"
-          />
+          /> */}
+                    <Image 
+            class=" rounded-lg object-fill lg:h-full md:h-full h-36 w-28 md:w-full lg:w-full"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={creator.image}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
           {/* </a> */}
         </div>
         <div class="lg:m-2"></div>
@@ -568,11 +590,22 @@ export const TvshowDetails = (movie) => {
                   console.log("linw 237",posters);
                   setPostersLink(posters)
                 }}>
-                <img
+                {/* <img
                   class="lg:h-fit md:h-full h-full w-full md:w-full lg:w-fit"
                   src={posters.posters}
                   alt="cast"
-                />
+                /> */}
+                <Image 
+            class="lg:h-fit md:h-full h-full w-full md:w-full lg:w-fit"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={posters.posters}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
                 </a>
               </div>
 
@@ -588,11 +621,22 @@ export const TvshowDetails = (movie) => {
 
                 <div class=" flex justify-center items-center md:justify-center md:items-center lg:justify-center lg:items-center w-80 md:h-72 lg:h-52 md:w-full lg:w-full md:grow lg:grow  ">
         {/* <div class=" rounded-lg box-border h-full w-full"> */}
-        <img
+        {/* <img
                   class=" justify-center items-center lg:h-full md:h-full h-full w-full md:w-full lg:w-fit"
                   src={postersLink.posters}
                   alt="cast"
-                />
+                /> */}
+                <Image 
+            class=" justify-center items-center lg:h-full md:h-full h-full w-full md:w-full lg:w-fit"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={postersLink.posters}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
         {/* </div> */}
       </div>
 
@@ -627,11 +671,22 @@ export const TvshowDetails = (movie) => {
               return i.hasOwnProperty("image") ? (
                 <div class="mt-10 w-32 h-36 md:w-40 md:h-48 lg:w-40 lg:h-48 font-medium dark:border-gray-700 border-gray-500 text-sm  rounded-lg ">
                   <div class="flex justify-center items-center h-16 md:h-28 lg:h-28">
-                    <img
+                    {/* <img
                       class="rounded-lg object-fill h-10 md:h-20 lg:h-20 w-10 md:w-20 lg:w-20"
                       src={i.image}
                       alt="Mountain"
-                    />
+                    /> */}
+                    <Image 
+            class="rounded-lg object-fill h-10 md:h-20 lg:h-20 w-10 md:w-20 lg:w-20"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={i.image}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
                   </div>
                   <div class="flex justify-center items-center ">
                     <hr class="w-32 dark:border-gray-700"></hr>

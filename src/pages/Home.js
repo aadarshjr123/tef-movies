@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useRef} from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { GetTvshows } from "../query/GetTvshows";
 import { Homepage } from "./Homepage";
@@ -10,8 +10,16 @@ import { GetMovies } from "../query/GetMovies";
 import { GetCollections } from "../query/GetCollections";
 import { CardLayout } from "../components/CardLayout";
 import { Collection } from "../components/Collection";
-
+// import { FaBeer } from 'react-icons/fa';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import '../node_modules/font-awesome/css/font-awesome.min.css'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCaretLeft, faCaretRight } from '@fortawesome/fontawesome-free-solid'
 const Tvshows =  () => {
+  const ref = useRef(null);
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+  const ref3 = useRef(null);
 
   const { loading, error, data } = useQuery(GetTvshows("Tvshows"));
   // const = useQuery(GetTvshows("Tvshows"));
@@ -86,7 +94,18 @@ const Tvshows =  () => {
     // let some = await tvshowfilter();
     // if(data)
     // return console.log(tvshowfilter());
-
+    const scroll = (scrollOffset) => {
+      ref.current.scrollLeft += scrollOffset;
+    };
+    const scroll1 = (scrollOffset) => {
+      ref1.current.scrollLeft += scrollOffset;
+    };
+    const scroll2 = (scrollOffset) => {
+      ref2.current.scrollLeft += scrollOffset;
+    };
+    const scroll3 = (scrollOffset) => {
+      ref3.current.scrollLeft += scrollOffset;
+    };
   return (
 
     // console.log(data)
@@ -101,33 +120,54 @@ const Tvshows =  () => {
      <div class="m-16"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Latest dubbed movies</h3>  
     <div class="m-4"></div>
-    <div class=" m-2 lg:m-0 space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+    <div class="flex flex-row" >
+      {
+        some1.length <= 5 ? null : <button class="w-20" onClick={() => scroll(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+      }
+    <div ref={ref} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
     {
          some1.map((movies) => (
            <CardLayout  user={movies}/>
          ))
       }
      </div>
+     {
+      some1.length <= 5 ? null :  <button class="w-20" onClick={() => scroll(1000)}><FontAwesomeIcon color="white" size="3x" icon={faCaretRight} /></button>
+     }
+    </div>
+
 
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Latest dubbed tvshoes</h3>  
     <div class="m-4"></div>
-    <div class="m-2 lg:m-0 space-x-1 flex h-full overflow-x-scroll overflow-y-hidden hide-scroll-bar ">
+    <div class="flex flex-row" >
+      {
+        some.length <=5 ? null : <button class="w-20" onClick={() => scroll1(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+      }
+    <div  ref={ref1} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
     {
          some.map((movies) => (
            <CardLayoutTvshow  user={movies}/>
          ))
       }
      </div>
+     {
+      some.length <=5 ? null : <button class="w-20" onClick={() => scroll1(1000)}><FontAwesomeIcon color="white" size="3x" icon={faCaretRight} /></button>
+     }
+    </div>
 
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Movie Collection</h3>  
     <div class="m-4"></div>
-    <div class="m-2 lg:m-0  space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+    <div class="flex flex-row" >
+    {
+      collection.length <=5 ? null : <button class="w-20" onClick={() => scroll1(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+     }
+    <div ref={ref2} class="m-2 lg:m-0  space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
      {
         
         collection.map((collection) => 
@@ -136,19 +176,30 @@ const Tvshows =  () => {
          )
       }
      </div>
-
+     {
+      collection.length <=5 ? null : <button class="w-20" onClick={() => scroll1(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+     }
+     </div>
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Genres</h3>  
     <div class="m-4"></div>
-    <div class="m-2 lg:m-0 space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+    <div class="flex flex-row" >
+      {
+        genereCollection.length <=5 ? null : <button class="w-20" onClick={() => scroll1(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+      }
+    <div ref={ref3} class="m-2 lg:m-0 space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
      {
          genereCollection.map((collection) => 
             <Collection  collection={collection}/>
          
          )
       }
+     </div>
+     {
+       genereCollection.length <=5 ? null : <button class="w-20" onClick={() => scroll1(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+     }
      </div>
 
      </div>

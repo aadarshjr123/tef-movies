@@ -7,6 +7,7 @@ import { Carousel } from "../components/Carousel";
 import { CardColumn } from "../components/CardColumn";
 import { Link } from "react-router-dom";
 // import { OneMovie } from "../pages/OneMovie";
+import {Image, Video, Transformation} from 'cloudinary-react';
 
 let array = [];
 
@@ -67,9 +68,20 @@ export function MoviesHomepage() {
   }}>
   <div class="w-auto h-32 md:h-40 lg:h-40 md:w-full lg:w-full max-w-4xl rounded overflow-hidden m-2 flex justify-between ">
     <div class="md:flex-shrink-0 flex justify-center items-center  w-1/3">
-      <img class="md:w-28 object-contain lg:h-full lg:w-full rounded-lg"
+      {/* <img class="md:w-28 object-contain lg:h-full lg:w-full rounded-lg"
            src={movies.posters[0].posters}
-           alt="A Quiet Place movie poster" />
+           alt="A Quiet Place movie poster" /> */}
+             <Image 
+            class="md:w-28 object-contain lg:h-full lg:w-full rounded-lg"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={movies.posters[0].posters}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>    
     </div>
     <div class="flex w-3/4 flex-col flex-grow px-4 py-4 bg-color-333 ">
       <h3 class="font-bold text-sm md:text-2xl lg:text-xs text-black movie--title dark:text-white">{movies.name}</h3>

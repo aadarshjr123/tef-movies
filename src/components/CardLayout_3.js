@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { GetMovies } from "../query/GetMovies";
 import { Link } from "react-router-dom";
 import LazyLoad from 'react-lazy-load';
+import {Image, Video, Transformation} from 'cloudinary-react';
 
 const scrollToTop = () =>{
   window.scrollTo({
@@ -33,12 +34,22 @@ export const CardLayout_3 = ({ user: { name, storyline, posters, id ,watchOn} })
         class="mt-3 ml-2 animate-fade-in-down w-36 md:w-52 lg:w-48 h-48 md:h-72 lg:h-72 max-w-xs overflow-hidden  shadow-md bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out"
       >
           {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
-          <img
+          {/* <img
             class="h-full w-full"
             src={posters[0].posters}
             alt="Mountain"
-          />
-         
+          /> */}
+               <Image 
+            class="h-full w-full"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={posters[0].posters}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>
           {/* </a> */}
         </div>
       </div>
