@@ -95,7 +95,7 @@ const Tvshows =  () => {
     </h1>
     <div class="mt-5 ">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Latest dubbed tvshoes</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Latest dubbed tvshoes</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
       {
@@ -117,7 +117,7 @@ const Tvshows =  () => {
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Netflix tvshows</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Netflix tvshows</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
     {
@@ -140,7 +140,7 @@ const Tvshows =  () => {
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Amazon prime tvshows</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Amazon prime tvshows</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
     {
@@ -163,7 +163,7 @@ const Tvshows =  () => {
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Hotstar tvshows</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Hotstar tvshows</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
     {

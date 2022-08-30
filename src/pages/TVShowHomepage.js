@@ -56,7 +56,7 @@ console.log(Latest);
     </div>
     <div class="m-5 md:m-0 lg:m-0 h-auto lg:w-2/5">
     <div class="m-5"></div>
-    <h3 class="lg:ml-4 font-bold text-sm md:text-2xl lg:text-sm text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Popular movies</h3>
+    <h3 class="lg:ml-4 font-bold text-sm md:text-2xl lg:text-sm text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono ">Popular movies</h3>
     <div class="m-2"></div>
     {
       // console.log(data.getMovies)
@@ -80,13 +80,13 @@ console.log(Latest);
            </Image>
     </div>
     <div class="flex w-3/4 flex-col flex-grow px-4 py-4 bg-color-333 ">
-      <h3 class="font-bold text-sm md:text-2xl lg:text-xs text-black movie--title dark:text-white">{movies.name}</h3>
+      <h3 class="font-RobotoMono font-bold text-sm md:text-2xl lg:text-xs text-black movie--title dark:text-white">{movies.name}</h3>
       <div class="m-1"></div>
-      <span class="movie--year text-sm md:text-xs lg:text-xs dark:text-white">2019</span>
+      {/* <span class="movie--year text-sm md:text-xs lg:text-xs dark:text-white">2019</span> */}
       <div class="m-1"></div>
      
       <div class="flex-grow ">
-        <p class="invisible md:visible lg:visible text-sm md:text-base lg:text-xs dark:text-white text-black leading-snug truncate-overflow">{movies.storyline}</p>
+        <p class="font-RobotoMono invisible md:visible lg:visible text-sm md:text-base lg:text-xs dark:text-white text-black leading-snug truncate-overflow">{movies.storyline}</p>
       </div>
       {/* <div class="m-1 "></div> */}
       {/* <div class=" h-10 justify-center items-center  button-container flex mb-4 border-4 border-black"> */}
@@ -102,7 +102,7 @@ console.log(Latest);
     <div class="m-5"></div>
 
             {/* <CardColumn data={data}/> */}
-    <div class="text-sm md:ml-0 lg:ml-0 flex h-7 md:h-10 lg:h-10 w-full md:w-full lg:w-full rounded-sm bg-orange-300  justify-center items-center ">
+    <div class="font-RobotoMono text-sm md:ml-0 lg:ml-0 flex h-7 md:h-10 lg:h-10 w-full md:w-full lg:w-full rounded-sm bg-orange-300  justify-center items-center ">
       {/* <a href="/PopularTvshows" class="text-sm"> */}
       <Link to={{
     pathname: "/PopularTvshows",

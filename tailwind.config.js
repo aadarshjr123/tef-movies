@@ -5,6 +5,9 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        RobotoMono: ["Roboto Mono", "monospace"],
+      },
       boxShadow: {
         '3xl': '0 0 20px 10px rgba(0, 0, 0, 1)',
       },

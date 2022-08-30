@@ -64,8 +64,8 @@ export class Carousel extends Component {
     // console.log( `${this.state.type}`, this.state.name.length > 0 ? `?6241e21?Tvshows`:`?6241e21`,)
     // console.log()
     return (
-      <div className="m-3 md:m-10 lg:m-10 flex justify-center items-center ">
-        <div className="flex w-full md:w-20/12 lg:w-20/12 md:h-96 lg:h-96  overflow-hidden relative rounded-md ">
+      <div className=" m-3 md:m-10 lg:m-10 flex justify-center items-center ">
+        <div className="flex w-full md:w-20/12 lg:w-20/12 md:h-96 lg:h-110  overflow-hidden relative rounded-md ">
           {/* <AiOutlineLeft
             onClick={this.prevSlide}
             className="absolute left-0 text-3xl inset-y-1/2 text-white cursor-pointer"
@@ -74,15 +74,22 @@ export class Carousel extends Component {
             {this.props.value.map((slide, index) => {
               // console.log("Carosel",slide);
               return (
-                <div>
-                <div class="h-10 md:h-full lg:h-10 carousel-caption top-3 lg:top-3 flex justify-center items-center md:block absolute text-center ">
-                <h5 class="lg:text-xs" key={index}
+                <div class="">
+                <h5 className={
+                    index === this.state.currentSlide
+                      ? "text-transparent bg-clip-text  bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-center  font-RobotoMono block lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-xl font-bold "
+                      : "hidden"
+                  }
+                  key={index} >{slide.name}</h5>  
+
+                {/* <div class="h-10 md:h-full lg:h-10 carousel-caption top-3 lg:top-3 flex justify-center items-center md:block absolute text-center "> */}
+                {/* <h5 class="font-RobotoMono lg:text-xs" key={index}
                   className={
                     index === this.state.currentSlide
-                      ? "block -mt-5 lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-xl font-bold "
+                      ? "font-RobotoMono block -mt-5 lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-xl font-bold "
                       : "hidden"
-                  }>{slide.name}</h5>
-                </div>
+                  }>{slide.name}</h5> */}
+                {/* </div> */}
                 {/* {console.log(this.state.name.length > 0 ? `?${slide.id}?Tvshows`:`?${slide.id}`)} */}
                 <Link to={{
                   pathname:  `${this.state.type}`,
@@ -91,7 +98,11 @@ export class Carousel extends Component {
                   key: index
                   // index: this.state.currentSlide
                 }}>
-                  <div class="">
+                  <div className={
+                    index === this.state.currentSlide ? 
+                    "mt-7"
+                    : "hidden"
+                  }>
                    
                 {/* <img
                   src={slide.rectanglePosters[0].rectanglePosters}
@@ -113,7 +124,7 @@ export class Carousel extends Component {
                 key={index}
                 className={
                   index === this.state.currentSlide
-                    ? "block w-full h-auto object-cover"
+                    ? "block w-400 h-80 object-cover"
                     : "hidden"
                 }
                 onMouseEnter={() => {
@@ -157,10 +168,10 @@ export class Carousel extends Component {
                 </div>
                   </Link>
                   <div class=" z-0 bg-opacity-30 h-10 md:h-full lg:h-10 carousel-caption top-36 lg:top-10 flex justify-center items-center md:block absolute text-center">
-                <p class="lg:text-xs" key={index}
+                <p class="font-RobotoMono lg:text-xs" key={index}
                   className={
                     index === this.state.currentSlide
-                      ? "block -mt-5  lg:w-full h-5 lg:h-10 object-cover text-xs lg:text-md font-mono "
+                      ? "font-RobotoMono font-thin block -mt-5  lg:w-full h-5 lg:h-10 object-cover text-xs lg:text-md "
                       : "hidden"
                   }>Available languages {slide.availLanguages.length}</p>
                 </div>
@@ -174,7 +185,7 @@ export class Carousel extends Component {
                 <div
                   className={
                     index === this.state.currentSlide
-                      ? "bg-black w-3 h-1 mx-2 mb-2 cursor-pointer"
+                      ? "bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500  rounded-sm w-3 h-1 mx-2 mb-2 cursor-pointer"
                       : "bg-white w-3 h-1 rounded-sm mx-2 mb-2 cursor-pointer"
                   }
                   key={index}
