@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { MovieDetails } from "../components/MovieDetails";
 import { Cardskeleton } from "../Skeleton/Cardskeleton";
@@ -63,6 +63,7 @@ some[0].movieInfo[0].director.map((castName) => {
 };
 
  function OneMovie() {
+  
   const GetMoviess = useQuery(GetMovies);
   const getOttss = useQuery(getOtts);
   const getActorss = useQuery(getActors);
