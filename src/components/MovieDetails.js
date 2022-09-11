@@ -6,7 +6,7 @@ import logo2 from "../404-error.png";
 import logo3 from "../Frames1.png";
 import { CarouselPosters } from "./CarouselPosters";
 import { CardLayout_2 } from "../components/CardLayout_2";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { FaGreaterThan } from 'react-icons/fa';
 import {Image, Video, Transformation} from 'cloudinary-react';

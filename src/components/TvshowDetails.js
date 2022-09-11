@@ -7,7 +7,7 @@ import logo3  from "../Frames1.png";
 import {Image, Video, Transformation} from 'cloudinary-react';
 import { CarouselPosters } from "./CarouselPosters";
 import { CardLayoutTvshow_2 } from "../components/CardLayoutTvshow_2";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { GetTvshows } from "../query/GetTvshows";
 import { FaGreaterThan } from 'react-icons/fa';
 import Accordion from "./Accordion";

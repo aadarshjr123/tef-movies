@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ApolloClient from 'apollo-boost'
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/client';
 import 'tw-elements';
 import Toggle from './components/ThemeToggle';
 import { ThemeProvider } from './ThemeContext';

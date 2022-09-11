@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 // import { getOtts } from "../../query/GetOtts";
 
 export const WatchNowUI = (links) =>  (
