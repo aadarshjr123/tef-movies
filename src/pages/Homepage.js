@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { MovieDetails } from "../components/MovieDetails";
 import { Cardskeleton } from "../Skeleton/Cardskeleton";
@@ -27,6 +27,7 @@ function dynamicSort(property) {
 
 export function Homepage() {
   // console.log(GetMovies)
+  
   const { loading, error, data } = useQuery(GetMovies);
     console.log()
   if (error) return <h1>Something went wrong!</h1>;

@@ -1,5 +1,5 @@
 import React,{useState} from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { GetTvshows } from "../query/GetTvshows";
 import { Homepage } from "./Homepage";
 import { CardLayoutTvshow } from "../components/CardLayoutTvshow";
@@ -15,19 +15,42 @@ import SearchData from "./searchData";
 
 const Search =  () => {
 
-  const { loading, error, data } = useQuery(GetTvshows("Tvshows"));
+  // const { loading, error, data } = useQuery(GetTvshows("Tvshows"));
   const [searchStart,setSearchStart ] = useState(false);
   const [searchName,setSearchName ] = useState("");
 
   // const = useQuery(GetTvshows("Tvshows"));
-  const { loading:MoviesLoading, error:MoviesError, data:MoviesData }  = useQuery(GetMovies);
-  const { loading:CollectionLoading, error:CollectionError, data:CollectionData }  = useQuery(GetCollections);
+  let CollectionsData = localStorage.getItem('Collection');
+  // let TvshowData = localStorage.getItem('TvshowData');
+  // let MovieData = localStorage.getItem('MovieData');
+
+  let CollectionLocalStoredData = JSON.parse(CollectionsData);
+  // let TvshowLocalStoredData = JSON.parse(TvshowData);
+  // let MovieLocalStoredData = JSON.parse(MovieData);
 
 
-    // console.log()
-    if (error || MoviesError || CollectionError) return <h1>{error}</h1>;
-    if (loading || MoviesLoading || CollectionLoading) 
-    return <HomepageSkeleton />
+  console.log(CollectionLocalStoredData);
+  // const { loading:MoviesLoading, error:MoviesError, data:MoviesData }  = useQuery(GetMovies);
+  // ssss
+  // const CollectionError = undefined;
+  // const CollectionLoading = false;
+  // const CollectionData = [];
+  let localS = false;
+  CollectionLocalStoredData !== null ? localS = true : localS = false
+  // if(CollectionLocalStoredData === null) {
+    const { loading:CollectionLoading, error:CollectionError, data:CollectionData }  = useQuery(GetCollections,{skip: localS});
+  // } else {
+    // CollectionData.push(CollectionLocalStoredData)
+  // }
+// 
+
+
+    // console.log(CollectionError)
+    // console.log(CollectionLoading)
+
+    // if (error || MoviesError) return <h1>{error}</h1>;
+    // if (loading || MoviesLoading) 
+    // return <HomepageSkeleton />
     // if (data) 
     // return <HomepageSkeleton />
     // const tvshowfilter = async () => {
@@ -56,6 +79,16 @@ const Search =  () => {
 
   let collection = []
   let genereCollection = []
+
+  
+  localS === true ? 
+  CollectionLocalStoredData.getCollections.map((i) => {
+    if(i.type === 'genre') {
+      collection.push(i)
+    } else if(i.type === 'collection') {
+      genereCollection.push(i)
+    }
+  }) :
   CollectionData.getCollections.map((i) => {
     if(i.type === 'genre') {
       collection.push(i)
@@ -68,14 +101,15 @@ const Search =  () => {
 
 
 
-  console.log("marvel",marvel);
 
-  let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
-  let some1 = MoviesData.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat);
+  // console.log("marvel",marvel);
 
-  let netflix = [];
-  let Amazon = [];
-  let Hotstar = [];
+  // let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
+  // let some1 = MoviesData.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat);
+
+  // let netflix = [];
+  // let Amazon = [];
+  // let Hotstar = [];
   // let some1 = data.getTVshow1.filter((i) => {
   //   i.watchOn.map((j) => {
   //     if(j.watchOn === "Netflix") {
@@ -116,12 +150,12 @@ const Search =  () => {
     <div className="mt-44 w-full">
         <form class="flex flex-row w-full">   
         <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">Search</label>
-        <div class="relative w-11/12">
+        <div class="relative w-full">
         <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
             <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </div>
         <input disabled={searchStart === true} onChange={onChangeSearchName} type="search" id="default-search" class="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Movies and more..." required></input>
-        <button disabled={searchStart === true} type="submit" onClick={onSubmit} class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+        <button disabled={searchStart === true} type="submit" onClick={onSubmit} class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 ">Search</button>
         </div>
         {
           searchStart ? <div class="relative items-center w-1/12">
@@ -146,7 +180,6 @@ const Search =  () => {
         
         collection.map((collection) => 
              <Collection  collection={collection}/>
-           
          )
       }
      </div>

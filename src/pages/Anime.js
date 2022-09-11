@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { GetTvshows } from "../query/GetTvshows";
 import { TVShowHomepage } from "./TVShowHomepage";
 import { CardLayoutTvshow } from "../components/CardLayoutTvshow";

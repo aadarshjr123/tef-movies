@@ -2,7 +2,7 @@ import React, { useEffect,useState } from "react";
 import { OneMovie } from "./OneMovie";
 import { Homepage } from "./Homepage";
 import { CardLayout } from "../components/CardLayout";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { motion  } from "framer-motion";
 
@@ -11,7 +11,14 @@ import { motion  } from "framer-motion";
 
 function FilterGenre() {
   console.log("start");
-  const { loading, error, data } = useQuery(GetMovies);
+  // let TvshowData = localStorage.getItem('TvshowData');
+  let MovieData = localStorage.getItem('MoviesData');
+  console.log(MovieData);
+  let MovieLocalStoredData = JSON.parse(MovieData);
+  console.log(MovieLocalStoredData);
+  let localS = false;
+  MovieLocalStoredData !== null ? localS = true : localS = false
+  const { loading, error, data } = useQuery(GetMovies,{skip:localS});
   console.log("start1");
   let ddd
   if(window.location.href.split("?")[1]) {
@@ -26,6 +33,16 @@ function FilterGenre() {
   const [filterState, setFilterState] = useState(false);
   let marvel = [];
   console.log(data);
+  localS === true ? 
+  MovieLocalStoredData.getMovies.map((i) => {
+    // console.log(i.movieInfo[0].genre);
+    i.movieInfo[0].genre.map((j) => {
+      if( j.genre.split(" ").join("") === ddd)
+      {
+        marvel.push(i);
+      }
+    })
+  }) :
   data.getMovies.map((i) => {
     // console.log(i.movieInfo[0].genre);
     i.movieInfo[0].genre.map((j) => {
@@ -35,6 +52,7 @@ function FilterGenre() {
       }
     })
   })
+  
   console.log(marvel);
 
 

@@ -1,5 +1,5 @@
 import React,{useRef, useState} from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { GetTvshows } from "../query/GetTvshows";
 import { TVShowHomepage } from "./TVShowHomepage";
 import { CardLayoutTvshow } from "../components/CardLayoutTvshow";
@@ -10,18 +10,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/fontawesome-free-solid";
 
 const Tvshows =  () => {
-  const { loading, error, data } = useQuery(GetTvshows("Tvshows"));
-
+    let TvshowData = localStorage.getItem('TvshowData');
+      let TvshowLocalStoredData = JSON.parse(TvshowData);
+      console.log(TvshowLocalStoredData)
+      console.log(TvshowLocalStoredData === JSON.parse(null))
+      console.log(typeof JSON.parse(null))
+      let localS = false;
+      TvshowLocalStoredData === JSON.parse(null) ? localS = false : localS = true
+      console.log(localS);
+  const { loading, error, data } = useQuery(GetTvshows("Tvshows"),localS);
 
     // console.log()
     const ref = useRef(null);
     const ref1 = useRef(null);
     const ref2 = useRef(null);
     const ref3 = useRef(null);
-
-    if (error) return <h1>{error}</h1>;
-    if (loading) 
-    return <HomepageSkeleton />
+    if(localS === false){
+      if (error) return <h1>{error}</h1>;
+      if (loading) 
+      return <HomepageSkeleton />
+    }
     // if (data) 
     // return <HomepageSkeleton />
     // const tvshowfilter = async () => {
@@ -35,12 +43,28 @@ const Tvshows =  () => {
     //   return arrayTvshows;
     // }
 
-  let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
+  let some = localS === true ? TvshowLocalStoredData.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat) : data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
 
   let netflix = [];
   let Amazon = [];
   let Hotstar = [];
-  let some1 = data.getTVshow1.filter((i) => {
+  // let some1 = 
+  localS === true ?
+  TvshowLocalStoredData.getTVshow1.filter((i) => {
+    i.watchOn.map((j) => {
+      if(j.watchOn === "Netflix") {
+        // console.log("netflix");
+        netflix.push(i); 
+      } else if(j.watchOn === "Amazon Prime Videos") {
+        // console.log("netflix");
+        Amazon.push(i); 
+      } else if(j.watchOn === "Disney Plus Hotstar") {
+        // console.log("netflix");
+        Hotstar.push(i); 
+      }
+    })
+  }) :
+  data.getTVshow1.filter((i) => {
     i.watchOn.map((j) => {
       if(j.watchOn === "Netflix") {
         // console.log("netflix");

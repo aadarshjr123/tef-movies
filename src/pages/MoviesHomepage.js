@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { MovieDetails } from "../components/MovieDetails";
 import { Cardskeleton } from "../Skeleton/Cardskeleton";
@@ -27,12 +27,18 @@ function dynamicSort(property) {
 }
 
 export function MoviesHomepage() {
+  let MoviesData = localStorage.getItem('MoviesData');
+  let MoviesLocalStoredData = JSON.parse(MoviesData);
+  console.log(MoviesLocalStoredData)
+  let localS = false;
+  MoviesLocalStoredData !== null ? localS = true : localS = false
   // console.log(GetMovies)
-  const { loading, error, data } = useQuery(GetMovies);
+  const { loading, error, data } = useQuery(GetMovies,localS);
     console.log()
-  if (error) return <h1>Something went wrong!</h1>;
-  if (loading) 
-  return <Cardskeleton />
+
+  // if (error) return <h1>Something went wrong!</h1>;
+  // if (loading) 
+  // return <Cardskeleton />
   const url = (data) => {
     console.log(`/OneMovie?${data}`)
   //  return `/OneMovie?${data}`
@@ -40,7 +46,7 @@ export function MoviesHomepage() {
 
   // let Latest = data.getMovies.slice(-5);
   // let Latest1 = data.getMovies.sort();
-  let Latest = data.getMovies.sort(dynamicSort("id")).slice(-5);
+  let Latest = localS === true ? MoviesLocalStoredData.getMovies.sort(dynamicSort("id")).slice(-5) : data.getMovies.sort(dynamicSort("id")).slice(-5);
   // console.log(Latest);
   console.log(Latest);
 
@@ -58,6 +64,51 @@ export function MoviesHomepage() {
     <div class="m-2"></div>
     {
       // console.log(data.getMovies)
+      localS === true ?
+      MoviesLocalStoredData.getMovies.slice(0,2).map((movies) => (
+        // console.log(movies);
+        <div class="flex  md:h-48 lg:h-48 justify-center items-center flex-wrap flex--movie ">  
+    <Link to={{
+    pathname: "/OneMovie",
+    search: `?${movies.id}`,
+    state: { fromDashboard: true }
+  }}>
+  <div class="w-auto h-32 md:h-40 lg:h-40 md:w-full lg:w-full max-w-4xl rounded overflow-hidden m-2 flex justify-between ">
+    <div class="md:flex-shrink-0 flex justify-center items-center  w-1/3">
+      {/* <img class="md:w-28 object-contain lg:h-full lg:w-full rounded-lg"
+           src={movies.posters[0].posters}
+           alt="A Quiet Place movie poster" /> */}
+             <Image 
+            class="md:w-28 object-contain lg:h-full lg:w-full rounded-lg"
+            cloud_name="tefdb"
+            loading="lazy"
+            format="webp"
+            publicId={movies.posters[0].posters}
+            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            alt="Image"
+          >
+            <Transformation quality="85"/>
+          </Image>    
+    </div>
+    <div class="flex w-3/4 flex-col flex-grow px-4 py-4 bg-color-333 ">
+      <h3 class="font-RobotoMono font-bold text-sm md:text-2xl lg:text-xs text-black movie--title dark:text-white">{movies.name}</h3>
+      <div class="m-1"></div>
+      <span class="font-RobotoMono movie--year text-sm md:text-xs lg:text-xs dark:text-white">{movies.movieInfo[0].releaseDate.split(",")[1]} | {movies.movieInfo[0].runtime}</span>
+      <div class="m-1"></div>
+      <div class="flex-grow ">
+        <p class="font-RobotoMono invisible md:visible lg:visible text-sm md:text-base lg:text-xs dark:text-white text-black leading-snug truncate-overflow">{movies.storyline}</p>
+      </div>
+      {/* <div class="m-1 "></div> */}
+      {/* <div class=" h-10 justify-center items-center  button-container flex mb-4 border-4 border-black"> */}
+        {/* <button class=" text-lg mr-4 lg:text-sm text-black">More Info</button> */}
+        {/* <button class="text-lg lg:text-sm font-bold py-2 px-4 rounded bg-orange-200 text-orange-700">Add to List</button> */}
+      {/* </div> */}
+    </div>
+  </div>
+  </Link>
+  </div>
+  ))
+  :
       data.getMovies.slice(0,2).map((movies) => (
         // console.log(movies);
         <div class="flex  md:h-48 lg:h-48 justify-center items-center flex-wrap flex--movie ">  

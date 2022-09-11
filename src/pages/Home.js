@@ -1,5 +1,5 @@
-import React,{useRef} from "react";
-import { useQuery } from "@apollo/react-hooks";
+import React,{useEffect, useRef} from "react";
+import { useQuery } from "@apollo/client";
 import { GetTvshows } from "../query/GetTvshows";
 import { Homepage } from "./Homepage";
 import { CardLayoutTvshow } from "../components/CardLayoutTvshow";
@@ -20,17 +20,101 @@ const Tvshows =  () => {
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const ref3 = useRef(null);
+ 
+  let MoviesLocalStoredData = "undefined";
+  let TvshowLocalStoredData = "undefined";
+  let CollectionLocalStoredData = "undefined";
+  let localS = false;
+  let localS1 = false;
+  let localS2 = false;
+  console.log(localStorage.getItem('MoviesData'));
 
-  const { loading, error, data } = useQuery(GetTvshows("Tvshows"));
+  useEffect(() => {
+    // Run! Like go get some data from an API.
+    console.log("hai");
+    console.log(localStorage.getItem('MoviesData'));
+    console.log(typeof localStorage.getItem('MoviesData'));
+  
+    let def;
+    if(typeof localStorage.getItem('MoviesData') === "object" && localStorage.getItem('MoviesData') === null) {
+      // console.log(typeof localStorage.getItem('MoviesData'));
+      def = "null";
+    }
+  
+    console.log(def);
+  
+ 
+  
+    if(localStorage.getItem('MoviesData') !== "undefined"  && localStorage.getItem('TvshowData') !== "undefined"  && localStorage.getItem('Collection') !== "undefined" && def !== "null" ) {
+    console.log("hai4");
+    let MovieData = localStorage.getItem('MoviesData');
+    let TvshowData = localStorage.getItem('TvshowData');
+    let CollectionsData = localStorage.getItem('Collection');
+  
+    MoviesLocalStoredData = JSON.parse(MovieData);
+    TvshowLocalStoredData = JSON.parse(TvshowData);
+    CollectionLocalStoredData = JSON.parse(CollectionsData);
+    }
+  
+      
+    console.log(MoviesLocalStoredData);
+    console.log(TvshowLocalStoredData);
+    console.log(CollectionLocalStoredData);
+  
+      
+    console.log(typeof MoviesLocalStoredData);
+    console.log(typeof TvshowLocalStoredData);
+    console.log(typeof CollectionLocalStoredData);
+  
+    localS = false;
+    localS1 = false;
+    localS2 = false;
+  
+    // MoviesLocalStoredData !== null || "undefined" ? localS = true : localS = false
+    // TvshowLocalStoredData !== null || "undefined" ? localS1 = true : localS1 = false
+    // CollectionLocalStoredData !== null || "undefined" ? localS2 = true : localS2 = false
+    console.log(def);
+    // 1
+    def !== "null" ? localS = true : localS = false;
+    console.log(localS)
+    MoviesLocalStoredData !== "undefined" ? localS = true : localS = false;
+    console.log(localS)
+    
+    // 2
+    def !== "null" ? localS1 = true : localS1 = false;
+    console.log(localS1)
+    TvshowLocalStoredData !== "undefined" ? localS1 = true :  localS1 = false;
+    console.log(localS1)
+    
+    // 3
+    def !== "null" ? localS2 = true :   localS2 = false;
+    console.log(localS2)
+    
+    CollectionLocalStoredData !==  "undefined" ? localS2 = true :  localS2 = false;
+    console.log(localS2)
+  
+  
+  
+    console.log("hai1");
+    console.log(localS,localS1,localS2);
+  }, [localS,localS1,localS2]);
+
+
+  // const { loading, error, data } = useQuery(GetTvshows("Tvshows"));
+  const { loading, error, data } = useQuery(GetTvshows("Tvshows"),localS);
   // const = useQuery(GetTvshows("Tvshows"));
-  const { loading:MoviesLoading, error:MoviesError, data:MoviesData }  = useQuery(GetMovies);
-  const { loading:CollectionLoading, error:CollectionError, data:CollectionData }  = useQuery(GetCollections);
-
+  const { loading:MoviesLoading, error:MoviesError, data:MoviesData }  = useQuery(GetMovies,localS1);
+  const { loading:CollectionLoading, error:CollectionError, data:CollectionData }  = useQuery(GetCollections,localS2);
+  localStorage.setItem('Collection', JSON.stringify(CollectionData));
+  localStorage.setItem('MoviesData', JSON.stringify(MoviesData));
+  localStorage.setItem('TvshowData', JSON.stringify(data));
 
     // console.log()
-    if (error || MoviesError || CollectionError) return <h1>{error}</h1>;
-    if (loading || MoviesLoading || CollectionLoading) 
-    return <HomepageSkeleton />
+    if(localS === false){
+      if (error || MoviesError || CollectionError) return <h1>{error}</h1>;
+      if (loading || MoviesLoading || CollectionLoading) 
+      return <HomepageSkeleton />
+    }
     // if (data) 
     // return <HomepageSkeleton />
     // const tvshowfilter = async () => {
@@ -43,7 +127,9 @@ const Tvshows =  () => {
     //   })
     //   return arrayTvshows;
     // }
-  console.log("38",CollectionData);
+  // console.log("38",CollectionData);
+  console.log("hai3");
+
   let marvel = [];
   // MoviesData.getMovies.map((i) => {
   //   // console.log(i.movieInfo[0].genre);
@@ -55,9 +141,19 @@ const Tvshows =  () => {
   //   })
   // })
 
+  console.log("CollectionData",CollectionData);
+  console.log(localS2);
   let collection = []
   let genereCollection = []
+  localS2 === false ?
   CollectionData.getCollections.map((i) => {
+    if(i.type === 'genre') {
+      collection.push(i)
+    } else if(i.type === 'collection') {
+      genereCollection.push(i)
+    }
+  }) : 
+  CollectionLocalStoredData.getCollections.map((i) => {
     if(i.type === 'genre') {
       collection.push(i)
     } else if(i.type === 'collection') {
@@ -69,11 +165,18 @@ const Tvshows =  () => {
 
 
 
+
+
   console.log("marvel",marvel);
 
-  let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
-  let some1 = MoviesData.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat);
+  let some = localS1 === true ? TvshowLocalStoredData.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat) : data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
+  let some1 = localS === true ? MoviesLocalStoredData.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat) : MoviesData.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat);
   console.log(some);
+  console.log(some1);
+  console.log(collection);
+  console.log(genereCollection);
+
+
   let netflix = [];
   let Amazon = [];
   let Hotstar = [];

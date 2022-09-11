@@ -3,7 +3,7 @@ import { OneMovie } from "./OneMovie";
 import { Homepage } from "./Homepage";
 import { CardLayout } from "../components/CardLayout";
 import { CardLayoutTvshow } from "../components/CardLayoutTvshow";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { GetTvshows } from "../query/GetTvshows";
 import { motion  } from "framer-motion";
 import LazyLoad from 'react-lazy-load';
