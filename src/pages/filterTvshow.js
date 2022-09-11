@@ -10,20 +10,31 @@ import LazyLoad from 'react-lazy-load';
 import InfiniteScroll from 'react-infinite-scroller';
 
 
-const MovieDetailsss = (data) => {
-  // console.log(data);
-  // console.log(data.getMovies)
-  // let some = [];
-  console.log(window.location.href.split("?")[1]);
-  console.log(data);
-  return data;
-};
+// const MovieDetailsss = (data) => {
+//   // console.log(data);
+//   // console.log(data.getMovies)
+//   // let some = [];
+//   console.log(window.location.href.split("?")[1]);
+//   console.log(data);
+//   return data;
+// };
 
 
 
 function FilterTvshow() {
   let ddd = window.location.href.split("?")[1];
-  const { loading, error, data } = useQuery(GetTvshows(ddd));
+  console.log(ddd);
+  let TvshowData = localStorage.getItem('TvshowData');
+  let TvshowLocalStoredData = JSON.parse(TvshowData);
+  console.log(TvshowLocalStoredData)
+  // let localS = false;
+  // TvshowLocalStoredData === JSON.parse(null) ? localS = false : localS = true
+  // console.log(MoviesLocalStoredData)
+  let localS = false;
+  TvshowLocalStoredData !== null ? localS = true : localS = false
+  console.log(localS);
+  const { loading, error, data } = useQuery(GetTvshows(ddd),localS);
+
   const [filterData, setFilterData] = useState([]);
   const [filterState, setFilterState] = useState(false);
   const [indexMain, setIndexMain] = useState(0);
@@ -60,15 +71,32 @@ function FilterTvshow() {
 //     // console.log(some);
 //     // return some;
 // }
-console.log(data);
+// console.log(data);
 
   
   const filterGenre =async (data,keys) => {
     let filterMoviesAction = [];
     let filterMoviesComedy = [];
     
-    // console.log(data);
-    
+    console.log(data);
+    console.log(TvshowLocalStoredData);
+    console.log(localS);
+
+
+    localS !== false ? 
+    TvshowLocalStoredData.getTVshow1.filter((genre) => {
+      //  console.log(genre.tvshowInfo[0].genre);
+       genre.tvshowInfo[0].genre.filter((generes) => {
+        // console.log(generes)
+        if(generes.genre.toLowerCase() === "action") {
+          // console.log(genre.genre);
+          filterMoviesAction.push(genre);
+        } else if(generes.genre.toLowerCase() === "comedy") {
+          filterMoviesComedy.push(genre);
+        }
+       })
+      
+    }) :
     data.getTVshow1.filter((genre) => {
       //  console.log(genre.tvshowInfo[0].genre);
        genre.tvshowInfo[0].genre.filter((generes) => {
@@ -96,17 +124,20 @@ console.log(data);
 
     }
   }
-if (error) return <h1>Something went wrong!</h1>;
-if (loading) 
-return <h1>Loading</h1>;
-const loader = <div className="loader">Loading ...</div>;
+
+  if(localS === false) {
+    if (error) return <h1>Something went wrong!</h1>;
+    if (loading) 
+    return <h1>Loading</h1>;
+    const loader = <div className="loader">Loading ...</div>;
+  }
 
   return (
-    <main class="w-full mt-10 "> 
+    <main class="w-full mt-40"> 
     {/* {console.log(loadData(data))} */}
     {/* {console.log(loadData(data))}
     {console.log(loadData(data))} */}
-    <div class=" flex flex-row  justify-center items-center">
+    <div class="flex flex-row  justify-center items-center">
     <button class="text-xs border-1 w-16 h-6 dark:text-white border-orange-300 rounded-sm hover:bg-orange-300 hover:border-black" type="button" onClick={() => {filterGenre(data,"All")}}>
       All
     </button>
@@ -122,12 +153,21 @@ const loader = <div className="loader">Loading ...</div>;
     <div class="m-10 md:m-5 lg:m-5"></div>
     <div class="grid grid-cols-2  md:grid-cols-4  lg:grid-cols-4 -gap-4 gap-y-4  md:gap-4 lg:gap-4 ">
     {
+     
        filterState === false ? 
       //  <InfiniteScroll
       //  pageStart={0}
       //  loadMore={loadData(data)}
       //  hasMore={hasMore}
       //  loader={loader}>
+      localS !== false ? TvshowLocalStoredData.getTVshow1.map((movies) => (
+         
+        //  <motion.div>
+        // <LazyLoad>
+        <CardLayoutTvshow  user={movies}/>
+        // </LazyLoad>
+        //  </motion.div >
+         ))   :
        data.getTVshow1.map((movies) => (
          
         //  <motion.div>
