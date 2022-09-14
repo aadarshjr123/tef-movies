@@ -59,66 +59,38 @@ export class CarouselHome extends Component {
   };
 
   render() {
-    // console.log(this.props.value);
-    // console.log( `${this.state.type}`, this.state.name.length > 0 ? `?6241e21?Tvshows`:`?6241e21`,)
-    // console.log()
+
     return (
-      <div className="-z-50 m-3 lg:m-0 flex justify-center items-center ">
-        <div className="flex w-full md:h-96 lg:h-110 overflow-hidden relative rounded-md ">
-          {/* <AiOutlineLeft
-            onClick={this.prevSlide}
-            className="absolute left-0 text-3xl inset-y-1/2 text-white cursor-pointer"
-          /> */}
+      <div className=" bg-gradient-to-r from-black via-black to-transparent m-3 lg:m-0 flex justify-center items-center ">
+        <div className=" flex w-full md:h-96 lg:h-200 overflow-hidden relative">
+
           <Swipe onSwipeLeft={this.nextSlide} onSwipeRight={this.prevSlide}>
             {this.props.value.map((slide, index) => {
-              // console.log("Carosel",slide);
+
               return (
                 <div>
-                {/* <div class="h-10 md:h-full lg:h-10 carousel-caption top-3 lg:top-3 flex justify-center items-center md:block absolute text-center ">
-                <h5 class="lg:text-xs" key={index}
-                  className={
-                    index === this.state.currentSlide
-                      ? "block -mt-5 lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-xl font-bold "
-                      : "hidden"
-                  }>{slide.name}</h5>
-                </div> */}
-                {/* {console.log(this.state.name.length > 0 ? `?${slide.id}?Tvshows`:`?${slide.id}`)} */}
+
+
                 <Link to={{
                   pathname:  `${this.state.type}`,
                   search: this.state.name.length > 0 ? `?${slide.id}?Tvshows`:`?${slide.id}`,
                   state: { fromDashboard: true },
                   key: index
-                  // index: this.state.currentSlide
+
                 }}>
-                  <div class="flex flex-row">
+                  <div class=" flex flex-row  h-full">
+
                   <div className={
                     index === this.state.currentSlide
-                      ? "z-30 bg-black shadow-3xl flex justify-center items-center lg:w-2/4 object-cover text-sm lg:text-xl font-bold "
+                      ? "block w-full h-auto object-cover "
                       : "hidden"
                   }>
-                   <h5 class="text-white lg:text-xs" key={index}
-                  >{slide.name}</h5>
-                  </div> 
-                  <div className={
-                    index === this.state.currentSlide
-                      ? "block w-2/4 h-auto object-cover"
-                      : "hidden"
-                  }>
-                  {/* <img
-                  src={slide.rectanglePosters[0].rectanglePosters}
-                  alt="This is a carousel slide"
-                  key={index}
-                  onMouseEnter={() => {
-                    this.setState({ paused: true });
-                  }}
-                  onMouseLeave={() => {
-                    this.setState({ paused: false });
-                  }}
-                />  */}
+
      <Image 
             cloud_name="tefdb"
             key={index}
             loading="lazy"
+            class="opacity-60"
             format="webp"
             publicId={slide.rectanglePosters[0].rectanglePosters}
             onMouseEnter={() => {
@@ -127,7 +99,7 @@ export class CarouselHome extends Component {
             onMouseLeave={() => {
               this.setState({ paused: false });
             }}
-            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+
             alt="Image"
           >
             <Transformation quality="85"/>
@@ -137,18 +109,45 @@ export class CarouselHome extends Component {
 
                 </div>
                   </Link>
-                  {/* <div class=" z-0 bg-opacity-30 h-10 md:h-full lg:h-10 carousel-caption top-36 lg:top-7 flex justify-center items-center md:block absolute text-center ">
-                <p class="lg:text-xs" key={index}
-                  className={
-                    index === this.state.currentSlide
-                      ? "block  lg:w-full h-5 lg:h-10 object-cover text-xs lg:text-md font-mono "
-                      : "hidden"
-                  }>Available languages {slide.availLanguages.length}</p>
-                </div> */}
+
                   </div>
               );
             })}
           </Swipe>
+
+          <div class="  h-40 absolute w-full flex justify-center bottom-0">
+                {
+                  this.props.value.map((slide, index) => {
+                    console.log(slide)
+                    return(
+                      <div class="absolute  w-11/12 h-full">
+                        <p
+                        className={
+                          index === this.state.currentSlide
+                            ? " block font-RobotoMono text-white lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-xl"
+                            : "hidden"
+                        }>
+                         ⭐ {slide.rating[0].imdb}
+                        </p>
+                        <h5 class="lg:text-xs" key={index}
+                        className={
+                          index === this.state.currentSlide
+                            ? "block font-RobotoMono text-white lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-2xl font-bold "
+                            : "hidden"
+                        }>{slide.name.toUpperCase()}</h5>
+                        <p className={
+                          index === this.state.currentSlide
+                            ? " font-RobotoMono block text-white lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-sm font-bold"
+                            : "hidden"}>{slide.movieInfo[0].releaseDate} - {slide.movieInfo[0].genre[0].genre} <p className={
+                              index === this.state.currentSlide
+                                ? "block font-RobotoMono  font-thin lg:w-full h-5 lg:h-10 object-cover text-sm lg:text-sm"
+                                : "hidden"}>{slide.storyline.split(/\s+/).slice(0,20).join(" ")}...</p> </p>
+                      </div>
+                    )
+                  }
+                  )
+                }
+                </div>
           <div className="absolute w-full flex justify-center bottom-0">
             {this.props.value.map((element, index) => {
               return (
@@ -167,14 +166,8 @@ export class CarouselHome extends Component {
             })}
           </div>
 
-          {/* <AiOutlineRight
-            onClick={this.nextSlide}
-            className="absolute right-0 text-3xl inset-y-1/2 text-white cursor-pointer"
-          /> */}
         </div>
       </div>
     );
   }
 }
-
-//  Carousel;
