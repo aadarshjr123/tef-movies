@@ -212,15 +212,15 @@ const Tvshows =  () => {
   return (
 
     // console.log(data)
-    <div className=" mt-44 w-full  ">
+    <div className="mt-60 w-full  ">
       {/* Home */}
       {/* <h1 className="text-3xl"> */}
       <div className=" w-full lg:h-110 ">
       <Homepage name="Tvshows"/>
       </div>
     {/* </h1> */}
-    <div class="mt-5 ">
-     <div class="m-16"></div>
+    <div class="mt-5 m-10">
+     <div class="m-28"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Latest dubbed movies</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
@@ -241,7 +241,7 @@ const Tvshows =  () => {
 
 
      </div>
-     <div class="mt-5 ">
+     <div class="mt-5  m-10">
      <div class="m-16"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Latest Tvshows</h3>  
     <div class="m-4"></div>
@@ -262,7 +262,7 @@ const Tvshows =  () => {
     </div>
 
      </div>
-     <div class="mt-5 ">
+     <div class="mt-5  m-10">
      <div class="m-16"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Movie Collection</h3>  
     <div class="m-4"></div>
@@ -284,7 +284,7 @@ const Tvshows =  () => {
      }
      </div>
      </div>
-     <div class="mt-5 ">
+     <div class="mt-5  m-10">
      <div class="m-16"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Genres</h3>  
     <div class="m-4"></div>
