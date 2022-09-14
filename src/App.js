@@ -41,7 +41,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
     <div class="">
 
-<div class="z-10 relative mt-5 md:m-10 lg:mt-5 h-full  max-w-screen-2xl max-w-screen overflow-hidden ">
+<div class="z-10 relative mt-5 lg:mt-5 h-full  max-w-screen-2xl max-w-screen overflow-hidden ">
     <div className=' fixed top-0 left-0 right-0 md:m-0 lg:m-0 h-36 md:h-44 lg:h-44 w-full flex flex-col space-y-10 lg:space-y-0 lg:flex-row justify-center items-center bg-white dark:bg-hotstar z-20'>
     {/* <img class="w-1/3 h-5 md:h-14 lg:h-14 "
            src={Logo}
