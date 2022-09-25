@@ -2,21 +2,82 @@ import React, { useEffect,useState } from "react";
 import { OneMovie } from "./OneMovie";
 import { Homepage } from "./Homepage";
 import { CardLayout } from "../components/CardLayout";
-import { useQuery } from "@apollo/client";
+// import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { motion  } from "framer-motion";
-
+import { useQuery } from 'react-query';
+import request, { gql } from 'graphql-request';
 
 
 
 function FilterMovie() {
-    // const { loading, error, data } = useQuery(GetMovies);
-    let MoviesData = localStorage.getItem('MoviesData');
-    let MoviesLocalStoredData = JSON.parse(MoviesData);
-    console.log(MoviesLocalStoredData)
-    let localS = false;
-    MoviesLocalStoredData !== null ? localS = true : localS = false
-  const { loading, error, data } = useQuery(GetMovies,localS);
+  const getMovies = gql`
+  query {
+    getMovies {
+      id
+      name
+      storyline
+      casts {
+        castName
+        CharacterName
+      }
+      rating {
+        imdb
+        rottenTomatoes
+      }
+      posters {
+        posters
+      }
+      movieInfo {
+        rating{
+          rating
+        }
+        director{
+          director
+        }
+        runtime
+        link {
+            title
+            link
+            date
+        }
+        releaseDate
+        dateFormat
+        genre {
+            genre
+        }
+      }
+      watchOn{
+        watchOnLink
+        watchOn
+      }
+      rectanglePosters{
+        rectanglePosters
+      }
+      availLanguages {
+        languages
+      }
+      
+    }
+        }
+  `;
+
+
+  const queryVariables = {};
+
+  // const headers = { Authorization: `Bearer ${user._accessToken}` }
+
+  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
+  
+
+
+  const Mov = () => request(API_URL,
+    getMovies,
+    queryVariables,
+    // headers
+  );
+
+  const { isLoading, error, data } = useQuery("GetMovies",Mov);
   const [filterData, setFilterData] = useState([]);
   const [filterState, setFilterState] = useState(false);
 
@@ -30,21 +91,7 @@ function FilterMovie() {
     
 
 
-    // console.log(data);
-    localS !== false ? 
-    MoviesLocalStoredData.getMovies.filter((genre) => {
-      //  console.log(genre.movieInfo[0].genre);
-       genre.movieInfo[0].genre.filter((generes) => {
-        // console.log(generes)
-        if(generes.genre.toLowerCase() === "action") {
-          // console.log(genre.genre);
-          filterMoviesAction.push(genre);
-        } else if(generes.genre.toLowerCase() === "comedy") {
-          filterMoviesComedy.push(genre);
-        }
-       })
-      
-    }) :
+
     data.getMovies.filter((genre) => {
       //  console.log(genre.movieInfo[0].genre);
        genre.movieInfo[0].genre.filter((generes) => {
@@ -72,11 +119,11 @@ function FilterMovie() {
 
     }
   }
-if(localS === false) {
+
   if (error) return <h1>Something went wrong!</h1>;
-  if (loading) 
+  if (isLoading) 
   return <h1>Loading</h1>;
-}
+
 
   return (
     <main class="w-full mt-40"> 
@@ -97,14 +144,7 @@ if(localS === false) {
     <div class="grid grid-cols-2  md:grid-cols-4  lg:grid-cols-4 -gap-4 gap-y-4  md:gap-4 lg:gap-4 ">
     {
        filterState === false ? 
-       
-       localS !== false ? 
-       MoviesLocalStoredData.getMovies.map((movies) => (
-         
-        //  <motion.div>
-           <CardLayout  user={movies}/>
-        //  </motion.div >
-         )) :
+
        data.getMovies.map((movies) => (
          
         //  <motion.div>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useQuery } from "@apollo/client";
+// import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { MovieDetails } from "../components/MovieDetails";
 import { Cardskeleton } from "../Skeleton/Cardskeleton";
@@ -7,6 +7,8 @@ import { CarouselHome } from "../components/CarouselHome";
 import { CardColumn } from "../components/CardColumn";
 import { Link } from "react-router-dom";
 // import { OneMovie } from "../pages/OneMovie";
+import { useQuery } from 'react-query';
+import request, { gql } from 'graphql-request';
 
 let array = [];
 
@@ -26,13 +28,80 @@ function dynamicSort(property) {
 }
 
 export function Homepage() {
-  // console.log(GetMovies)
-  
-  const { loading, error, data } = useQuery(GetMovies);
+
+
+  const getMovies = gql`
+  query {
+    getMovies {
+      id
+      name
+      storyline
+      casts {
+        castName
+        CharacterName
+      }
+      rating {
+        imdb
+        rottenTomatoes
+      }
+      posters {
+        posters
+      }
+      movieInfo {
+        rating{
+          rating
+        }
+        director{
+          director
+        }
+        runtime
+        link {
+            title
+            link
+            date
+        }
+        releaseDate
+        dateFormat
+        genre {
+            genre
+        }
+      }
+      watchOn{
+        watchOnLink
+        watchOn
+      }
+      rectanglePosters{
+        rectanglePosters
+      }
+      availLanguages {
+        languages
+      }
+      
+    }
+        }
+  `;
+
+
+  const queryVariables = {};
+
+  // const headers = { Authorization: `Bearer ${user._accessToken}` }
+
+  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
+
+
+  const Mov = () => request(API_URL,
+    getMovies,
+    queryVariables,
+    // headers
+  );
+
+  const {isLoading, error, data, refetch} = useQuery("GetMovies",Mov);
     console.log()
-  if (error) return <h1>Something went wrong!</h1>;
-  if (loading) 
-  return <Cardskeleton />
+
+      if (error) return <h1>Something went wrong!</h1>;
+      if (isLoading) 
+      return <Cardskeleton />
+
   const url = (data) => {
     console.log(`/OneMovie?${data}`)
   //  return `/OneMovie?${data}`
@@ -40,7 +109,7 @@ export function Homepage() {
 
   // let Latest = data.getMovies.slice(-5);
   // let Latest1 = data.getMovies.sort();
-  let Latest = data.getMovies.sort(dynamicSort("id")).slice(-5);
+  let Latest =  data.getMovies.slice().sort(dynamicSort("id")).slice(-5);
   // console.log(Latest);
   console.log(Latest);
 

@@ -5,7 +5,23 @@ const Accordion = ({ title, content }) => {
 
   return (
  
-<div class="accordion accordion-flush bg-gradient-to-r p-[1px] from-indigo-500 via-purple-500 to-pink-500  mb-5" id="accordionFlushExample">
+<div class="border-2 border-indigo-600 border-dashed rounded  space-y-2 w-auto h-auto lg:w-80 lg:h-64 m-1 lg:m-4 ">
+              <div class="flex flex-col m-3 text-white rounded-md justify-center items-center w-72 h-60 lg:w-72 lg:h-60 overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                <p class="font-RobotoMono font-extrabold  text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">{title}</p>
+                <div class="m-2"></div>
+                <p class="text-justify font-RobotoMono font-thin text-xs">{content}</p>
+                </div>
+
+            </div>
+  );
+};
+
+export default Accordion;
+
+
+
+
+{/* <div class="accordion accordion-flush bg-gradient-to-r p-[1px] from-indigo-500 via-purple-500 to-pink-500  mb-5" id="accordionFlushExample">
   <div class="accordion-item " onClick={() => setIsActive(!isActive)}>
     <div class="flex flex-row">
     <h2 class="font-RobotoMono w-11/12 accordion-header mb-0" id="flush-headingOne">
@@ -35,10 +51,5 @@ const Accordion = ({ title, content }) => {
       <div class="font-RobotoMono accordion-body py-4 px-5"> {content}</div>
     </div> }
   </div>
-</div>
-  );
-};
-
-export default Accordion;
-
+</div> */}
 

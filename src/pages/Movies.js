@@ -4,7 +4,7 @@ import { FaGreaterThan } from 'react-icons/fa';
 import { MoviesHomepage } from "../pages/MoviesHomepage";
 import { CardLayout } from "../components/CardLayout";
 import { CardLayout_3 } from "../components/CardLayout_3";
-import { useQuery } from "@apollo/client";
+// import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { motion  } from "framer-motion";
 import { Cardskeleton } from "../Skeleton/Cardskeleton";
@@ -14,47 +14,108 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { datesconverter } from "./dates";
 // import { latestDubbed } from "./data/LatestDubbed";
 
+import { useQuery } from 'react-query';
+import request, { gql } from 'graphql-request';
+import { useQueryClient  } from 'react-query'
+
 function Movies() {
-    // const { loading, error, data } = useQuery(GetMovies);
-    let MoviesData = localStorage.getItem('MoviesData');
-    let MoviesLocalStoredData = JSON.parse(MoviesData);
-    console.log(MoviesLocalStoredData)
-    let localS = false;
-    MoviesLocalStoredData !== null ? localS = true : localS = false
-  const { loading, error, data } = useQuery(GetMovies,localS);
+  const queryClient = useQueryClient()
+  const getMovies = gql`
+  query {
+    getMovies {
+      id
+      name
+      storyline
+      casts {
+        castName
+        CharacterName
+      }
+      rating {
+        imdb
+        rottenTomatoes
+      }
+      posters {
+        posters
+      }
+      movieInfo {
+        rating{
+          rating
+        }
+        director{
+          director
+        }
+        runtime
+        link {
+            title
+            link
+            date
+        }
+        releaseDate
+        dateFormat
+        genre {
+            genre
+        }
+      }
+      watchOn{
+        watchOnLink
+        watchOn
+      }
+      rectanglePosters{
+        rectanglePosters
+      }
+      availLanguages {
+        languages
+      }
+      
+    }
+        }
+  `;
+
+  const queryVariables = {};
+
+  // const headers = { Authorization: `Bearer ${user._accessToken}` }
+
+  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
+
+  const Mov = () => request(API_URL,
+    getMovies,
+    queryVariables,
+    // headers
+  );
+
+  const datass = queryClient.getQueryData("GetMovies");
+
+
+
+
+  // console.log("queryCacahe",datass);
+ let status = true;
+
+  if(datass !== undefined) {
+    status = false;
+  }
+
+  const { isLoading, error, data } = useQuery("GetMovies",Mov,{
+    enabled: status,
+  });
   const ref = useRef(null);
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const ref3 = useRef(null);
 
-  if(localS ===  false) {
+
     if (error) return <h1>Something went wrong!</h1>;
-    if (loading) 
+    if (isLoading) 
     return <HomepageSkeleton />
-  }
+
 
   console.log(data);
-  let some = localS === true ?  MoviesLocalStoredData.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat) : data.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat);
+  let some =  data.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat);
   let netflix = [];
   let Amazon = [];
   let Hotstar = [];
   // let some1 = 
-  localS === true ?
-  MoviesLocalStoredData.getMovies.filter((i) => {
-    i.watchOn.map((j) => {
-      if(j.watchOn === "Netflix") {
-        // console.log("netflix");
-        netflix.push(i); 
-      } else if(j.watchOn === "Amazon Prime Videos") {
-        // console.log("netflix");
-        Amazon.push(i); 
-      } else if(j.watchOn === "Disney Plus Hotstar") {
-        // console.log("netflix");
-        Hotstar.push(i); 
-      }
-    })
-  })
-  :
+
   data.getMovies.filter((i) => {
     i.watchOn.map((j) => {
       if(j.watchOn === "Netflix") {

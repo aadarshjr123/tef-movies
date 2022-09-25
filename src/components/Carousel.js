@@ -64,8 +64,8 @@ export class Carousel extends Component {
     // console.log( `${this.state.type}`, this.state.name.length > 0 ? `?6241e21?Tvshows`:`?6241e21`,)
     // console.log()
     return (
-      <div className=" m-3 md:m-10 lg:m-10 flex justify-center items-center ">
-        <div className="flex w-full md:w-20/12 lg:w-20/12 md:h-96 lg:h-110  overflow-hidden relative rounded-md ">
+      <div className=" m-5 h-full flex justify-center items-center ">
+        <div className="flex w-full md:w-20/12 lg:w-20/12 md:h-96  lg:h-140  overflow-hidden relative rounded-md ">
           {/* <AiOutlineLeft
             onClick={this.prevSlide}
             className="absolute left-0 text-3xl inset-y-1/2 text-white cursor-pointer"
@@ -124,7 +124,7 @@ export class Carousel extends Component {
                 key={index}
                 className={
                   index === this.state.currentSlide
-                    ? "block w-400 h-80 object-cover"
+                    ? "  border-black block w-500 h-83 object-cover"
                     : "hidden"
                 }
                 onMouseEnter={() => {
@@ -171,7 +171,7 @@ export class Carousel extends Component {
                 <p class="font-RobotoMono lg:text-xs" key={index}
                   className={
                     index === this.state.currentSlide
-                      ? "font-RobotoMono font-thin block -mt-5  lg:w-full h-5 lg:h-10 object-cover text-xs lg:text-md "
+                      ? "font-RobotoMono dark:text-white text-hotstar font-thin block -mt-5  lg:w-full h-5 lg:h-10 object-cover text-xs lg:text-md "
                       : "hidden"
                   }>Available languages {slide.availLanguages.length}</p>
                 </div>
@@ -179,13 +179,13 @@ export class Carousel extends Component {
               );
             })}
           </Swipe>
-          <div className="absolute w-full flex justify-center bottom-0">
+          <div className=" border-black absolute w-full flex justify-center bottom-1">
             {this.props.value.map((element, index) => {
               return (
                 <div
                   className={
                     index === this.state.currentSlide
-                      ? "bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500  rounded-sm w-3 h-1 mx-2 mb-2 cursor-pointer"
+                      ? " bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500  rounded-sm w-3 h-1 mx-2 mb-2 cursor-pointer"
                       : "bg-white w-3 h-1 rounded-sm mx-2 mb-2 cursor-pointer"
                   }
                   key={index}

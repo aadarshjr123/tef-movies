@@ -171,3 +171,5 @@ export class CarouselHome extends Component {
     );
   }
 }
+
+//  Carousel;

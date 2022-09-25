@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from './Navbar'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import baffle from 'baffle';
-import Anime from './pages/Anime';
+// import Anime from './pages/Anime';
 import Movies from "./pages/Movies";
 import Tvshows from './pages/Tvshows';
 // import SearchBox from './components/Search';
@@ -24,9 +24,10 @@ import instagram from 'react-useanimations/lib/instagram';
 import twitter from 'react-useanimations/lib/twitter';
 import facebook from 'react-useanimations/lib/facebook';
 import youtube from 'react-useanimations/lib/youtube';
-
+import { ReactQueryDevtools } from "react-query/devtools";
 import FilterGenre from './pages/filterGenre';
 import SearchBox from './pages/Search';
+import Welcome from './pages/Welcome';
 
 const queryClient = new QueryClient()
 
@@ -41,13 +42,13 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
     <div class="">
 
-<div class="z-10 relative mt-5 lg:mt-5 h-full  max-w-screen-2xl max-w-screen overflow-hidden ">
+<div class=" z-10 relative mt-5 lg:mt-5 h-full  max-w-screen-2xl max-w-screen overflow-hidden ">
     <div className=' fixed top-0 left-0 right-0 md:m-0 lg:m-0 h-36 md:h-44 lg:h-44 w-full flex flex-col space-y-10 lg:space-y-0 lg:flex-row justify-center items-center bg-white dark:bg-hotstar z-20'>
     {/* <img class="w-1/3 h-5 md:h-14 lg:h-14 "
            src={Logo}
            alt="A Quiet Place movie poster" />
             */}
-            <p class=" w-full md:w-1/3 lg:w-1/3 h-5 md:h-14 lg:h-14 flex justify-center items-center text-2xl md:text-2xl lg:text-4xl font-extrabold text-transparent bg-clip-text  bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">TEF <p className='font-RobotoMono font-thin text-gray-300'>MOVIES</p></p>
+            <a class=" w-full md:w-1/3 lg:w-1/3 h-5 md:h-14 lg:h-14 flex justify-center items-center text-2xl md:text-2xl lg:text-4xl font-extrabold text-transparent bg-clip-text  bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono" href="/Welcome">TEF <p className='font-RobotoMono font-thin text-gray-300'>MOVIES</p></a>
            <div className=' w-full flex justify-center lg:justify-start items-center md:w-3/4 lg:w-3/4 h-5 md:h-14 lg:h-14  '>
             <div class="lg:flex lg:justify-start items-start lg:w-4/5 ">
             <Navbar />
@@ -101,10 +102,11 @@ export default function App() {
          <Route exact path="/">
            <Redirect to="/Home"/>
          </Route>
+         <Route path='/Welcome' exact component={Welcome} />
          <Route path='/Tvshows' exact component={Tvshows} />
          <Route path='/Home' exact component={Home} />
          <Route path='/Movies' component={Movies} />
-         <Route path='/Anime' component={Anime} />
+         {/* <Route path='/Anime' component={Anime} /> */}
          <Route path='/Popular' component={FilterMovie} />
          <Route path='/PopularGenre' component={FilterGenre} />
          <Route path='/PopularTvshows' component={FilterTvshow} />
@@ -178,7 +180,7 @@ export default function App() {
     </div>
     </div>
     </div>
-    
+    <ReactQueryDevtools />
     </QueryClientProvider>
   )
 }

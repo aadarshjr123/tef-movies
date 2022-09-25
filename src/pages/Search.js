@@ -1,5 +1,6 @@
+
 import React,{useState} from "react";
-import { useQuery } from "@apollo/client";
+// import { useQuery } from "@apollo/client";
 import { GetTvshows } from "../query/GetTvshows";
 import { Homepage } from "./Homepage";
 import { CardLayoutTvshow } from "../components/CardLayoutTvshow";
@@ -12,6 +13,8 @@ import { CardLayout } from "../components/CardLayout";
 import { Collection } from "../components/Collection";
 import { SearchResults } from "../query/SearchResults";
 import SearchData from "./searchData";
+import { useQuery } from 'react-query';
+import request, { gql } from 'graphql-request';
 
 const Search =  () => {
 
@@ -19,76 +22,37 @@ const Search =  () => {
   const [searchStart,setSearchStart ] = useState(false);
   const [searchName,setSearchName ] = useState("");
 
-  // const = useQuery(GetTvshows("Tvshows"));
-  let CollectionsData = localStorage.getItem('Collection');
-  // let TvshowData = localStorage.getItem('TvshowData');
-  // let MovieData = localStorage.getItem('MovieData');
+  const getCollections = gql`
+  query {
+    getCollections {
+      name
+      image
+      type
+    }
+        }
+  `;
 
-  let CollectionLocalStoredData = JSON.parse(CollectionsData);
-  // let TvshowLocalStoredData = JSON.parse(TvshowData);
-  // let MovieLocalStoredData = JSON.parse(MovieData);
+  const queryVariables = {};
 
+  // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
-  console.log(CollectionLocalStoredData);
-  // const { loading:MoviesLoading, error:MoviesError, data:MoviesData }  = useQuery(GetMovies);
-  // ssss
-  // const CollectionError = undefined;
-  // const CollectionLoading = false;
-  // const CollectionData = [];
-  let localS = false;
-  CollectionLocalStoredData !== null ? localS = true : localS = false
-  // if(CollectionLocalStoredData === null) {
-    const { loading:CollectionLoading, error:CollectionError, data:CollectionData }  = useQuery(GetCollections,{skip: localS});
-  // } else {
-    // CollectionData.push(CollectionLocalStoredData)
-  // }
-// 
+  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
+  
+  const Coll = () => request(API_URL,
+    getCollections,
+    queryVariables,
+    // headers
+  );
 
+    const { isLoading:CollectionLoading, error:CollectionError, data:CollectionData }  = useQuery("GetCollections", Coll);
 
-    // console.log(CollectionError)
-    // console.log(CollectionLoading)
-
-    // if (error || MoviesError) return <h1>{error}</h1>;
-    // if (loading || MoviesLoading) 
-    // return <HomepageSkeleton />
-    // if (data) 
-    // return <HomepageSkeleton />
-    // const tvshowfilter = async () => {
-    //   let some = await data;
-    //   var arrayTvshows = [];
-    //   await some.getTVshows.filter((movies) => {
-    //     if(movies.tvshowInfo[0].Type === 'TVshows') {
-    //       arrayTvshows.push(movies);
-    //     }
-    //   })
-    //   return arrayTvshows;
-    // }
-  // console.log("38",CollectionData);
 
 
   let marvel = [];
-  // MoviesData.getMovies.map((i) => {
-  //   // console.log(i.movieInfo[0].genre);
-  //   i.movieInfo[0].genre.map((j) => {
-  //     if( j.genre === 'marvel')
-  //     {
-  //       marvel.push(i);
-  //     }
-  //   })
-  // })
 
   let collection = []
   let genereCollection = []
 
-  
-  localS === true ? 
-  CollectionLocalStoredData.getCollections.map((i) => {
-    if(i.type === 'genre') {
-      collection.push(i)
-    } else if(i.type === 'collection') {
-      genereCollection.push(i)
-    }
-  }) :
   CollectionData.getCollections.map((i) => {
     if(i.type === 'genre') {
       collection.push(i)
@@ -102,31 +66,6 @@ const Search =  () => {
 
 
 
-  // console.log("marvel",marvel);
-
-  // let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
-  // let some1 = MoviesData.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat);
-
-  // let netflix = [];
-  // let Amazon = [];
-  // let Hotstar = [];
-  // let some1 = data.getTVshow1.filter((i) => {
-  //   i.watchOn.map((j) => {
-  //     if(j.watchOn === "Netflix") {
-  //       // console.log("netflix");
-  //       netflix.push(i); 
-  //     } else if(j.watchOn === "Amazon Prime Videos") {
-  //       // console.log("netflix");
-  //       Amazon.push(i); 
-  //     } else if(j.watchOn === "Disney Plus Hotstar") {
-  //       // console.log("netflix");
-  //       Hotstar.push(i); 
-  //     }
-  //   })
-  // })
-    // let some = await tvshowfilter();
-    // if(data)
-    // return console.log(tvshowfilter());
   let onChangeSearchName =async (e) => {
     let words = e.target.value
     console.log(words);

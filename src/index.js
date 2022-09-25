@@ -3,29 +3,35 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import ApolloClient from 'apollo-boost'
-import { ApolloProvider } from '@apollo/client';
 import 'tw-elements';
 import Toggle from './components/ThemeToggle';
 import { ThemeProvider } from './ThemeContext';
 import Background from './components/Background';
+import { QueryClient, QueryClientProvider } from "react-query";
+// const cache = new InMemoryCache();
 
-const client = new ApolloClient({
-  uri: 'https://tefmovies.herokuapp.com/graphql'
-})
 
+// await persistCache({
+//   cache,
+//   storage: new LocalStorageWrapper(window.localStorage),
+// });
+
+// const client = new ApolloClient({
+//   cache,
+//   uri: 'https://tefmovies.herokuapp.com/graphql',
+// })
+
+// const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-        <div class='dark:border-2 dark:border-hotstar dark:bg-hotstar'>
+    <div class='dark:border-2 dark:border-hotstar dark:bg-hotstar'>
         <ThemeProvider>
       <Background>
         <App />
           </Background>
-    </ThemeProvider>
+          </ThemeProvider>
         </div>
-    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

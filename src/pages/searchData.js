@@ -2,20 +2,136 @@ import React, { useEffect,useState } from "react";
 import { OneMovie } from "./OneMovie";
 import { Homepage } from "./Homepage";
 import { CardLayout } from "../components/CardLayout";
-import { useQuery } from "@apollo/client";
+// import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { motion  } from "framer-motion";
 import { CardLayoutTvshow } from "../components/CardLayoutTvshow";
 import { HomepageSkeleton } from "../Skeleton/HomepageSkeleton";
 import { SearchResults } from "../query/SearchResults";
-
+import { useQuery } from 'react-query';
+import request, { gql } from 'graphql-request';
 
 
 
 function SearchData(names) {
   console.log("start");
   console.log(names);
-  const { loading:SearchLoading, error:SearchError, data:SearchData }  = useQuery(SearchResults(names.names));
+
+  const searchDatas = (names) => gql`
+  query {
+
+    searchMovie(name:"${names}"){
+      id
+      name
+      storyline
+      casts {
+        castName
+        CharacterName
+      }
+      rating {
+        imdb
+        rottenTomatoes
+      }
+      posters {
+        posters
+      }
+      movieInfo {
+        rating{
+          rating
+        }
+        director{
+          director
+        }
+        runtime
+        link {
+            title
+            link
+            date
+        }
+        releaseDate
+        dateFormat
+        genre {
+            genre
+        }
+      }
+      watchOn{
+        watchOnLink
+        watchOn
+      }
+      rectanglePosters{
+        rectanglePosters
+      }
+      availLanguages {
+        languages
+      }
+      
+    }
+  
+        searchTvshows(name:"${names}"){
+          id
+          name
+          Type
+          storyline
+          casts {
+            castName
+            CharacterName
+          }
+          rating {
+            imdb
+            rottenTomatoes
+          }
+          posters {
+            posters
+          }
+          tvshowInfo {
+            rating{
+              rating
+            }
+            creator{
+              creator
+            }
+            writer
+            genre {
+              genre
+            }
+            link {
+              title
+              link
+              date
+          }
+            originalTitle
+            noOfseasons
+            status
+            releaseDate
+            dateFormat
+          }
+          watchOn {
+            watchOnLink
+            watchOn
+          }
+          rectanglePosters {
+            rectanglePosters
+          }
+          availLanguages {
+            languages
+          }
+        }
+        }
+  `;
+
+  const queryVariables = {};
+
+  // const headers = { Authorization: `Bearer ${user._accessToken}` }
+
+  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
+  
+  const SearchResults = (names) => request(API_URL,
+    searchDatas(names),
+    queryVariables,
+    // headers
+  );
+
+  const { isLoading:SearchLoading, error:SearchError, data:SearchData }  = useQuery("searchData",SearchResults(names.names));
 
 if (SearchError) return <h1>Something went wrong!</h1>;
 if (SearchLoading) 

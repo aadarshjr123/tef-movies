@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "@apollo/client";
+
 import { GetMovies } from "../query/GetMovies";
 import { Link } from "react-router-dom";
 import LazyLoad from 'react-lazy-load';

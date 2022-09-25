@@ -1,5 +1,5 @@
 import React,{useRef, useState} from "react";
-import { useQuery } from "@apollo/client";
+// import { useQuery } from "@apollo/client";
 import { GetTvshows } from "../query/GetTvshows";
 import { TVShowHomepage } from "./TVShowHomepage";
 import { CardLayoutTvshow } from "../components/CardLayoutTvshow";
@@ -8,28 +8,169 @@ import { Cardskeleton } from "../Skeleton/Cardskeleton";
 import { HomepageSkeleton } from "../Skeleton/HomepageSkeleton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/fontawesome-free-solid";
+import { useQuery } from 'react-query';
+import request, { gql } from 'graphql-request';
+import { useQueryClient  } from 'react-query'
 
 const Tvshows =  () => {
-    let TvshowData = localStorage.getItem('TvshowData');
-      let TvshowLocalStoredData = JSON.parse(TvshowData);
-      console.log(TvshowLocalStoredData)
-      console.log(TvshowLocalStoredData === JSON.parse(null))
-      console.log(typeof JSON.parse(null))
-      let localS = false;
-      TvshowLocalStoredData === JSON.parse(null) ? localS = false : localS = true
-      console.log(localS);
-  const { loading, error, data } = useQuery(GetTvshows("Tvshows"),localS);
+  const queryClient = useQueryClient()
+  // const getTVshow1 = gql`
+  // query GetTvshow($name: String!){
+  //   getTVshow1( Type: $name) {
+  //     id
+  //     name
+  //     Type
+  //     storyline
+  //     casts {
+  //       castName
+  //       CharacterName
+  //     }
+  //     rating {
+  //       imdb
+  //       rottenTomatoes
+  //     }
+  //     posters {
+  //       posters
+  //     }
+  //     tvshowInfo {
+  //       rating{
+  //         rating
+  //       }
+  //       creator{
+  //         creator
+  //       }
+  //       writer
+  //       genre {
+  //         genre
+  //       }
+  //       link {
+  //         title
+  //         link
+  //         date
+  //     }
+  //       originalTitle
+  //       noOfseasons
+  //       status
+  //       releaseDate
+  //       dateFormat
+  //     }
+  //     watchOn {
+  //       watchOnLink
+  //       watchOn
+  //     }
+  //     rectanglePosters {
+  //       rectanglePosters
+  //     }
+  //     availLanguages {
+  //       languages
+  //     }
+  //   }
+  //       }
+  // `;
+  const queryVariables = {};
 
-    // console.log()
+  // const headers = { Authorization: `Bearer ${user._accessToken}` }
+
+  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
+  
+
+  // const Tvshow = () => request(API_URL,
+  //   getTVshow1,
+  //   queryVariables,
+  //   // headers
+  // );
+
+  
+  const datass = queryClient.getQueryData("GetTvshows");
+
+
+  const getTvshows = ({ queryKey }) => {
+    const [_, names] = queryKey;
+    console.log("season id",names);
+    const somes = request(
+      'https://tefmovies.herokuapp.com/graphql',
+      gql `query GetTvshow($name: String!){
+        getTVshow1( Type: $name) {
+          id
+          name
+          Type
+          storyline
+          casts {
+            castName
+            CharacterName
+          }
+          rating {
+            imdb
+            rottenTomatoes
+          }
+          posters {
+            posters
+          }
+          tvshowInfo {
+            rating{
+              rating
+            }
+            creator{
+              creator
+            }
+            writer
+            genre {
+              genre
+            }
+            link {
+              title
+              link
+              date
+          }
+            originalTitle
+            noOfseasons
+            status
+            releaseDate
+            dateFormat
+          }
+          watchOn {
+            watchOnLink
+            watchOn
+          }
+          rectanglePosters {
+            rectanglePosters
+          }
+          availLanguages {
+            languages
+          }
+        }
+            }
+      `,
+      { name: names }
+    ).catch(e => {
+      console.log(e);
+    })
+    console.log("getSeason",somes);
+    return somes;
+  }
+
+  // console.log("queryCacahe",datass);
+ let status = true;
+
+  if(datass !== undefined) {
+    status = false;
+  }
+ 
+  let names = "Tvshows";
+
+  const {  isLoading, error, data, refetch } = useQuery(["GetTvshows",names],getTvshows,{
+    enabled: status,
+  });
+
+    console.log(data);
     const ref = useRef(null);
     const ref1 = useRef(null);
     const ref2 = useRef(null);
     const ref3 = useRef(null);
-    if(localS === false){
+
       if (error) return <h1>{error}</h1>;
-      if (loading) 
+      if (isLoading) 
       return <HomepageSkeleton />
-    }
     // if (data) 
     // return <HomepageSkeleton />
     // const tvshowfilter = async () => {
@@ -43,27 +184,13 @@ const Tvshows =  () => {
     //   return arrayTvshows;
     // }
 
-  let some = localS === true ? TvshowLocalStoredData.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat) : data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
+  let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
 
   let netflix = [];
   let Amazon = [];
   let Hotstar = [];
   // let some1 = 
-  localS === true ?
-  TvshowLocalStoredData.getTVshow1.filter((i) => {
-    i.watchOn.map((j) => {
-      if(j.watchOn === "Netflix") {
-        // console.log("netflix");
-        netflix.push(i); 
-      } else if(j.watchOn === "Amazon Prime Videos") {
-        // console.log("netflix");
-        Amazon.push(i); 
-      } else if(j.watchOn === "Disney Plus Hotstar") {
-        // console.log("netflix");
-        Hotstar.push(i); 
-      }
-    })
-  }) :
+
   data.getTVshow1.filter((i) => {
     i.watchOn.map((j) => {
       if(j.watchOn === "Netflix") {

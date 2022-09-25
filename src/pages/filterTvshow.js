@@ -3,12 +3,14 @@ import { OneMovie } from "./OneMovie";
 import { Homepage } from "./Homepage";
 import { CardLayout } from "../components/CardLayout";
 import { CardLayoutTvshow } from "../components/CardLayoutTvshow";
-import { useQuery } from "@apollo/client";
+// import { useQuery } from "@apollo/client";
 import { GetTvshows } from "../query/GetTvshows";
 import { motion  } from "framer-motion";
 import LazyLoad from 'react-lazy-load';
 import InfiniteScroll from 'react-infinite-scroller';
-
+import { useQuery } from 'react-query';
+import request, { gql } from 'graphql-request';
+import { useQueryClient  } from 'react-query'
 
 // const MovieDetailsss = (data) => {
 //   // console.log(data);
@@ -22,81 +24,177 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 
 function FilterTvshow() {
+  const queryClient = useQueryClient()
   let ddd = window.location.href.split("?")[1];
   console.log(ddd);
-  let TvshowData = localStorage.getItem('TvshowData');
-  let TvshowLocalStoredData = JSON.parse(TvshowData);
-  console.log(TvshowLocalStoredData)
-  // let localS = false;
-  // TvshowLocalStoredData === JSON.parse(null) ? localS = false : localS = true
-  // console.log(MoviesLocalStoredData)
-  let localS = false;
-  TvshowLocalStoredData !== null ? localS = true : localS = false
-  console.log(localS);
-  const { loading, error, data } = useQuery(GetTvshows(ddd),localS);
+
+  // const getTVshow1 = (ddd) => gql`
+  // query {
+  //   getTVshow1( Type: ${ddd}) {
+  //     id
+  //     name
+  //     Type
+  //     storyline
+  //     casts {
+  //       castName
+  //       CharacterName
+  //     }
+  //     rating {
+  //       imdb
+  //       rottenTomatoes
+  //     }
+  //     posters {
+  //       posters
+  //     }
+  //     tvshowInfo {
+  //       rating{
+  //         rating
+  //       }
+  //       creator{
+  //         creator
+  //       }
+  //       writer
+  //       genre {
+  //         genre
+  //       }
+  //       link {
+  //         title
+  //         link
+  //         date
+  //     }
+  //       originalTitle
+  //       noOfseasons
+  //       status
+  //       releaseDate
+  //       dateFormat
+  //     }
+  //     watchOn {
+  //       watchOnLink
+  //       watchOn
+  //     }
+  //     rectanglePosters {
+  //       rectanglePosters
+  //     }
+  //     availLanguages {
+  //       languages
+  //     }
+  //   }
+  //       }
+  // `;
+
+
+  const queryVariables = {};
+
+  // const headers = { Authorization: `Bearer ${user._accessToken}` }
+
+  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
+  
+  // const Tvshow = (ddd) => request(API_URL,
+  //   getTVshow1(ddd),
+  //   queryVariables,
+  //   // headers
+  // );
+
+  // const { isLoading, error, data } = useQuery("GetTvshows",Tvshow(ddd));
+
+  const datass = queryClient.getQueryData("GetTvshows");
+
+
+  const getTvshows = ({ queryKey }) => {
+    const [_, names] = queryKey;
+    console.log("season id",names);
+    const somes = request(
+      'https://tefmovies.herokuapp.com/graphql',
+      gql `query GetTvshow($name: String!){
+        getTVshow1( Type: $name) {
+          id
+          name
+          Type
+          storyline
+          casts {
+            castName
+            CharacterName
+          }
+          rating {
+            imdb
+            rottenTomatoes
+          }
+          posters {
+            posters
+          }
+          tvshowInfo {
+            rating{
+              rating
+            }
+            creator{
+              creator
+            }
+            writer
+            genre {
+              genre
+            }
+            link {
+              title
+              link
+              date
+          }
+            originalTitle
+            noOfseasons
+            status
+            releaseDate
+            dateFormat
+          }
+          watchOn {
+            watchOnLink
+            watchOn
+          }
+          rectanglePosters {
+            rectanglePosters
+          }
+          availLanguages {
+            languages
+          }
+        }
+            }
+      `,
+      { name: names }
+    ).catch(e => {
+      console.log(e);
+    })
+    console.log("getSeason",somes);
+    return somes;
+  }
+
+  // console.log("queryCacahe",datass);
+ let status = true;
+
+  if(datass !== undefined) {
+    status = false;
+  }
+ 
+  let names = "Tvshows";
+
+  const {  isLoading, error, data, refetch } = useQuery(["GetTvshows",names],getTvshows,{
+    enabled: status,
+  });
+
 
   const [filterData, setFilterData] = useState([]);
   const [filterState, setFilterState] = useState(false);
   const [indexMain, setIndexMain] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   
-//   const loadData = (data) => {
-//     let datas = data.getTVshow1;
-//     console.log(datas);
-//     let some = [];
-//     // let indexMain = 0;
-//     setIndexMain(0);
-//     datas.map((i,index) => {
-//       // console.log('some.length',some.length);
-//       // console.log(indexMain)
-//       // console.log(indexMain +"==="+index)
-//       if(indexMain === index && some.length < 5) {
-//         // console.log("entered");
-
-//         some.push(i);
-//         // console.log(index)
-//         // console.log(index + 1)
-//         setIndexMain(indexMain + 1);
-//       //   // console.log(index);
-
-//       //   // console.log(indexMain);
-//       } 
-//       // console.log(some);
-
-//       // if(indexMain === index + 1) {
-//       //   setHasMore(false)
-//       // }
-//     })
-
-//     // console.log(some);
-//     // return some;
-// }
-// console.log(data);
 
   
   const filterGenre =async (data,keys) => {
     let filterMoviesAction = [];
     let filterMoviesComedy = [];
     
-    console.log(data);
-    console.log(TvshowLocalStoredData);
-    console.log(localS);
+    // console.log(data);
+    // console.log(TvshowLocalStoredData);
+    // console.log(localS);
 
 
-    localS !== false ? 
-    TvshowLocalStoredData.getTVshow1.filter((genre) => {
-      //  console.log(genre.tvshowInfo[0].genre);
-       genre.tvshowInfo[0].genre.filter((generes) => {
-        // console.log(generes)
-        if(generes.genre.toLowerCase() === "action") {
-          // console.log(genre.genre);
-          filterMoviesAction.push(genre);
-        } else if(generes.genre.toLowerCase() === "comedy") {
-          filterMoviesComedy.push(genre);
-        }
-       })
-      
-    }) :
     data.getTVshow1.filter((genre) => {
       //  console.log(genre.tvshowInfo[0].genre);
        genre.tvshowInfo[0].genre.filter((generes) => {
@@ -125,12 +223,11 @@ function FilterTvshow() {
     }
   }
 
-  if(localS === false) {
+
     if (error) return <h1>Something went wrong!</h1>;
-    if (loading) 
+    if (isLoading) 
     return <h1>Loading</h1>;
     const loader = <div className="loader">Loading ...</div>;
-  }
 
   return (
     <main class="w-full mt-40"> 
@@ -160,14 +257,7 @@ function FilterTvshow() {
       //  loadMore={loadData(data)}
       //  hasMore={hasMore}
       //  loader={loader}>
-      localS !== false ? TvshowLocalStoredData.getTVshow1.map((movies) => (
-         
-        //  <motion.div>
-        // <LazyLoad>
-        <CardLayoutTvshow  user={movies}/>
-        // </LazyLoad>
-        //  </motion.div >
-         ))   :
+      
        data.getTVshow1.map((movies) => (
          
         //  <motion.div>

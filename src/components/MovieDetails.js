@@ -6,13 +6,15 @@ import logo2 from "../404-error.png";
 import logo3 from "../Frames1.png";
 import { CarouselPosters } from "./CarouselPosters";
 import { CardLayout_2 } from "../components/CardLayout_2";
-import { useQuery } from "@apollo/client";
+// import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { FaGreaterThan } from 'react-icons/fa';
 import {Image, Video, Transformation} from 'cloudinary-react';
 import grabLink from "youtube-thumbnail-grabber";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/fontawesome-free-solid";
+import { useQuery } from 'react-query';
+import request, { gql } from 'graphql-request';
 
 export const MovieDetails = (movie) => {
   const ref = useRef(null);
@@ -23,12 +25,81 @@ export const MovieDetails = (movie) => {
   const ref5 = useRef(null);
 
 
+  const getMovies = gql`
+  query {
+    getMovies {
+      id
+      name
+      storyline
+      casts {
+        castName
+        CharacterName
+      }
+      rating {
+        imdb
+        rottenTomatoes
+      }
+      posters {
+        posters
+      }
+      movieInfo {
+        rating{
+          rating
+        }
+        director{
+          director
+        }
+        runtime
+        link {
+            title
+            link
+            date
+        }
+        releaseDate
+        dateFormat
+        genre {
+            genre
+        }
+      }
+      watchOn{
+        watchOnLink
+        watchOn
+      }
+      rectanglePosters{
+        rectanglePosters
+      }
+      availLanguages {
+        languages
+      }
+      
+    }
+        }
+  `;
+
+
+  const queryVariables = {};
+
+  // const headers = { Authorization: `Bearer ${user._accessToken}` }
+
+  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
+
+
+  const Mov = () => request(API_URL,
+    getMovies,
+    queryVariables,
+    // headers
+  );
+
+
   const [showModal, setShowModal] = React.useState(false);
   const [showVideoModal, setShowVideoModal] = React.useState(false);
   const [showPostersModal, setShowPostersModal] = React.useState(false);
   const [videoLink, setVideoLink] = React.useState([]);
   const [postersLink, setPostersLink] = React.useState("");
-  const { loading, error, data } = useQuery(GetMovies);
+
+
+
+  const { isLoading, error, data } = useQuery("GetMovies",Mov);
   let some = data.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat).slice(0,5);
   console.log(some);
   // let netflix = [];

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import ReactPlayer from 'react-player';
 import logo from '../tomatometer-fresh.149b5e8adc3.svg';
 import logo1 from '../favicon_desktop_32x32._CB1582158068_.png';
@@ -7,12 +7,26 @@ import logo3  from "../Frames1.png";
 import {Image, Video, Transformation} from 'cloudinary-react';
 import { CarouselPosters } from "./CarouselPosters";
 import { CardLayoutTvshow_2 } from "../components/CardLayoutTvshow_2";
-import { useQuery } from "@apollo/client";
+// import { useQuery } from "@apollo/client";
 import { GetTvshows } from "../query/GetTvshows";
 import { FaGreaterThan } from 'react-icons/fa';
 import Accordion from "./Accordion";
+import { useQuery } from 'react-query';
+import request, { gql } from 'graphql-request';
+import { useQueryClient  } from 'react-query';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretLeft, faCaretRight } from "@fortawesome/fontawesome-free-solid";
 
 export const TvshowDetails = (movie) => {
+  const ref = useRef(null);
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+  const ref3 = useRef(null);
+  const ref4 = useRef(null);
+  const ref5 = useRef(null);
+  const ref6 = useRef(null);
+
+  const queryClient = useQueryClient()
   const [showModal, setShowModal] = React.useState(false);
   const [showVideoModal, setShowVideoModal] = React.useState(false);
   const [videoLink, setVideoLink] = React.useState([]);
@@ -20,8 +34,170 @@ export const TvshowDetails = (movie) => {
   const [showSeason, setShowSeason] = React.useState("Season 1");
   const { innerWidth: width, innerHeight: height } = window;
   const [postersLink, setPostersLink] = React.useState("");
-  const { loading, error, data } = useQuery(GetTvshows("Tvshows"));
-  let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat).slice(0,5);
+
+  const scroll = (scrollOffset) => {
+    ref.current.scrollLeft += scrollOffset;
+  };
+  const scroll1 = (scrollOffset) => {
+    ref1.current.scrollLeft += scrollOffset;
+  };
+  const scroll2 = (scrollOffset) => {
+    ref2.current.scrollLeft += scrollOffset;
+  };
+  const scroll3 = (scrollOffset) => {
+    ref3.current.scrollLeft += scrollOffset;
+  };
+  const scroll4 = (scrollOffset) => {
+    ref4.current.scrollLeft += scrollOffset;
+  };
+  const scroll5 = (scrollOffset) => {
+    ref5.current.scrollLeft += scrollOffset;
+  };
+  const scroll6 = (scrollOffset) => {
+    ref6.current.scrollLeft += scrollOffset;
+  };
+  // const getTVshow1 = gql`
+  // query {
+  //   getTVshow1( Type: "Tvshows") {
+  //     id
+  //     name
+  //     Type
+  //     storyline
+  //     casts {
+  //       castName
+  //       CharacterName
+  //     }
+  //     rating {
+  //       imdb
+  //       rottenTomatoes
+  //     }
+  //     posters {
+  //       posters
+  //     }
+  //     tvshowInfo {
+  //       rating{
+  //         rating
+  //       }
+  //       creator{
+  //         creator
+  //       }
+  //       writer
+  //       genre {
+  //         genre
+  //       }
+  //       link {
+  //         title
+  //         link
+  //         date
+  //     }
+  //       originalTitle
+  //       noOfseasons
+  //       status
+  //       releaseDate
+  //       dateFormat
+  //     }
+  //     watchOn {
+  //       watchOnLink
+  //       watchOn
+  //     }
+  //     rectanglePosters {
+  //       rectanglePosters
+  //     }
+  //     availLanguages {
+  //       languages
+  //     }
+  //   }
+  //       }
+  // `;
+
+  const queryVariables = {};
+  // const API_URL = 'https://tefmovies.herokuapp.com/graphql';
+  
+  // const Tvshow = () => request(API_URL,
+  //   getTVshow1,
+  //   queryVariables,
+  //   // headers
+  // );
+  const datass = queryClient.getQueryData("GetTvshows");
+
+
+  const getTvshows = ({ queryKey }) => {
+    const [_, names] = queryKey;
+    console.log("season id",names);
+    const somes = request(
+      'https://tefmovies.herokuapp.com/graphql',
+      gql `query GetTvshow($name: String!){
+        getTVshow1( Type: $name) {
+          id
+          name
+          Type
+          storyline
+          casts {
+            castName
+            CharacterName
+          }
+          rating {
+            imdb
+            rottenTomatoes
+          }
+          posters {
+            posters
+          }
+          tvshowInfo {
+            rating{
+              rating
+            }
+            creator{
+              creator
+            }
+            writer
+            genre {
+              genre
+            }
+            link {
+              title
+              link
+              date
+          }
+            originalTitle
+            noOfseasons
+            status
+            releaseDate
+            dateFormat
+          }
+          watchOn {
+            watchOnLink
+            watchOn
+          }
+          rectanglePosters {
+            rectanglePosters
+          }
+          availLanguages {
+            languages
+          }
+        }
+            }
+      `,
+      { name: names }
+    ).catch(e => {
+      console.log(e);
+    })
+    console.log("getSeason",somes);
+    return somes;
+  }
+  // console.log("queryCacahe",datass);
+  let status = true;
+
+  if(datass !== undefined) {
+    status = false;
+  }
+  let names = "Tvshows";
+  const { isLoading, error, data, refetch } = useQuery(["GetTvshows",names],getTvshows,{
+    enabled: status,
+  });
+  
+
+  let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
   console.log(some);
   console.log(movie);
   console.log(width,height);
@@ -218,7 +394,11 @@ export const TvshowDetails = (movie) => {
         Videos to watch
       </div>
       <div class="m-10 " />
-      <div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+      <div class="flex flex-row" >
+        {
+          movie.movie[0].tvshowInfo[0].link.length <=5 ? null : <button  class="w-20" onClick={() => scroll(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+        }
+      <div ref={ref} class="scroll-smooth flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
         {movie.movie[0].tvshowInfo[0].link.map((links,index) => {
           // console.log(cast)
           return (
@@ -296,17 +476,22 @@ export const TvshowDetails = (movie) => {
           )
         })}
       </div>
+      {
+        movie.movie[0].tvshowInfo[0].link.length <=5 ? null : <button  class="w-20" onClick={() => scroll(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+      }
+      </div>
       {/* <div class="m-10 md:m-10 lg:m-16" /> */}
 
       <div class=" m-10 md:m-10 lg:m-16" />
 
       {/* <div class="m-10 md:m-10 lg:m-16" /> */}
-      {movie.movie[0].hasOwnProperty("seasons") ? (
-        <div>
-      <div class="font-RobotoMono w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
+      <div class=" font-RobotoMono w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
         Seasons
       </div>
-      <div class=" flex-col flex mt-5 w-80 md:h-72 lg:h-auto md:w-full lg:w-11/12 md:grow lg:grow  ">
+      {movie.movie[0].hasOwnProperty("seasons") ? (
+        <div ref={ref6} class="">
+        {/* <div class=" flex flex-col"> */}
+      <div class=" flex-col flex mt-5 w-80 md:h-72 lg:h-auto md:w-full lg:w-full md:grow lg:grow  ">
 
       
 
@@ -417,8 +602,9 @@ export const TvshowDetails = (movie) => {
       </ul>
       
     </div>
-
-<div class="m-10 flex flex-col w-80 md:w-full lg:w-full h-auto border-white dark:text-white">
+    <div class="flex flex-row " >
+    <button  class="w-20" onClick={() => scroll6(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+<div ref={ref6} class="scroll-smooth  m-10 flex flex-row w-80 md:w-full lg:w-11/12 h-auto border-white dark:text-white overflow-y-hidden overflow-x-scroll hide-scroll-bar">
 
         {
          movie.movie[0].seasons.map((i) => {
@@ -436,19 +622,24 @@ export const TvshowDetails = (movie) => {
          }) 
         }
       </div>
+      <button  class=" w-20" onClick={() => scroll6(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+      </div>
       </div>
       </div>
       )
       : null}
-      <div class="m-5" />
 
+      <div class="m-5" />
 <div class="font-RobotoMono flex w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white lg:grow">
   Casts
 </div>
 <div class="m-10 " />
 <div class="m-10 " />
-
-<div class="lg:grow flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-82 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+<div class="flex flex-row " >
+        {
+          movie.movie[0].casts.length <=5 ? null : <button  class="w-20" onClick={() => scroll1(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+        }
+<div ref={ref1} class="scroll-smooth lg:grow flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-82 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
         {movie.movie[0].casts.map((cast) => {
           console.log(cast)
           return cast.hasOwnProperty("image") ? (
@@ -510,13 +701,21 @@ export const TvshowDetails = (movie) => {
           );
         })}
       </div>
+      {
+       movie.movie[0].casts.length <=5 ? null : <button  class="w-20" onClick={() => scroll1(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+      }
+      </div>
 <div class="m-6"></div>
 <div class="m-10 md:m-10 lg:m-16" />
       <div class=" font-RobotoMono w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
   Crew
 </div>
 <div class="m-5" />
-<div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-72 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+<div class="flex flex-row" >
+        {
+          movie.movie[0].tvshowInfo[0].creator.length <=5 ? null : <button  class="w-20" onClick={() => scroll2(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+        }
+<div ref={ref2} class="scroll-smooth flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-72 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
   {movie.movie[0].tvshowInfo[0].creator.map((creator) => {
     console.log(creator)
     return creator.hasOwnProperty("image") ? (
@@ -571,6 +770,10 @@ export const TvshowDetails = (movie) => {
     );
   })}
 </div>
+{
+       movie.movie[0].tvshowInfo[0].creator.length <=5 ? null : <button  class="w-20" onClick={() => scroll2(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+      }
+      </div>
 
 <div class="m-10 md:m-10 lg:m-16" />
       <div class="font-RobotoMono w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
@@ -578,7 +781,11 @@ export const TvshowDetails = (movie) => {
       </div>
 
       <div class="m-10 " />
-      <div class=" flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
+      <div class="flex flex-row" >
+        {
+          movie.movie[0].posters.length <=5 ? null : <button  class="w-20" onClick={() => scroll3(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+        }
+      <div ref={ref3} class="scroll-smooth flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar ">
         {movie.movie[0].posters.map((posters,index) => {
           // console.log(cast)
           return (
@@ -662,12 +869,20 @@ export const TvshowDetails = (movie) => {
           )
         })}
       </div>
+      {
+       movie.movie[0].posters.length <=5 ? null : <button  class="w-20" onClick={() => scroll3(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+      }
+      </div>
 
 <div class="m-10 md:m-10 lg:m-16" />
       <div class=" m-10 md:m-10 lg:m-16" />
       <div class=" w-full font-medium text-sm  dark:text-white">
         <p class="font-RobotoMono">Watch now</p>
-        <div class=" flex flex-row space-x-4 grow items-center w-80 h-60 md:w-full lg:w-full md:h-60 lg:h-80 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
+        <div class="flex flex-row" >
+        {
+          movie.movie[0].watchOn.length <=5 ? null : <button  class="w-20" onClick={() => scroll4(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+        }
+        <div ref={ref4} class="scroll-smooth flex flex-row space-x-4 grow items-center w-80 h-60 md:w-full lg:w-full md:h-60 lg:h-80 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
           {movie.movie[0].watchOn.map((i) => {
             console.log(i)
             {
@@ -736,11 +951,20 @@ export const TvshowDetails = (movie) => {
             }
           })}
         </div>
+        {
+       movie.movie[0].watchOn.length <=5 ? null : <button  class="w-20" onClick={() => scroll(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+      }
+      </div>
       </div>
       <div class=" w-full font-medium text-sm  dark:text-white ">
         <p class="font-RobotoMono">Popular movies</p>
         <div class="m-10"></div>
-        <div class="  flex flex-row space-x-4 grow items-center w-80 h-80 md:w-full lg:w-full md:h-60 lg:h-110 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
+        <div class="flex flex-row" >
+
+        {
+          some.length <=5 ? null : <button  class="w-20" onClick={() => scroll5(-1000)}><FontAwesomeIcon  color="white"  size="3x" icon={faCaretLeft} /></button>
+        }
+        <div ref={ref5} class="scroll-smooth  flex flex-row space-x-4 grow items-center w-80 h-80 md:w-full lg:w-full md:h-60 lg:h-110 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
       
         {
         //  latestDubbed(data)
@@ -749,6 +973,10 @@ export const TvshowDetails = (movie) => {
          ))
       }
         </div>
+        {
+       some.length <=5 ? null : <button  class="w-20" onClick={() => scroll5(1000)}><FontAwesomeIcon  color="white"  size="3x" icon={faCaretRight} /></button>
+      }
+      </div>
       </div>
     </div>
   </div>

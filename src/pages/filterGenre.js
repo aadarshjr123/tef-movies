@@ -2,23 +2,81 @@ import React, { useEffect,useState } from "react";
 import { OneMovie } from "./OneMovie";
 import { Homepage } from "./Homepage";
 import { CardLayout } from "../components/CardLayout";
-import { useQuery } from "@apollo/client";
+// import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { motion  } from "framer-motion";
-
+import { useQuery } from 'react-query';
+import request, { gql } from 'graphql-request';
 
 
 
 function FilterGenre() {
   console.log("start");
-  // let TvshowData = localStorage.getItem('TvshowData');
-  let MovieData = localStorage.getItem('MoviesData');
-  console.log(MovieData);
-  let MovieLocalStoredData = JSON.parse(MovieData);
-  console.log(MovieLocalStoredData);
-  let localS = false;
-  MovieLocalStoredData !== null ? localS = true : localS = false
-  const { loading, error, data } = useQuery(GetMovies,{skip:localS});
+
+  const getMovies = gql`
+  query {
+    getMovies {
+      id
+      name
+      storyline
+      casts {
+        castName
+        CharacterName
+      }
+      rating {
+        imdb
+        rottenTomatoes
+      }
+      posters {
+        posters
+      }
+      movieInfo {
+        rating{
+          rating
+        }
+        director{
+          director
+        }
+        runtime
+        link {
+            title
+            link
+            date
+        }
+        releaseDate
+        dateFormat
+        genre {
+            genre
+        }
+      }
+      watchOn{
+        watchOnLink
+        watchOn
+      }
+      rectanglePosters{
+        rectanglePosters
+      }
+      availLanguages {
+        languages
+      }
+      
+    }
+        }
+  `;
+
+  const queryVariables = {};
+
+  // const headers = { Authorization: `Bearer ${user._accessToken}` }
+
+  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
+
+  const Mov = () => request(API_URL,
+    getMovies,
+    queryVariables,
+    // headers
+  );
+
+  const { isLoading, error, data } = useQuery("GetMovies",Mov);
   console.log("start1");
   let ddd
   if(window.location.href.split("?")[1]) {
@@ -33,16 +91,7 @@ function FilterGenre() {
   const [filterState, setFilterState] = useState(false);
   let marvel = [];
   console.log(data);
-  localS === true ? 
-  MovieLocalStoredData.getMovies.map((i) => {
-    // console.log(i.movieInfo[0].genre);
-    i.movieInfo[0].genre.map((j) => {
-      if( j.genre.split(" ").join("") === ddd)
-      {
-        marvel.push(i);
-      }
-    })
-  }) :
+
   data.getMovies.map((i) => {
     // console.log(i.movieInfo[0].genre);
     i.movieInfo[0].genre.map((j) => {
@@ -58,7 +107,7 @@ function FilterGenre() {
 
 
 if (error) return <h1>Something went wrong!</h1>;
-if (loading) 
+if (isLoading) 
 return <h1 class="border-1">Loading</h1>;
 
   return (
