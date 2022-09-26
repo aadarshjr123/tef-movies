@@ -16,6 +16,7 @@ import request, { gql } from 'graphql-request';
 import { useQueryClient  } from 'react-query';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/fontawesome-free-solid";
+import ImageScroller from 'react-image-scroller';
 
 export const TvshowDetails = (movie) => {
   const ref = useRef(null);
@@ -56,6 +57,8 @@ export const TvshowDetails = (movie) => {
   const scroll6 = (scrollOffset) => {
     ref6.current.scrollLeft += scrollOffset;
   };
+
+
   // const getTVshow1 = gql`
   // query {
   //   getTVshow1( Type: "Tvshows") {
@@ -489,7 +492,7 @@ export const TvshowDetails = (movie) => {
         Seasons
       </div>
       {movie.movie[0].hasOwnProperty("seasons") ? (
-        <div ref={ref6} class="">
+        <div class="">
         {/* <div class=" flex flex-col"> */}
       <div class=" flex-col flex mt-5 w-80 md:h-72 lg:h-auto md:w-full lg:w-full md:grow lg:grow  ">
 
@@ -602,16 +605,26 @@ export const TvshowDetails = (movie) => {
       </ul>
       
     </div>
-    <div class="flex flex-row " >
-    <button  class="w-20" onClick={() => scroll6(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
-<div ref={ref6} class="scroll-smooth  m-10 flex flex-row w-80 md:w-full lg:w-11/12 h-auto border-white dark:text-white overflow-y-hidden overflow-x-scroll hide-scroll-bar">
+    <div class="flex flex-row" >
+    <button  class="w-20"
+                    onClick={() => ref6.current.previous()}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+<div class="m-10 flex flex-row w-80 md:w-full lg:w-11/12 h-64 border-white dark:text-white overflow-y-hidden overflow-x-scroll  hide-scroll-bar ">
+    <ImageScroller ref={ref} hideScrollbar>
 
         {
          movie.movie[0].seasons.map((i) => {
           return i.season === showSeason ? (
             i.episodes.map((j) => {
                 return (
-                <Accordion title={j.episodeName} content={j.episodeDescription} />
+                  <div className="border-2 border-indigo-600 border-dashed rounded  space-y-2 w-auto h-auto lg:w-80 lg:max-h-60 m-1 lg:m-4 hide-scroll-bar">
+              <div className="flex flex-col m-3 text-white rounded-md justify-center items-center w-72 h-60 lg:w-72 lg:max-h-56 overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                <p className="font-RobotoMono font-extrabold  text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">{j.episodeName}</p>
+                <div className="m-2"></div>
+                <p className="text-justify font-RobotoMono font-thin text-xs">{j.episodeDescription}</p>
+                </div>
+
+            </div>
+                // <Accordion title={j.episodeName} content={j.episodeDescription} />
                 )
             })
           ) : (
@@ -621,14 +634,16 @@ export const TvshowDetails = (movie) => {
           )
          }) 
         }
+      </ImageScroller>
       </div>
-      <button  class=" w-20" onClick={() => scroll6(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+      <button class="w-20"
+                    onClick={() => ref6.current.next()}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
       </div>
       </div>
       </div>
       )
       : null}
-
+      
       <div class="m-5" />
 <div class="font-RobotoMono flex w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white lg:grow">
   Casts

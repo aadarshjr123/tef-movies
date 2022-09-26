@@ -8,7 +8,7 @@ import { getOtts } from "../query/GetOtts";
 import { getSeason } from "../query/GetSeasons";
 import { useQuery } from 'react-query';
 import request, { gql } from 'graphql-request';
-
+import { useQueryClient  } from 'react-query'
 
 let array = [];
 
@@ -86,6 +86,8 @@ some[0].tvshowInfo[0].creator.map((castName) => {
 };
 
  function OneTvshow() {
+  const queryClient = useQueryClient()
+  const datass = queryClient.getQueryData("GetTvshows");
   let sss = window.location.href.split("?")[2]
   let sss1 = window.location.href.split("?")[1]
 
@@ -100,59 +102,124 @@ some[0].tvshowInfo[0].creator.map((castName) => {
         }
   `;
 
-  const getTvshows = gql`
-  query {
-    getTVshow1( Type:  "Tvshows") {
-      id
-      name
-      Type
-      storyline
-      casts {
-        castName
-        CharacterName
-      }
-      rating {
-        imdb
-        rottenTomatoes
-      }
-      posters {
-        posters
-      }
-      tvshowInfo {
-        rating{
-          rating
+  // const getTvshows = gql`
+  // query {
+  //   getTVshow1( Type:  "Tvshows") {
+  //     id
+  //     name
+  //     Type
+  //     storyline
+  //     casts {
+  //       castName
+  //       CharacterName
+  //     }
+  //     rating {
+  //       imdb
+  //       rottenTomatoes
+  //     }
+  //     posters {
+  //       posters
+  //     }
+  //     tvshowInfo {
+  //       rating{
+  //         rating
+  //       }
+  //       creator{
+  //         creator
+  //       }
+  //       writer
+  //       genre {
+  //         genre
+  //       }
+  //       link {
+  //         title
+  //         link
+  //         date
+  //     }
+  //       originalTitle
+  //       noOfseasons
+  //       status
+  //       releaseDate
+  //       dateFormat
+  //     }
+  //     watchOn {
+  //       watchOnLink
+  //       watchOn
+  //     }
+  //     rectanglePosters {
+  //       rectanglePosters
+  //     }
+  //     availLanguages {
+  //       languages
+  //     }
+  //   }
+  //       }
+  // `;
+
+  const getTvshows = ({ queryKey }) => {
+    const [_, names] = queryKey;
+    console.log("season id",names);
+    const somes = request(
+      'https://tefmovies.herokuapp.com/graphql',
+      gql `query GetTvshow($name: String!){
+        getTVshow1( Type: $name) {
+          id
+          name
+          Type
+          storyline
+          casts {
+            castName
+            CharacterName
+          }
+          rating {
+            imdb
+            rottenTomatoes
+          }
+          posters {
+            posters
+          }
+          tvshowInfo {
+            rating{
+              rating
+            }
+            creator{
+              creator
+            }
+            writer
+            genre {
+              genre
+            }
+            link {
+              title
+              link
+              date
+          }
+            originalTitle
+            noOfseasons
+            status
+            releaseDate
+            dateFormat
+          }
+          watchOn {
+            watchOnLink
+            watchOn
+          }
+          rectanglePosters {
+            rectanglePosters
+          }
+          availLanguages {
+            languages
+          }
         }
-        creator{
-          creator
-        }
-        writer
-        genre {
-          genre
-        }
-        link {
-          title
-          link
-          date
-      }
-        originalTitle
-        noOfseasons
-        status
-        releaseDate
-        dateFormat
-      }
-      watchOn {
-        watchOnLink
-        watchOn
-      }
-      rectanglePosters {
-        rectanglePosters
-      }
-      availLanguages {
-        languages
-      }
-    }
-        }
-  `;
+            }
+      `,
+      { name: names }
+    ).catch(e => {
+      console.log(e);
+    })
+    console.log("getSeason",somes);
+    return somes;
+  }
 
   // function usePost(postId) {
   //   return useQuery(
@@ -274,8 +341,17 @@ getSeason(seasonId:$seasonId) {
   // // const GetMoviess = GetMovies();
   // const getActorss = GetActors();
 
+  let status = true;
+
+  if(datass !== undefined) {
+    status = false;
+  }
+ 
+  let names = "Tvshows";
+
+
   const { isLoading, error, data, refetch } = useQuery("GetOtts", getOtt);
-  const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery("GetTvshows", getTvshow);
+  const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery(["GetTvshows",names], getTvshows);
   const { isLoading:SeasonLoading, error:SeasonError, data:SeasonData } = useQuery(["GetSeason",sss1], getSeason);
   const { isLoading:ActorLoading, error:ActorError, data:ActorData } = useQuery("GetActors", getActor);
   // const { isLoading:SeasonLoading, error:SeasonError, data:SeasonData } = useQuery(
