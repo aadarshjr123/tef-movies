@@ -13,14 +13,17 @@ import request, { gql } from 'graphql-request';
 
 
 
+
 function SearchData(names) {
-  console.log("start");
-  console.log(names);
 
-  const searchDatas = (names) => gql`
-  query {
 
-    searchMovie(name:"${names}"){
+  const searchDatas = ({ queryKey }) => {
+    const [_, names] = queryKey;
+    console.log("season id",names);
+    const somes = request(
+      'https://tefmovies.herokuapp.com/graphql',
+      gql `query SearchMovie($name: String!){
+          searchMovie(name:$name){
       id
       name
       storyline
@@ -63,61 +66,173 @@ function SearchData(names) {
       }
       availLanguages {
         languages
-      }
+      } 
       
     }
+    
+    searchTvshows(name:$name){
+      id
+      name
+      Type
+      storyline
+      casts {
+        castName
+        CharacterName
+      }
+      rating {
+        imdb
+        rottenTomatoes
+      }
+      posters {
+        posters
+      }
+      tvshowInfo {
+        rating{
+          rating
+        }
+        creator{
+          creator
+        }
+        writer
+        genre {
+          genre
+        }
+        link {
+          title
+          link
+          date
+      }
+        originalTitle
+        noOfseasons
+        status
+        releaseDate
+        dateFormat
+      }
+      watchOn {
+        watchOnLink
+        watchOn
+      }
+      rectanglePosters {
+        rectanglePosters
+      }
+      availLanguages {
+        languages
+      }
+    }
+  }
+      `,
+      { name: names }
+    ).catch(e => {
+      console.log(e);
+    })
+    console.log("getSeason",somes);
+    return somes;
+  }
   
-        searchTvshows(name:"${names}"){
-          id
-          name
-          Type
-          storyline
-          casts {
-            castName
-            CharacterName
-          }
-          rating {
-            imdb
-            rottenTomatoes
-          }
-          posters {
-            posters
-          }
-          tvshowInfo {
-            rating{
-              rating
-            }
-            creator{
-              creator
-            }
-            writer
-            genre {
-              genre
-            }
-            link {
-              title
-              link
-              date
-          }
-            originalTitle
-            noOfseasons
-            status
-            releaseDate
-            dateFormat
-          }
-          watchOn {
-            watchOnLink
-            watchOn
-          }
-          rectanglePosters {
-            rectanglePosters
-          }
-          availLanguages {
-            languages
-          }
-        }
-        }
-  `;
+  console.log("start");
+  console.log(names);
+
+  // const searchDatas = (names) => gql`
+  // query {
+
+  //   searchMovie(name:"${names}"){
+  //     id
+  //     name
+  //     storyline
+  //     casts {
+  //       castName
+  //       CharacterName
+  //     }
+  //     rating {
+  //       imdb
+  //       rottenTomatoes
+  //     }
+  //     posters {
+  //       posters
+  //     }
+  //     movieInfo {
+  //       rating{
+  //         rating
+  //       }
+  //       director{
+  //         director
+  //       }
+  //       runtime
+  //       link {
+  //           title
+  //           link
+  //           date
+  //       }
+  //       releaseDate
+  //       dateFormat
+  //       genre {
+  //           genre
+  //       }
+  //     }
+  //     watchOn{
+  //       watchOnLink
+  //       watchOn
+  //     }
+  //     rectanglePosters{
+  //       rectanglePosters
+  //     }
+  //     availLanguages {
+  //       languages
+  //     }
+      
+  //   }
+  
+  //       searchTvshows(name:"${names}"){
+  //         id
+  //         name
+  //         Type
+  //         storyline
+  //         casts {
+  //           castName
+  //           CharacterName
+  //         }
+  //         rating {
+  //           imdb
+  //           rottenTomatoes
+  //         }
+  //         posters {
+  //           posters
+  //         }
+  //         tvshowInfo {
+  //           rating{
+  //             rating
+  //           }
+  //           creator{
+  //             creator
+  //           }
+  //           writer
+  //           genre {
+  //             genre
+  //           }
+  //           link {
+  //             title
+  //             link
+  //             date
+  //         }
+  //           originalTitle
+  //           noOfseasons
+  //           status
+  //           releaseDate
+  //           dateFormat
+  //         }
+  //         watchOn {
+  //           watchOnLink
+  //           watchOn
+  //         }
+  //         rectanglePosters {
+  //           rectanglePosters
+  //         }
+  //         availLanguages {
+  //           languages
+  //         }
+  //       }
+  //       }
+  // `;
 
   const queryVariables = {};
 
@@ -125,13 +240,15 @@ function SearchData(names) {
 
   const API_URL = 'https://tefmovies.herokuapp.com/graphql';
   
-  const SearchResults = (names) => request(API_URL,
-    searchDatas(names),
-    queryVariables,
-    // headers
-  );
+  // const SearchResults = (names) => request(API_URL,
+  //   searchDatas(names),
+  //   queryVariables,
+  //   // headers
+  // );
 
-  const { isLoading:SearchLoading, error:SearchError, data:SearchData }  = useQuery("searchData",SearchResults(names.names));
+  const { isLoading:SearchLoading, error:SearchError, data:SearchData, refetch } = useQuery(["searchData",names.names],searchDatas);
+
+  // const { isLoading:SearchLoading, error:SearchError, data:SearchData }  = useQuery("searchData",SearchResults(names.names));
 
 if (SearchError) return <h1>Something went wrong!</h1>;
 if (SearchLoading) 

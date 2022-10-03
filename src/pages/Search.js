@@ -44,10 +44,14 @@ const Search =  () => {
     // headers
   );
 
-    const { isLoading:CollectionLoading, error:CollectionError, data:CollectionData }  = useQuery("GetCollections", Coll);
+    const {  isLoading:CollectionLoading, error:CollectionError, data:CollectionData  }  = useQuery("GetCollections", Coll);
 
 
+    if (CollectionError) return <h1>{CollectionError}</h1>;
+    if (CollectionLoading) 
+    return <HomepageSkeleton />
 
+// console.log(CollectionData);
   let marvel = [];
 
   let collection = []
