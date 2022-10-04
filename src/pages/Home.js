@@ -334,10 +334,10 @@ let FreeTvshows = [];
 
 
 ImDBTvshows=[...data.getTVshow1];
-ImDBMovies=[...data.getTVshow1];
+ImDBMovies=[...MoviesData.getMovies];
 
 FreeMovies=[...MoviesData.getMovies];
-FreeTvshows=[...MoviesData.getMovies];
+FreeTvshows=[...data.getTVshow1];
 
 console.log("ImDB",ImDBTvshows);
 
@@ -588,7 +588,7 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
     <div  ref={ref7} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
     {
          FreeMoviesSorted.map((movies) => (
-           <CardLayoutTvshow  user={movies}/>
+           <CardLayout  user={movies}/>
          ))
       }
      </div>
@@ -609,7 +609,7 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
     <div ref={ref8} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
     {
          FreeTvshowsSorted.map((movies) => (
-           <CardLayout  user={movies}/>
+           <CardLayoutTvshow   user={movies}/>
          ))
       }
      </div>
