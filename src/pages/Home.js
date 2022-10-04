@@ -24,7 +24,8 @@ import { orderBy } from "lodash";
 
 
 const Tvshows =  () => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
+
   const ref = useRef(null);
   const ref1 = useRef(null);
   const ref2 = useRef(null);
@@ -542,7 +543,7 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
       {
         some22.length <=5 ? null : <button class="w-20" onClick={() => scroll5(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
       }
-    <div  ref={ref4} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+    <div  ref={ref5} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
     {
          some22.map((movies) => (
            <CardLayoutTvshow  user={movies}/>
