@@ -7,12 +7,15 @@ import { GetMovies } from "../query/GetMovies";
 import { motion  } from "framer-motion";
 import { useQuery } from 'react-query';
 import request, { gql } from 'graphql-request';
-
+import { useQueryClient  } from 'react-query'
 
 
 function FilterGenre() {
+  
+  const [filterData, setFilterData] = useState([]);
+  const [filterState, setFilterState] = useState(false);
   console.log("start");
-
+  const queryClient = useQueryClient()
   const getMovies = gql`
   query {
     getMovies {
@@ -65,6 +68,7 @@ function FilterGenre() {
   `;
 
   const queryVariables = {};
+  const datass1 = queryClient.getQueryData("GetMovies");
 
   // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
@@ -76,8 +80,33 @@ function FilterGenre() {
     // headers
   );
 
-  const { isLoading, error, data } = useQuery("GetMovies",Mov);
+    // console.log("queryCacahe",datass);
+
+ let status1 = true;
+
+  if(datass1 !== undefined) {
+    status1 = false;
+  }
+
+
+
+  // const { isLoading, error, data } = useQuery("GetMovies",Mov);
+  
+  const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery("GetMovies",Mov,{
+    enabled: status1,
+  });
+
+  if (MoviesError) return <h1>Something went wrong!</h1>;
+if (MoviesLoading) 
+return <h1 class="border-1">Loading</h1>;
+
+// if (MoviesError) return <h1>Something went wrong!</h1>;
+console.log(MoviesLoading)
+console.log(MoviesError)
+
+  
   console.log("start1");
+
   let ddd
   if(window.location.href.split("?")[1]) {
     ddd = window.location.href.split("?")[1];
@@ -87,12 +116,10 @@ function FilterGenre() {
     console.log("no params");
   }
 
-  const [filterData, setFilterData] = useState([]);
-  const [filterState, setFilterState] = useState(false);
   let marvel = [];
-  console.log(data);
+  console.log(MoviesData);
 
-  data.getMovies.map((i) => {
+  MoviesData.getMovies.map((i) => {
     // console.log(i.movieInfo[0].genre);
     i.movieInfo[0].genre.map((j) => {
       if( j.genre.split(" ").join("") === ddd)
@@ -106,9 +133,7 @@ function FilterGenre() {
 
 
 
-if (error) return <h1>Something went wrong!</h1>;
-if (isLoading) 
-return <h1 class="border-1">Loading</h1>;
+
 
   return (
     

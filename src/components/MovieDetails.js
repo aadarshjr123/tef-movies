@@ -15,6 +15,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/fontawesome-free-solid";
 import { useQuery } from 'react-query';
 import request, { gql } from 'graphql-request';
+import { Link } from "react-router-dom";
+
+const scrollToTop = () =>{
+  window.scrollTo({
+    top: 0, 
+    behavior: 'smooth'
+    /* you can also use 'auto' behaviour
+       in place of 'smooth' */
+  });
+};
 
 export const MovieDetails = (movie) => {
   const ref = useRef(null);
@@ -436,6 +446,13 @@ export const MovieDetails = (movie) => {
         {movie.movie[0].casts.map((cast) => {
           console.log(cast)
           return cast.hasOwnProperty("image") ? (
+            <Link to={{
+              pathname: "/PopularActorMov",
+              search: `?${cast.castName}`,
+              state: { fromDashboard: true }
+            }}
+            onClick={scrollToTop}
+            >
             <div class=" w-32 h-56 lg:w-40 lg:h-96 m-1 lg:m-2 ">
               <div class=" flex box-border w-32 h-8 lg:w-40 lg:h-14 justify-center items-center  ">
                 <div class="font-RobotoMono font-normal text-xs text-center dark:text-white">
@@ -470,7 +487,15 @@ export const MovieDetails = (movie) => {
                 </div>
               </div>
             </div>
+            </Link>
           ) : (
+            <Link to={{
+              pathname: "/PopularActorMov",
+              search: `?${cast.castName}`,
+              state: { fromDashboard: true }
+            }}
+            onClick={scrollToTop}
+            >
             <div class=" w-32 h-56 lg:w-40 lg:h-96 m-1 lg:m-2 ">
               <div class=" flex box-border w-32 h-8 lg:w-40 lg:h-14 justify-center items-center  ">
                 <div class="font-RobotoMono font-normal text-xs text-center dark:text-white">
@@ -491,6 +516,7 @@ export const MovieDetails = (movie) => {
                 </div>
               </div>
             </div>
+            </Link>
           );
         })}
       </div>

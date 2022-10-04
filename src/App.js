@@ -28,6 +28,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import FilterGenre from './pages/filterGenre';
 import SearchBox from './pages/Search';
 import Welcome from './pages/Welcome';
+import FilterActor from './pages/filterActorsMov';
 
 const queryClient = new QueryClient()
 
@@ -109,6 +110,7 @@ export default function App() {
          {/* <Route path='/Anime' component={Anime} /> */}
          <Route path='/Popular' component={FilterMovie} />
          <Route path='/PopularGenre' component={FilterGenre} />
+         <Route path='/PopularActorMov' component={FilterActor} />
          <Route path='/PopularTvshows' component={FilterTvshow} />
          <Route path='/OneMovie' component={OneMovie} />
          <Route path='/OneTvshow' component={OneTvshow} />

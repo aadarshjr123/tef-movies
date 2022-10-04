@@ -19,6 +19,9 @@ import { GetTvshows,GetMovies,GetCollections } from "../query/GetActors";
 import { useQuery } from 'react-query';
 import request, { gql } from 'graphql-request';
 import { useQueryClient  } from 'react-query'
+import { CollectionActorMov } from "../components/CollectionActorMov";
+import { orderBy } from "lodash";
+
 
 const Tvshows =  () => {
   const queryClient = useQueryClient()
@@ -26,6 +29,14 @@ const Tvshows =  () => {
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const ref3 = useRef(null);
+  const ref4 = useRef(null);
+  const ref5 = useRef(null);
+  const ref6 = useRef(null);
+  const ref7 = useRef(null);
+  const ref8 = useRef(null);
+
+
+
  
   const getCollections = gql`
   query {
@@ -140,7 +151,16 @@ const Tvshows =  () => {
   //   }
   //       }
   // `;
-  
+  const getActors = gql`
+  query {
+    getActors {
+          
+      name
+      image
+      description
+    }
+        }
+  `;
 
 
   const getTvshows = ({ queryKey }) => {
@@ -226,6 +246,12 @@ const Tvshows =  () => {
     // headers
   );
 
+  const Actors = () => request(API_URL,
+    getActors,
+    queryVariables,
+    // headers
+  );
+
   // const Tvshow = () => request(API_URL,
   //   getTVshow1,
   //   queryVariables,
@@ -235,12 +261,16 @@ const Tvshows =  () => {
   const datass = queryClient.getQueryData("GetTvshows");
   const datass1 = queryClient.getQueryData("GetMovies");
   const datass2 = queryClient.getQueryData("GetCollections");
+  const datass3 = queryClient.getQueryData("GetActors");
+
 
 
   // console.log("queryCacahe",datass);
  let status = true;
  let status1 = true;
  let status2 = true;
+ let status3 = true;
+
 
   if(datass !== undefined) {
     status = false;
@@ -250,6 +280,10 @@ const Tvshows =  () => {
   }
   if(datass2 !== undefined) {
     status2 = false;
+  }
+
+  if(datass3 !== undefined) {
+    status3 = false;
   }
 
   let names = "Tvshows";
@@ -263,9 +297,12 @@ const Tvshows =  () => {
   const { isLoading:CollectionLoading, error:CollectionError, data:CollectionData } = useQuery("GetCollections", Coll,{
     enabled: status2,
   });
+  const { isLoading:ActorsLoading, error:ActorsError, data:ActorsData } = useQuery("GetActors", Actors,{
+    enabled: status3,
+  });
 
-      if (error || MoviesError || CollectionError) return <h1>{error}</h1>;
-      if (isLoading || MoviesLoading || CollectionLoading) 
+      if (error || MoviesError || CollectionError || ActorsError) return <h1>{error}</h1>;
+      if (isLoading || MoviesLoading || CollectionLoading || ActorsLoading) 
       return <HomepageSkeleton />
 
 
@@ -290,22 +327,61 @@ const Tvshows =  () => {
   })
 
 
+let ImDBTvshows = [];
+let ImDBMovies = [];
+let FreeMovies = [];
+let FreeTvshows = [];
+
+
+ImDBTvshows=[...data.getTVshow1];
+ImDBMovies=[...data.getTVshow1];
+
+FreeMovies=[...MoviesData.getMovies];
+FreeTvshows=[...MoviesData.getMovies];
+
+console.log("ImDB",ImDBTvshows);
 
 
 
-
-
+  console.log("ActorsData",ActorsData);
   console.log("marvel",marvel);
 
+let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
   console.log(MoviesData);
 
   let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
+  let some22 = ImDBTvshows.sort((a, b) => b.rating[0].imdb - a.rating[0].imdb).slice(0, 10);
   let some1 = MoviesData.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat);
-  console.log(some);
-  console.log(some1);
-  console.log(collection);
-  console.log(genereCollection);
+  let some222 = ImDBMovies.sort((a, b) => b.rating[0].imdb - a.rating[0].imdb).slice(0, 10);
 
+  let FreeMoviesSorted = [];
+  FreeMovies.filter((i) => {
+    freeOtt.map((j) => {
+      // console.log(j);
+      console.log(i.watchOn[0].watchOn.includes(j),i.watchOn[0].watchOn,j);
+      if(i.watchOn[0].watchOn.includes(j)) {
+        FreeMoviesSorted.push(i);
+      }
+    }) 
+  })
+  console.log(FreeMoviesSorted);
+  
+  
+  
+  // .sort((a, b) => b.watchOn[0].watchOn - a.movieInfo[0].dateFormat);
+  let FreeTvshowsSorted = [];
+  FreeTvshows.filter((i) => {
+    freeOtt.map((j) => {
+      // console.log(j);
+      console.log(i.watchOn[0].watchOn.includes(j),i.watchOn[0].watchOn,j);
+      if(i.watchOn[0].watchOn.includes(j)) {
+        FreeTvshowsSorted.push(i);
+      }
+    }) 
+  })
+  // FreeTvshows.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
+  console.log(FreeTvshowsSorted);
+  
 
   let netflix = [];
   let Amazon = [];
@@ -323,9 +399,21 @@ const Tvshows =  () => {
     const scroll3 = (scrollOffset) => {
       ref3.current.scrollLeft += scrollOffset;
     };
-
-
-
+    const scroll4 = (scrollOffset) => {
+      ref4.current.scrollLeft += scrollOffset;
+    };
+    const scroll5 = (scrollOffset) => {
+      ref5.current.scrollLeft += scrollOffset;
+    };
+    const scroll6 = (scrollOffset) => {
+      ref6.current.scrollLeft += scrollOffset;
+    };
+    const scroll7 = (scrollOffset) => {
+      ref7.current.scrollLeft += scrollOffset;
+    };
+    const scroll8 = (scrollOffset) => {
+      ref8.current.scrollLeft += scrollOffset;
+    };
     
 
   return (
@@ -382,7 +470,7 @@ const Tvshows =  () => {
      </div>
      <div class="mt-5  m-10">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Movie Collection</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Genres</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
     {
@@ -404,7 +492,7 @@ const Tvshows =  () => {
      </div>
      <div class="mt-5  m-10">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Genres</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Movie Collection</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
       {
@@ -422,6 +510,114 @@ const Tvshows =  () => {
        genereCollection.length <=5 ? null : <button class="w-20" onClick={() => scroll3(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
      }
      </div>
+
+     </div>
+     <div class="mt-5  m-10">
+     <div class="m-16"></div>
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Actors</h3>  
+    <div class="m-4"></div>
+    <div class="flex flex-row" >
+      {
+        ActorsData.getActors.length <=5 ? null : <button class="w-20" onClick={() => scroll4(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+      }
+    <div ref={ref4} class="scroll-smooth  m-2 lg:m-0 space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+     {
+         ActorsData.getActors.map((collection) => 
+            <CollectionActorMov  collection={collection}/>
+         
+         )
+      }
+     </div>
+     {
+       ActorsData.getActors.length <=5 ? null : <button class="w-20" onClick={() => scroll4(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+     }
+     </div>
+
+     </div>
+     <div class="mt-5  m-10">
+     <div class="m-16"></div>
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Top 10 Tvshows from IMDB</h3>  
+    <div class="m-4"></div>
+    <div class="flex flex-row" >
+      {
+        some22.length <=5 ? null : <button class="w-20" onClick={() => scroll5(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+      }
+    <div  ref={ref4} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+    {
+         some22.map((movies) => (
+           <CardLayoutTvshow  user={movies}/>
+         ))
+      }
+     </div>
+     {
+      some22.length <=5 ? null : <button class="w-20" onClick={() => scroll5(1000)}><FontAwesomeIcon color="white" size="3x" icon={faCaretRight} /></button>
+     }
+    </div>
+
+     </div>
+     <div class="mt-5 m-10">
+     <div class="m-28"></div>
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Top 10 Movies from IMDB</h3>  
+    <div class="m-4"></div>
+    <div class="flex flex-row" >
+      {
+        some222.length <= 5 ? null : <button class="w-20" onClick={() => scroll6(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+      }
+    <div ref={ref6} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+    {
+         some222.map((movies) => (
+           <CardLayout  user={movies}/>
+         ))
+      }
+     </div>
+     {
+      some222.length <= 5 ? null :  <button class="w-20" onClick={() => scroll6(1000)}><FontAwesomeIcon color="white" size="3x" icon={faCaretRight} /></button>
+     }
+    </div>
+
+
+     </div>
+     <div class="mt-5  m-10">
+     <div class="m-16"></div>
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Free Movies</h3>  
+    <div class="m-4"></div>
+    <div class="flex flex-row" >
+      {
+        FreeMoviesSorted.length <=5 ? null : <button class="w-20" onClick={() => scroll7(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+      }
+    <div  ref={ref7} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+    {
+         FreeMoviesSorted.map((movies) => (
+           <CardLayoutTvshow  user={movies}/>
+         ))
+      }
+     </div>
+     {
+      FreeMoviesSorted.length <=5 ? null : <button class="w-20" onClick={() => scroll7(1000)}><FontAwesomeIcon color="white" size="3x" icon={faCaretRight} /></button>
+     }
+    </div>
+
+     </div>
+     <div class="mt-5 m-10">
+     <div class="m-28"></div>
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Free Tvshows</h3>  
+    <div class="m-4"></div>
+    <div class="flex flex-row" >
+      {
+        FreeTvshowsSorted.length <= 5 ? null : <button class="w-20" onClick={() => scroll8(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+      }
+    <div ref={ref8} class="scroll-smooth m-2 lg:m-0 space-x-5 flex w-screen h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
+    {
+         FreeTvshowsSorted.map((movies) => (
+           <CardLayout  user={movies}/>
+         ))
+      }
+     </div>
+     {
+      FreeTvshowsSorted.length <= 5 ? null :  <button class="w-20" onClick={() => scroll8(1000)}><FontAwesomeIcon color="white" size="3x" icon={faCaretRight} /></button>
+     }
+    </div>
+
 
      </div>
     </div>
