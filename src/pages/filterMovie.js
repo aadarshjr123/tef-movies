@@ -83,16 +83,20 @@ function FilterMovie() {
 
   console.log(data);
 
+  var data2 = [...data.getMovies].reverse();
+  console.log(data);
+  console.log(data2);
 
 
-  const filterGenre =async (data,keys) => {
+
+  const filterGenre =async (data2,keys) => {
     let filterMoviesAction = [];
     let filterMoviesComedy = [];
     
 
 
 
-    data.getMovies.filter((genre) => {
+    data2.filter((genre) => {
       //  console.log(genre.movieInfo[0].genre);
        genre.movieInfo[0].genre.filter((generes) => {
         // console.log(generes)
@@ -128,15 +132,15 @@ function FilterMovie() {
   return (
     <main class="w-full mt-40"> 
     <div class=" flex flex-row  justify-center items-center">
-    <button class="text-xs border-1 w-16 h-6 dark:text-white border-orange-300 rounded-sm hover:bg-orange-300 hover:border-black" type="button" onClick={() => {filterGenre(data,"All")}}>
+    <button class="text-xs border-1 w-16 h-6 dark:text-white border-orange-300 rounded-sm hover:bg-orange-300 hover:border-black" type="button" onClick={() => {filterGenre(data2,"All")}}>
       All
     </button>
     <div class="m-2"></div>
-    <button class="text-xs border-1 w-16 h-6 dark:text-white border-orange-300 rounded-sm hover:bg-orange-300 hover:border-black" type="button" onClick={() => {filterGenre(data,"Action")}}>
+    <button class="text-xs border-1 w-16 h-6 dark:text-white border-orange-300 rounded-sm hover:bg-orange-300 hover:border-black" type="button" onClick={() => {filterGenre(data2,"Action")}}>
       action
     </button>
     <div class="m-2"></div>
-    <button class="text-xs border-1 w-16 h-6 dark:text-white border-orange-300 rounded-sm hover:bg-orange-300 hover:border-black" type="button" onClick={() =>{filterGenre(data,"Comedy")}}>
+    <button class="text-xs border-1 w-16 h-6 dark:text-white border-orange-300 rounded-sm hover:bg-orange-300 hover:border-black" type="button" onClick={() =>{filterGenre(data2,"Comedy")}}>
       comedy
     </button>
     </div>
@@ -145,7 +149,7 @@ function FilterMovie() {
     {
        filterState === false ? 
 
-       data.getMovies.map((movies) => (
+       data2.map((movies) => (
          
         //  <motion.div>
            <CardLayout  user={movies}/>

@@ -161,20 +161,20 @@ export default function App() {
       <div className=' flex flex-col justify-center items-center h-10 mt-28 lg:mt-32'>
       <div className='flex mt-0 md:mt-20 lg:mt-4 justify-center row-auto gap-4 '>
         <div >
-        <p className='flex justify-center  text-xs lg:text-xs  text-white bg-gray-200 rounded-md px-1 lg:px-3 py-1 lg:py-0.5 font-semibold text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2 font-RobotoMono'>Terms Of Use</p>
+        <p className='flex justify-center  text-xs lg:text-xs  text-white bg-gray-200 rounded-md px-1 lg:px-3 py-1 lg:py-0.5 font-semibold text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2 font-RobotoMono'>#Terms Of Use</p>
         </div>
         
         <div>
-        <p className='flex justify-center  text-xs lg:text-xs text-white bg-gray-200 rounded-md px-1 lg:px-3 py-1 lg:py-0.5 font-semibold text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2 font-RobotoMono'>Privacy Policy</p>
+        <p className='flex justify-center  text-xs lg:text-xs text-white bg-gray-200 rounded-md px-1 lg:px-3 py-1 lg:py-0.5 font-semibold text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2 font-RobotoMono'>#Privacy Policy</p>
 
         </div>
        
         <div>
-        <p className='flex justify-center  text-xs lg:text-xs text-white bg-gray-200 rounded-md px-1 lg:px-3 py-1 lg:py-0.5 font-semibold text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2 font-RobotoMono'>FAQ</p>
+        <p className='flex justify-center  text-xs lg:text-xs text-white bg-gray-200 rounded-md px-1 lg:px-3 py-1 lg:py-0.5 font-semibold text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2 font-RobotoMono'>#FAQ</p>
     
         </div>
         <div>
-        <p className='flex justify-center  text-xs lg:text-xs text-white bg-gray-200 rounded-md px-1 lg:px-3 py-1 lg:py-0.5 font-semibold text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2 font-RobotoMono'>Feedback</p>
+        <p className='flex justify-center  text-xs lg:text-xs text-white bg-gray-200 rounded-md px-1 lg:px-3 py-1 lg:py-0.5 font-semibold text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2 font-RobotoMono'>#Feedback</p>
 
         </div>
       </div>

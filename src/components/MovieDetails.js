@@ -146,7 +146,7 @@ export const MovieDetails = (movie) => {
         w-full
         "
     >
-      <div class=" relative overflow-hidden w-80 h-550 lg:h-auto lg:w-full  ">
+      <div class=" relative overflow-hidden w-80 h-550 lg:h-auto lg:w-full">
       <Image 
                   // class="object-cover blur-3xl h-450 lg:h-110 w-full "
                   cloud_name="tefdb"

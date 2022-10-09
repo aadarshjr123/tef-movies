@@ -5,14 +5,14 @@ import { CardLayout } from "../components/CardLayout";
 // import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { motion  } from "framer-motion";
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import request, { gql } from 'graphql-request';
 import { CardLayoutTvshow } from "../components/CardLayoutTvshow";
-
+import {Image, Video, Transformation} from 'cloudinary-react';
 
 
 function FilterActor() {
-
+  const queryClient = useQueryClient();  
     let ddd
     let ddd1
 
@@ -202,9 +202,40 @@ function FilterActor() {
   //   // headers
   // );
 
+  const getActorss = gql`
+    query {
+      getActors {
+            
+        name
+        image
+        description
+      }
+          }
+    `;
+   //  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
+    const Actors = () => request(API_URL,
+      getActorss,
+      queryVariables,
+      // headers
+    );
+    const datass3 = queryClient.getQueryData("GetActors");  
+  let status3 = true;
+    if(datass3 !== undefined) {
+      status3 = false;
+    }
+
   const { isLoading, error, data } = useQuery(["getActorsMov",ddd],getActorMov);
+  const { isLoading:ActorsLoading, error:ActorsError, data:ActorsData } = useQuery("GetActors", Actors,{
+      enabled: status3,
+    });
+
+
   console.log("start1");
   console.log(data);
+
+  console.log(ActorsData);
+  console.log(ActorsData.getActors.filter((item) => item.name === ddd));
+   let actorDetails = ActorsData.getActors.filter((item) => item.name === ddd);
 
 
   // const [filterData, setFilterData] = useState([]);
@@ -226,17 +257,51 @@ function FilterActor() {
 
 
 
-if (error) return <h1>Something went wrong!</h1>;
-if (isLoading) 
-return <h1 class="border-1">Loading</h1>;
+if (error || ActorsError) return <h1>Something went wrong!</h1>;
+if (isLoading || ActorsLoading) 
+return <h1 class="">Loading</h1>;
 
   return (
     
-    <main class="mt-40 w-full flex justify-center lg:justify-start"> 
+    <main class="mt-40 w-full flex flex-col justify-center lg:justify-start"> 
+    <div class="relative overflow-hidden w-80 h-550 lg:h-200 lg:w-full ">
+    {/* <div class=""> */}
+    <Image 
+                  // class="object-cover blur-3xl h-450 lg:h-110 w-full "
+                  cloud_name="tefdb"
+                  loading="lazy"
+                  format="webp"
+            class="object-cover blur-3xl h-450 lg:h-96 w-full "
+            publicId="https://res.cloudinary.com/tefdb/image/upload/v1663748585/Movies/2019/Iron%20Sky:%20The%20Coming%20Race%20(2019)/Wallpaper/Iron_Sky_The_Coming_Race_2019_Wallpaper_rdqavc.webp"
+            alt="Image"
+            >
+            <Transformation quality="85"/>
+          </Image>
+          <div class="absolute top-0 left-0 px-6 w-full py-2.5 rounded-md h-450 lg:h-full justify-center items-center  flex flex-col lg:flex-col">
+          <Image 
+          class="lg:w-48 h-48 md:h-72 lg:h-72"
+          cloud_name="tefdb"
+          loading="lazy"
+          format="webp"
+          publicId={actorDetails[0].image}
+          // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+          alt="Image"
+        >
+          <Transformation quality="85"/>
+        </Image>
+          <div class=" font-RobotoMono text-white lg:text-left text-center mt-3 flex flex-col justify-center items-center md:justify-start md:items-start lg:justify-center lg:items-center w-full h-16 lg:h-auto md:w-4/5 lg:w-full font-extrabold text-xl md:text-lg lg:text-2xl">
+            {actorDetails[0].name}
+          </div>
+          <div class=" font-RobotoMono text-white lg:text-left text-center mt-3 flex flex-col justify-center items-center md:justify-start md:items-start lg:justify-center lg:items-center w-full h-16 lg:h-auto md:w-4/5 lg:w-full font-extrabold text-sm md:text-sm lg:text-sm">
+          {actorDetails[0].description}
+          </div>
+          </div>
+    {/* </div> */}
+    </div>
     <div >
             <div class="mt-5 ">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Latest dubbed movies</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Movies</h3>  
     <div class="m-4"></div>
     <div class=" m-2 lg:m-0 space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
     {
@@ -250,7 +315,7 @@ return <h1 class="border-1">Loading</h1>;
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Latest dubbed tvshoes</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">Tvshows</h3>  
     <div class="m-4"></div>
     <div class="m-2 lg:m-0 space-x-1 flex h-full overflow-x-scroll overflow-y-hidden hide-scroll-bar ">
     {
