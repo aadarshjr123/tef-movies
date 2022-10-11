@@ -38,6 +38,9 @@ const MovieDetailsss = (data,data2,data3,data4) => {
           // console.log(j.image);
              i.perMonth = j.perMonth
              i.image = j.image;
+        } else if(i.watchOn.split("-")[0] === j.name){
+          i.image = j.image;
+             i.perMonth = j.perMonth
         }
     })
 })
@@ -102,59 +105,6 @@ some[0].tvshowInfo[0].creator.map((castName) => {
         }
   `;
 
-  // const getTvshows = gql`
-  // query {
-  //   getTVshow1( Type:  "Tvshows") {
-  //     id
-  //     name
-  //     Type
-  //     storyline
-  //     casts {
-  //       castName
-  //       CharacterName
-  //     }
-  //     rating {
-  //       imdb
-  //       rottenTomatoes
-  //     }
-  //     posters {
-  //       posters
-  //     }
-  //     tvshowInfo {
-  //       rating{
-  //         rating
-  //       }
-  //       creator{
-  //         creator
-  //       }
-  //       writer
-  //       genre {
-  //         genre
-  //       }
-  //       link {
-  //         title
-  //         link
-  //         date
-  //     }
-  //       originalTitle
-  //       noOfseasons
-  //       status
-  //       releaseDate
-  //       dateFormat
-  //     }
-  //     watchOn {
-  //       watchOnLink
-  //       watchOn
-  //     }
-  //     rectanglePosters {
-  //       rectanglePosters
-  //     }
-  //     availLanguages {
-  //       languages
-  //     }
-  //   }
-  //       }
-  // `;
 
   const getTvshows = ({ queryKey }) => {
     const [_, names] = queryKey;
@@ -221,33 +171,7 @@ some[0].tvshowInfo[0].creator.map((castName) => {
     return somes;
   }
 
-  // function usePost(postId) {
-  //   return useQuery(
-  //     ["GetSeason", sss1],
-  //     async () => {
-  //       const { data } = await request(
-  //         'https://tefmovies.herokuapp.com/graphql',
-  //         gql`
-  //           query GetSeason($seasonId: String!) {
-  //   getSeason(seasonId:$seasonId) {
-  //     name
-  //     seasonId
-  //     season
-  //     seasonStart
-  //     seasonEnd
-  //     episodes{
-  //       episodeName
-  //       episodeDescription
-  //     }
-  //   }
-  //       }
-  //         `,
-  //         { seasonId: sss1 }
-  //       );
-  //       return data;
-  //     }
-  //   );
-  // }
+
 
   const getSeasons =
   `
@@ -330,17 +254,6 @@ getSeason(seasonId:$seasonId) {
   console.log("72",sss1);
   console.log("72",typeof sss1);
 
-  // const GetTvshowss = useQuery(GetTvshows(sss));
-  // const getSeasons = useQuery(getSeason(sss1));
-  // const getOttss = useQuery(getOtts);
-  // const getActorss = useQuery(getActors);
-
-  // const getOttss = GetOtts();
-  // const GetTvshowss = GetTvshows(sss);
-  // const getSeasons = GetSeason(sss1);
-  // // const GetMoviess = GetMovies();
-  // const getActorss = GetActors();
-
   let status = true;
 
   if(datass !== undefined) {
@@ -354,9 +267,6 @@ getSeason(seasonId:$seasonId) {
   const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery(["GetTvshows",names], getTvshows);
   const { isLoading:SeasonLoading, error:SeasonError, data:SeasonData } = useQuery(["GetSeason",sss1], getSeason);
   const { isLoading:ActorLoading, error:ActorError, data:ActorData } = useQuery("GetActors", getActor);
-  // const { isLoading:SeasonLoading, error:SeasonError, data:SeasonData } = useQuery(
-  // ["GetSeason",sss1]
-  // );
 
 
   if (error||  MoviesError || SeasonError || ActorError) return <h1>Something went wrong!</h1>;
@@ -373,25 +283,6 @@ getSeason(seasonId:$seasonId) {
     </main>
   );
 }
-
-// GetTvshowss.data,getOttss.data,getActorss.data,getSeasons.data
-// export default OneMovie;
-
-// export function OneMovie() {
-//   const { loading, error, data } = useQuery(GetMovie("sss"));
-
-//   if (error) return <h1>Something went wrong!</h1>;
-//   if (loading) 
-//   return <Cardskeleton />
-  
-//   return(
-//     <main class="w-full">
-//            {console.log(data)} 
-//          {/* <MovieDetails movie={MovieDetailsss(data)} /> */}
-//        </main>
-//   )
-
-// }
 
 
 export default OneTvshow

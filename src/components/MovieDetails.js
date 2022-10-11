@@ -110,15 +110,49 @@ export const MovieDetails = (movie) => {
 
 
   const { isLoading, error, data } = useQuery("GetMovies",Mov);
-  let some = data.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat).slice(0,5);
-  console.log(some);
+  // let some = data.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat).slice(0,5);
+
+  // console.log("data", data);
+  // console.log("movie.movie.name", movie.movie[0].name);
+  // let similarMovies = [];
+  // data.getMovies.filter((i) => {
+  //   // movie.movie[0].name.includes(i.name)
+  //   if(i.name.toLowerCase().includes(movie.movie[0].name.toLowerCase())) {
+  //     console.log(movie.movie[0].name.toLowerCase());
+  //     console.log(i.name.toLowerCase());
+  //     console.log(i.name.toLowerCase().includes(movie.movie[0].name.toLowerCase()));
+    
+  //   } else if(movie.movie[0].name.toLowerCase().includes(i.name.toLowerCase())) {
+  //     console.log(movie.movie[0].name.toLowerCase());
+  //     console.log(i.name.toLowerCase());
+  //     console.log(movie.movie[0].name.toLowerCase().includes(i.name.toLowerCase()));
+  //   }
+
+  //      if(i.name.toLowerCase().includes(movie.movie[0].name.toLowerCase())) {
+  //       // console.log(i.name);
+  //       similarMovies.push(i);
+  //       // return i;
+  //     }
+
+  //   // i.movieInfo[0].genre.map((j) => {
+  //   //   // console.log(movie.movie[0].name.toLowerCase());
+  //   //   // console.log(j.genre.toLowerCase());
+  //   //   // console.log(movie.movie[0].name.toLowerCase().includes(j.genre));
+  //   //   if(movie.movie[0].name.toLowerCase().includes(j.genre.toLowerCase())) {
+  //   //     // console.log(i.name);
+  //   //     similarMovies.push(i);
+  //   //     // return i;
+  //   //   }
+  //   // })
+  // });
+// console.log(similarMovies);
+  console.log("currentMovie",movie);
   // let netflix = [];
   const { innerWidth: width, innerHeight: height } = window;
   console.log(width,height)
   console.log(movie.movie[0].movieInfo[0].link,"22 line");
 
 
-  // console.log()
   const scroll = (scrollOffset) => {
     ref.current.scrollLeft += scrollOffset;
   };
@@ -137,6 +171,18 @@ export const MovieDetails = (movie) => {
   const scroll5 = (scrollOffset) => {
     ref5.current.scrollLeft += scrollOffset;
   };
+
+
+  let CurrentMovieGenere = movie.movie[0].movieInfo[0].genre.map(i => {
+    return i.genre;
+  })
+
+  console.log("CurrentMovieGenere",CurrentMovieGenere);
+
+
+  let some1 = sortGenre(data, CurrentMovieGenere);
+
+  
   return (
 <div class=" mt-36 lg:mt-48 flex w-full h-auto  md:justify-center md:items-center  lg:justify-center lg:items-center ">
     <div
@@ -697,7 +743,7 @@ export const MovieDetails = (movie) => {
         <p class="font-RobotoMono">Watch now</p>
         <div class="flex flex-row" >
           {
-            movie.movie[0].watchOn.length <=5 ? null : <button  class="w-20" onClick={() => scroll2(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+            movie.movie[0].watchOn.length <=5 ? null : <button  class="w-20" onClick={() => scroll3(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
           }
 
         <div ref={ref3}class=" flex flex-row space-x-4 grow items-center w-80 h-60 md:w-full lg:w-full md:h-60 lg:h-80 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
@@ -780,26 +826,51 @@ export const MovieDetails = (movie) => {
 
       </div>
       <div class=" w-full font-medium text-sm  dark:text-white ">
-        <p class="font-RobotoMono">Popular movies</p>
+        <p class="font-RobotoMono">Suggested movies</p>
         <div class="m-10"></div>
         <div class="flex flex-row" >
           {
-            some.length <=5 ? null : <button  class="w-20" onClick={() => scroll4(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+            some1.length <=5 ? null : <button  class="w-20" onClick={() => scroll4(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
           }
 
         <div ref={ref4} class="  flex flex-row space-x-4 grow items-center w-80 h-80 md:w-full lg:w-full md:h-60 lg:h-110 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
         {
         //  latestDubbed(data)
-        some.map((movies) => (
+        some1.map((movies) => (
            <CardLayout_2  user={movies}/>
          ))
       }
         </div>
         {
-          some.length <=5 ? null : <button  class="w-20" onClick={() => scroll4(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+          some1.length <=5 ? null : <button  class="w-20" onClick={() => scroll4(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
         }
         </div>
       </div>
+      {/* {
+        similarMovies.length === 1 ? null : 
+        <div class=" w-full font-medium text-sm  dark:text-white ">
+        <p class="font-RobotoMono">Similar movies</p>
+        <div class="m-10"></div>
+        <div class="flex flex-row" >
+          {
+            similarMovies.length <=5 ? null : <button  class="w-20" onClick={() => scroll4(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+          }
+
+        <div ref={ref4} class="  flex flex-row space-x-4 grow items-center w-80 h-80 md:w-full lg:w-full md:h-60 lg:h-110 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar ">
+        {
+        //  latestDubbed(data)
+        similarMovies.map((movies) => (
+           <CardLayout_2  user={movies}/>
+         ))
+      }
+        </div>
+        {
+          similarMovies.length <=5 ? null : <button  class="w-20" onClick={() => scroll4(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+        }
+        </div>
+      </div>
+      } */}
+      
     </div>
     
     
@@ -807,3 +878,37 @@ export const MovieDetails = (movie) => {
   )
   
         };
+
+
+        function sortGenre(data, CurrentMovieGenere) {
+          let aaa = [];
+          data.getMovies.map(i => {
+            i.movieInfo[0].genre.map(j => {
+              if (CurrentMovieGenere.includes(j.genre)) {
+                // console.log(i);
+                aaa.push(i);
+                // return i;
+              }
+            });
+          });
+          console.log("AllMovieGenre", aaa);
+          const uniqueIds = [];
+        
+          const unique = aaa.filter(element => {
+            const isDuplicate = uniqueIds.includes(element.id);
+        
+            if (!isDuplicate) {
+              uniqueIds.push(element.id);
+              return true;
+            } else {
+              return false;
+            }
+        
+          }).sort(() => Math.random() - 0.5);
+        
+          // console.log("unique", unique);
+          // let some1 = unique
+          // console.log(some1);
+          return unique;
+        }
+        

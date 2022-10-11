@@ -110,7 +110,9 @@ function Movies() {
 
 
   console.log(data);
-  let some =  data.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat);
+  let some =  data.getMovies.sort((a, b) => a.movieInfo[0].dateFormat - b.movieInfo[0].dateFormat);
+
+  console.log(data);
   let netflix = [];
   let Amazon = [];
   let Hotstar = [];
@@ -121,7 +123,7 @@ function Movies() {
       if(j.watchOn === "Netflix") {
         // console.log("netflix");
         netflix.push(i); 
-      } else if(j.watchOn === "Amazon Prime Videos") {
+      } else if(j.watchOn === "Amazon Prime Video") {
         // console.log("netflix");
         Amazon.push(i); 
       } else if(j.watchOn === "Disney Plus Hotstar") {

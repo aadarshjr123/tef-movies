@@ -18,9 +18,11 @@ function FilterActor() {
 
   if(window.location.href.split("?")[1]) {
     ddd1 = window.location.href.split("?")[1];
+    console.log(ddd1);
     console.log(window.location.href);
-    console.log(decodeURI(ddd));
+    console.log(decodeURI(ddd1));
     ddd = decodeURI(ddd1);
+
   } else {
     console.log("no params");
   }
@@ -192,15 +194,8 @@ function FilterActor() {
 
   const queryVariables = {};
 
-  // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
   const API_URL = 'https://tefmovies.herokuapp.com/graphql';
-
-  // const ActorsMov = () => request(API_URL,
-  //   getActorMov,
-  //   queryVariables,
-  //   // headers
-  // );
 
   const getActorss = gql`
     query {
@@ -212,11 +207,9 @@ function FilterActor() {
       }
           }
     `;
-   //  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
     const Actors = () => request(API_URL,
       getActorss,
       queryVariables,
-      // headers
     );
     const datass3 = queryClient.getQueryData("GetActors");  
   let status3 = true;
@@ -238,25 +231,6 @@ function FilterActor() {
    let actorDetails = ActorsData.getActors.filter((item) => item.name === ddd);
 
 
-  // const [filterData, setFilterData] = useState([]);
-  // const [filterState, setFilterState] = useState(false);
-  // let marvel = [];
-  // console.log(data);
-
-  // data.getMovies.map((i) => {
-  //   // console.log(i.movieInfo[0].genre);
-  //   i.movieInfo[0].genre.map((j) => {
-  //     if( j.genre.split(" ").join("") === ddd)
-  //     {
-  //       marvel.push(i);
-  //     }
-  //   })
-  // })
-  
-  // console.log(marvel);
-
-
-
 if (error || ActorsError) return <h1>Something went wrong!</h1>;
 if (isLoading || ActorsLoading) 
 return <h1 class="">Loading</h1>;
@@ -264,40 +238,54 @@ return <h1 class="">Loading</h1>;
   return (
     
     <main class="mt-40 w-full flex flex-col justify-center lg:justify-start"> 
-    <div class="relative overflow-hidden w-80 h-550 lg:h-200 lg:w-full ">
     {/* <div class=""> */}
-    <Image 
-                  // class="object-cover blur-3xl h-450 lg:h-110 w-full "
-                  cloud_name="tefdb"
-                  loading="lazy"
-                  format="webp"
-            class="object-cover blur-3xl h-450 lg:h-96 w-full "
-            publicId="https://res.cloudinary.com/tefdb/image/upload/v1663748585/Movies/2019/Iron%20Sky:%20The%20Coming%20Race%20(2019)/Wallpaper/Iron_Sky_The_Coming_Race_2019_Wallpaper_rdqavc.webp"
-            alt="Image"
-            >
-            <Transformation quality="85"/>
-          </Image>
-          <div class="absolute top-0 left-0 px-6 w-full py-2.5 rounded-md h-450 lg:h-full justify-center items-center  flex flex-col lg:flex-col">
-          <Image 
-          class="lg:w-48 h-48 md:h-72 lg:h-72"
-          cloud_name="tefdb"
-          loading="lazy"
-          format="webp"
-          publicId={actorDetails[0].image}
-          // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
-          alt="Image"
-        >
-          <Transformation quality="85"/>
-        </Image>
-          <div class=" font-RobotoMono text-white lg:text-left text-center mt-3 flex flex-col justify-center items-center md:justify-start md:items-start lg:justify-center lg:items-center w-full h-16 lg:h-auto md:w-4/5 lg:w-full font-extrabold text-xl md:text-lg lg:text-2xl">
-            {actorDetails[0].name}
-          </div>
-          <div class=" font-RobotoMono text-white lg:text-left text-center mt-3 flex flex-col justify-center items-center md:justify-start md:items-start lg:justify-center lg:items-center w-full h-16 lg:h-auto md:w-4/5 lg:w-full font-extrabold text-sm md:text-sm lg:text-sm">
-          {actorDetails[0].description}
-          </div>
-          </div>
-    {/* </div> */}
-    </div>
+    {
+      actorDetails.length > 0 ?  <div class="relative overflow-hidden w-80 h-550 lg:h-200 lg:w-full ">
+      <Image 
+                    // class="object-cover blur-3xl h-450 lg:h-110 w-full "
+                    cloud_name="tefdb"
+                    loading="lazy"
+                    format="webp"
+              class="object-cover blur-3xl h-450 lg:h-96 w-full "
+              publicId="https://res.cloudinary.com/tefdb/image/upload/v1663748585/Movies/2019/Iron%20Sky:%20The%20Coming%20Race%20(2019)/Wallpaper/Iron_Sky_The_Coming_Race_2019_Wallpaper_rdqavc.webp"
+              alt="Image"
+              >
+              <Transformation quality="85"/>
+            </Image>
+            <div class="absolute top-0 left-0 px-6 w-full py-2.5 rounded-md h-450 lg:h-full justify-center items-center  flex flex-col lg:flex-col">
+              {
+                actorDetails[0].image !== undefined ? 
+                <Image
+                class="lg:w-48 h-48 md:h-72 lg:h-72"
+                cloud_name="tefdb"
+                loading="lazy"
+                format="webp"
+                publicId={actorDetails[0].image}
+                // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
+                alt="Image"
+              >
+                  <Transformation quality="85" />
+              </Image>
+              : 
+              <div class="font-RobotoMono lg:ml-0 ml-1 lg:mt-0 mt-2   text-white rounded-md flex justify-center items-center w-28 h-36 lg:w-40 lg:h-56 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl  transition-shadow duration-300 ease-in-out  text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2">
+                  {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
+                  TEFMovies
+                  {/* </a> */}
+                </div>
+              
+              }
+  
+              <div class=" font-RobotoMono text-white lg:text-left text-center mt-3 flex flex-col justify-center items-center md:justify-start md:items-start lg:justify-center lg:items-center w-full h-16 lg:h-auto md:w-4/5 lg:w-full font-extrabold text-xl md:text-lg lg:text-2xl">
+                  {actorDetails[0].name}
+                </div>
+                <div class=" font-RobotoMono text-white lg:text-left text-center mt-3 flex flex-col justify-center items-center md:justify-start md:items-start lg:justify-center lg:items-center w-full h-16 lg:h-auto md:w-4/5 lg:w-full font-extrabold text-sm md:text-sm lg:text-sm">
+                  {actorDetails[0].description}
+                </div>
+            </div>
+      {/* </div> */}
+      </div> : null
+    }
+   
     <div >
             <div class="mt-5 ">
      <div class="m-16"></div>
