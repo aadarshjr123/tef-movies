@@ -149,6 +149,7 @@ export const TvshowDetails = (movie) => {
     getTvshows,
     {
       enabled: status,
+      staleTime: 1000 * 10
     }
   );
 

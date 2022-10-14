@@ -94,6 +94,7 @@ function FilterGenre() {
   
   const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery("GetMovies",Mov,{
     enabled: status1,
+    staleTime: 1000 * 10
   });
 
   if (MoviesError) return <h1>Something went wrong!</h1>;

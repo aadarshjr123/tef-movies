@@ -291,15 +291,23 @@ const Tvshows =  () => {
   
   const { isLoading, error, data, refetch } = useQuery(["GetTvshows",names],getTvshows,{
     enabled: status,
+    staleTime: 1000 * 10,
+    cacheTime :1000 * 60 * 5
   });
   const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery("GetMovies", Mov,{
     enabled: status1,
+    staleTime: 1000 * 10,
+    cacheTime :1000 * 60 * 5
   });
   const { isLoading:CollectionLoading, error:CollectionError, data:CollectionData } = useQuery("GetCollections", Coll,{
     enabled: status2,
+    staleTime: 1000 * 10,
+    cacheTime :1000 * 60 * 5
   });
   const { isLoading:ActorsLoading, error:ActorsError, data:ActorsData } = useQuery("GetActors", Actors,{
     enabled: status3,
+    staleTime: 1000 * 10,
+    cacheTime :1000 * 60 * 5
   });
 
       if (error || MoviesError || CollectionError || ActorsError) return <h1>{error}</h1>;

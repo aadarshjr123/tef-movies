@@ -90,7 +90,7 @@ export function MoviesHomepage() {
     queryVariables,
     // headers
   );
-  const { isLoading, error, data } = useQuery("GetMovies",Mov);
+  const { isLoading, error, data } = useQuery("GetMovies",Mov,{staleTime: 1000 * 10});
     console.log()
 
   // if (error) return <h1>Something went wrong!</h1>;

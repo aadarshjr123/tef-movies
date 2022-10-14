@@ -163,9 +163,9 @@ some[0].movieInfo[0].director.map((castName) => {
     // headers
   );
 
-  const { isLoading, error, data, refetch } = useQuery("GetOtts", getOtt);
-  const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery("GetMovies", Mov);
-  const { isLoading:CollectionLoading, error:CollectionError, data:CollectionData } = useQuery("GetActors", getActor);
+  const { isLoading, error, data, refetch } = useQuery("GetOtts", getOtt,{staleTime: 1000 * 10});
+  const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery("GetMovies", Mov,{staleTime: 1000 * 10});
+  const { isLoading:CollectionLoading, error:CollectionError, data:CollectionData } = useQuery("GetActors", getActor,{staleTime: 1000 * 10});
 
   // const GetMoviess = useQuery(GetMovies);
   // const getOttss = useQuery(getOtts);

@@ -220,6 +220,7 @@ function FilterActor() {
   const { isLoading, error, data } = useQuery(["getActorsMov",ddd],getActorMov);
   const { isLoading:ActorsLoading, error:ActorsError, data:ActorsData } = useQuery("GetActors", Actors,{
       enabled: status3,
+      staleTime: 1000 * 10
     });
 
 

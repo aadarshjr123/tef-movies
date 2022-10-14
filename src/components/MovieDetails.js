@@ -109,7 +109,7 @@ export const MovieDetails = (movie) => {
 
 
 
-  const { isLoading, error, data } = useQuery("GetMovies",Mov);
+  const { isLoading, error, data } = useQuery("GetMovies",Mov,{staleTime: 1000 * 10});
   // let some = data.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat).slice(0,5);
 
   // console.log("data", data);

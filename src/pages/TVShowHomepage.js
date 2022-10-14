@@ -107,6 +107,7 @@ export function TVShowHomepage(name) {
   }
   const {  isLoading, error, data, refetch } = useQuery(["GetTvshows",names],getTvshows,{
     enabled: status,
+    staleTime: 1000 * 10
   });
 
   // const { isLoading, error, data } = useQuery("GetTvshows",Tvshow);

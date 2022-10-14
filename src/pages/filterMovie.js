@@ -77,7 +77,7 @@ function FilterMovie() {
     // headers
   );
 
-  const { isLoading, error, data } = useQuery("GetMovies",Mov);
+  const { isLoading, error, data } = useQuery("GetMovies",Mov,{staleTime: 1000 * 10});
   const [filterData, setFilterData] = useState([]);
   const [filterState, setFilterState] = useState(false);
 

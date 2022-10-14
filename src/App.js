@@ -30,7 +30,14 @@ import SearchBox from './pages/Search';
 import Welcome from './pages/Welcome';
 import FilterActor from './pages/filterActorsMov';
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 10,
+    },
+  },
+})
 
 // src\tomatometer-fresh.149b5e8adc3.svg
 

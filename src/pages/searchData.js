@@ -246,7 +246,7 @@ function SearchData(names) {
   //   // headers
   // );
 
-  const { isLoading:SearchLoading, error:SearchError, data:SearchData, refetch } = useQuery(["searchData",names.names],searchDatas);
+  const { isLoading:SearchLoading, error:SearchError, data:SearchData, refetch } = useQuery(["searchData",names.names],searchDatas,{staleTime: 1000 * 10});
 
   // const { isLoading:SearchLoading, error:SearchError, data:SearchData }  = useQuery("searchData",SearchResults(names.names));
 

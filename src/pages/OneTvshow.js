@@ -264,9 +264,9 @@ getSeason(seasonId:$seasonId) {
 
 
   const { isLoading, error, data, refetch } = useQuery("GetOtts", getOtt);
-  const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery(["GetTvshows",names], getTvshows);
-  const { isLoading:SeasonLoading, error:SeasonError, data:SeasonData } = useQuery(["GetSeason",sss1], getSeason);
-  const { isLoading:ActorLoading, error:ActorError, data:ActorData } = useQuery("GetActors", getActor);
+  const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery(["GetTvshows",names], getTvshows,{staleTime: 1000 * 10});
+  const { isLoading:SeasonLoading, error:SeasonError, data:SeasonData } = useQuery(["GetSeason",sss1], getSeason,{staleTime: 1000 * 10});
+  const { isLoading:ActorLoading, error:ActorError, data:ActorData } = useQuery("GetActors", getActor,{staleTime: 1000 * 10});
 
 
   if (error||  MoviesError || SeasonError || ActorError) return <h1>Something went wrong!</h1>;

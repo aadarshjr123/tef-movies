@@ -44,7 +44,7 @@ const Search =  () => {
     // headers
   );
 
-    const {  isLoading:CollectionLoading, error:CollectionError, data:CollectionData  }  = useQuery("GetCollections", Coll);
+    const {  isLoading:CollectionLoading, error:CollectionError, data:CollectionData  }  = useQuery("GetCollections", Coll,{staleTime: 1000 * 10});
 
 
     if (CollectionError) return <h1>{CollectionError}</h1>;

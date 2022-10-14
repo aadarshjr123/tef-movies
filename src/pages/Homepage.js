@@ -95,7 +95,7 @@ export function Homepage() {
     // headers
   );
 
-  const {isLoading, error, data, refetch} = useQuery("GetMovies",Mov);
+  const {isLoading, error, data, refetch} = useQuery("GetMovies",Mov,{staleTime: 1000 * 10});
     console.log()
 
       if (error) return <h1>Something went wrong!</h1>;

@@ -97,6 +97,7 @@ function Movies() {
 
   const { isLoading, error, data } = useQuery("GetMovies",Mov,{
     enabled: status,
+    staleTime: 1000 * 10
   });
   const ref = useRef(null);
   const ref1 = useRef(null);
