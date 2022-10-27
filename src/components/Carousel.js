@@ -135,7 +135,7 @@ export class Carousel extends Component {
                 }}
             // class="object-cover blur-3xl h-450 lg:h-110 w-full "
             cloud_name="tefdb"
-            loading="lazy"
+            // loading="lazy"
             format="webp"
             publicId={slide.rectanglePosters[0].rectanglePosters}
             // src={movie.movie[0].rectanglePosters[0].rectanglePosters}

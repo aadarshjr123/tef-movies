@@ -36,7 +36,7 @@ export const CardLayoutTvshow = ({ user: { name, watchOn,storyline, posters,Type
           <Image 
             class=" h-full w-full"
             cloud_name="tefdb"
-            loading="lazy"
+            // loading="lazy"
             format="webp"
             publicId={posters[0].posters}
             // src={movie.movie[0].rectanglePosters[0].rectanglePosters}

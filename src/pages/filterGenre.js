@@ -69,7 +69,7 @@ function FilterGenre() {
 
   const queryVariables = {};
   const datass1 = queryClient.getQueryData("GetMovies");
-
+  console.log("somes",datass1);
   // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
   const API_URL = 'https://tefmovies.herokuapp.com/graphql';

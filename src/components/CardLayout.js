@@ -41,10 +41,10 @@ export const CardLayout = ({ user: { name, storyline, posters, id ,watchOn} }) =
           <Image
            class="h-full w-full"
           cloud_name="tefdb"
-          loading="lazy"
+          // LazyLoad
+          // loading
           publicId={posters[0].posters}
-            // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
-            alt="Image"
+          alt="Image"
           format="webp"
           >
           <Transformation quality="85"/>

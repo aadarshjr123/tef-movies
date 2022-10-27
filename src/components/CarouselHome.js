@@ -82,14 +82,14 @@ export class CarouselHome extends Component {
 
                   <div className={
                     index === this.state.currentSlide
-                      ? "block w-full h-auto object-cover "
+                      ? "block w-full h-auto object-cover"
                       : "hidden"
                   }>
 
      <Image 
             cloud_name="tefdb"
             key={index}
-            loading="lazy"
+            // loading="lazy"
             class="opacity-60"
             format="webp"
             publicId={slide.rectanglePosters[0].rectanglePosters}
@@ -102,7 +102,7 @@ export class CarouselHome extends Component {
 
             alt="Image"
           >
-            <Transformation quality="85"/>
+            <Transformation quality="100"/>
           </Image>
                   </div> 
      

@@ -21,7 +21,7 @@ const MovieDetailsss = (data,data2,data3,data4) => {
   console.log(window.location.href.split("?")[1]);
   console.log(data);
 
-  data.getTVshow1.filter((user, index) =>
+  data.filter((user, index) =>
     // console.log(user)
     user.id === `${window.location.href.split("?")[1]}`
       ? // console.log(user)
@@ -31,8 +31,10 @@ const MovieDetailsss = (data,data2,data3,data4) => {
   );
 
   console.log(data2)
+  console.log("some",some);
+
   some[0].watchOn.map((i) => {
-    data2.getOtts.map((j) => {
+    data2.map((j) => {
         if(i.watchOn === j.name) {
           // console.log(i);
           // console.log(j.image);
@@ -46,12 +48,14 @@ const MovieDetailsss = (data,data2,data3,data4) => {
 })
 
 some.map((i) => {
-  data4.getSeason.map((j) => {
+  console.log(i.id);
+  data4.map((j) => {
+  console.log(j.seasonId);
     if(i.id === j.seasonId) {
       // console.log([j]);
       // console.log(typeof i.seasons);
       // console.log(i.seasons);
-      i.seasons =  data4.getSeason;
+      i.seasons =  data4;
     }
   })
 })
@@ -59,7 +63,7 @@ some.map((i) => {
 // console.log(some,"after pushing");
 
 some[0].casts.map((castName) => {
-  data3.getActors.map((actors) => {
+  data3.map((actors) => {
     if(castName.castName === actors.name) {
       // console.log(i);
       // console.log(j.image);
@@ -70,7 +74,7 @@ some[0].casts.map((castName) => {
 
 
 some[0].tvshowInfo[0].creator.map((castName) => {
-  data3.getActors.map((actors) => {
+  data3.map((actors) => {
     if(castName.creator === actors.name) {
       // console.log(i);
       // console.log(j.image);
@@ -84,8 +88,8 @@ some[0].tvshowInfo[0].creator.map((castName) => {
   
   
   // some[0].seasons[0].push(seasons);
-  console.log(some);
-  return some;
+  console.log("some",some,);
+  return [some,data];
 };
 
  function OneTvshow() {
@@ -107,11 +111,11 @@ some[0].tvshowInfo[0].creator.map((castName) => {
 
 
   const getTvshows = ({ queryKey }) => {
-    const [_, names] = queryKey;
-    console.log("season id",names);
+    const [_, names,sss1] = queryKey;
+    // console.log("season id",names);
     const somes = request(
       'https://tefmovies.herokuapp.com/graphql',
-      gql `query GetTvshow($name: String!){
+      gql `query GetTvshow($name: String!, $seasonId: String!) {
         getTVshow1( Type: $name) {
           id
           name
@@ -161,13 +165,39 @@ some[0].tvshowInfo[0].creator.map((castName) => {
             languages
           }
         }
+
+        getOtts {
+      
+          name
+          image
+          perMonth
+        }
+
+        getActors {
+      
+          name
+          image
+        }
+
+        getSeason(seasonId:$seasonId) {
+          name
+          seasonId
+          season
+          seasonStart
+          seasonEnd
+          episodes{
+            episodeName
+            episodeDescription
+          }
+        }
+
             }
       `,
-      { name: names }
+      { name: names, seasonId: sss1 }
     ).catch(e => {
       console.log(e);
     })
-    console.log("getSeason",somes);
+    // console.log("getSeason",somes);
     return somes;
   }
 
@@ -218,7 +248,7 @@ some[0].tvshowInfo[0].creator.map((castName) => {
 
   const getSeason = ({ queryKey }) => {
     const [_, names] = queryKey;
-    console.log("season id",names);
+    // console.log("season id",names);
     const somes = request(
       'https://tefmovies.herokuapp.com/graphql',
       gql`
@@ -240,7 +270,7 @@ getSeason(seasonId:$seasonId) {
     ).catch(e => {
       console.log(e);
     })
-    console.log("getSeason",somes);
+    // console.log("getSeason",somes);
     return somes;
   }
 
@@ -251,8 +281,6 @@ getSeason(seasonId:$seasonId) {
   );
 
 
-  console.log("72",sss1);
-  console.log("72",typeof sss1);
 
   let status = true;
 
@@ -263,23 +291,24 @@ getSeason(seasonId:$seasonId) {
   let names = "Tvshows";
 
 
-  const { isLoading, error, data, refetch } = useQuery("GetOtts", getOtt);
-  const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery(["GetTvshows",names], getTvshows,{staleTime: 1000 * 10});
-  const { isLoading:SeasonLoading, error:SeasonError, data:SeasonData } = useQuery(["GetSeason",sss1], getSeason,{staleTime: 1000 * 10});
-  const { isLoading:ActorLoading, error:ActorError, data:ActorData } = useQuery("GetActors", getActor,{staleTime: 1000 * 10});
+  // const { isLoading, error, data, refetch } = useQuery("GetOtts", getOtt);
+  const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery(["GetTvshows",names,sss1], getTvshows,{staleTime: 1000 * 10});
+  // const { isLoading:SeasonLoading, error:SeasonError, data:SeasonData } = useQuery(["GetSeason",sss1], getSeason,{staleTime: 1000 * 10});
+  // const { isLoading:ActorLoading, error:ActorError, data:ActorData } = useQuery("GetActors", getActor,{staleTime: 1000 * 10});
 
 
-  if (error||  MoviesError || SeasonError || ActorError) return <h1>Something went wrong!</h1>;
-  if (isLoading ||MoviesLoading|| SeasonLoading || ActorLoading) 
+  if (MoviesError) return <h1>Something went wrong!</h1>;
+  if (MoviesLoading) 
   return <Cardskeleton />
-    console.log(data,MoviesData,SeasonData,ActorData)
+    console.log(MoviesData)
   // if(GetTvshowss.data || getOttss.data || getActorss.data) 
   // return <Cardskeleton />
 
   return (
     <main class="w-full">
       {/* {MovieDetailsss(data)}  */}
-      <TvshowDetails movie={MovieDetailsss(MoviesData,data,ActorData,SeasonData)} />
+      <p className="text-white border-1 border-white">Hai</p>
+      <TvshowDetails movie={MovieDetailsss(MoviesData.getTVshow1,MoviesData.getOtts,MoviesData.getActors,MoviesData.getSeason)} />
     </main>
   );
 }

@@ -7,10 +7,14 @@ import { GetMovies } from "../query/GetMovies";
 import { motion  } from "framer-motion";
 import { useQuery } from 'react-query';
 import request, { gql } from 'graphql-request';
-
+import { useQueryClient  } from 'react-query'
 
 
 function FilterMovie() {
+  const queryClient = useQueryClient()
+
+  const datass = queryClient.getQueryData("GetMovies");
+  console.log(datass);
   const getMovies = gql`
   query {
     getMovies {
@@ -69,7 +73,12 @@ function FilterMovie() {
 
   const API_URL = 'https://tefmovies.herokuapp.com/graphql';
   
+  // console.log("queryCacahe",datass);
+  let status = true;
 
+  if(datass !== undefined) {
+    status = false;
+  }
 
   const Mov = () => request(API_URL,
     getMovies,
@@ -77,9 +86,19 @@ function FilterMovie() {
     // headers
   );
 
-  const { isLoading, error, data } = useQuery("GetMovies",Mov,{staleTime: 1000 * 10});
+  const { isLoading, error, data } = useQuery("GetMovies",Mov,{
+    enabled: status,
+    staleTime: 1000 * 10
+  
+  });
   const [filterData, setFilterData] = useState([]);
   const [filterState, setFilterState] = useState(false);
+
+
+
+  if (error) return <h1>Something went wrong!</h1>;
+  if (isLoading) 
+  return <h1>Loading</h1>;
 
   console.log(data);
 
@@ -124,9 +143,7 @@ function FilterMovie() {
     }
   }
 
-  if (error) return <h1>Something went wrong!</h1>;
-  if (isLoading) 
-  return <h1>Loading</h1>;
+
 
 
   return (

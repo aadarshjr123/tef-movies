@@ -219,6 +219,66 @@ const Tvshows =  () => {
             languages
           }
         }
+
+        getActors {
+          
+          name
+          image
+          description
+        }
+
+        getMovies {
+          id
+          name
+          storyline
+          casts {
+            castName
+            CharacterName
+          }
+          rating {
+            imdb
+            rottenTomatoes
+          }
+          posters {
+            posters
+          }
+          movieInfo {
+            rating{
+              rating
+            }
+            director{
+              director
+            }
+            runtime
+            link {
+                title
+                link
+                date
+            }
+            releaseDate
+            dateFormat
+            genre {
+                genre
+            }
+          }
+          watchOn{
+            watchOnLink
+            watchOn
+          }
+          rectanglePosters{
+            rectanglePosters
+          }
+          availLanguages {
+            languages
+          }
+          
+        }
+
+        getCollections {
+          name
+          image
+          type
+        }
             }
       `,
       { name: names }
@@ -288,46 +348,55 @@ const Tvshows =  () => {
   }
 
   let names = "Tvshows";
-  
-  const { isLoading, error, data, refetch } = useQuery(["GetTvshows",names],getTvshows,{
+
+  const { isLoading, error, data, refetch } = useQuery(["GetTvshowss",names],getTvshows,{
     enabled: status,
     staleTime: 1000 * 10,
     cacheTime :1000 * 60 * 5
   });
-  const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery("GetMovies", Mov,{
-    enabled: status1,
-    staleTime: 1000 * 10,
-    cacheTime :1000 * 60 * 5
-  });
-  const { isLoading:CollectionLoading, error:CollectionError, data:CollectionData } = useQuery("GetCollections", Coll,{
-    enabled: status2,
-    staleTime: 1000 * 10,
-    cacheTime :1000 * 60 * 5
-  });
-  const { isLoading:ActorsLoading, error:ActorsError, data:ActorsData } = useQuery("GetActors", Actors,{
-    enabled: status3,
-    staleTime: 1000 * 10,
-    cacheTime :1000 * 60 * 5
-  });
 
-      if (error || MoviesError || CollectionError || ActorsError) return <h1>{error}</h1>;
-      if (isLoading || MoviesLoading || CollectionLoading || ActorsLoading) 
+  console.log("data",data)
+
+
+  // const { isLoading, error, data, refetch } = useQuery(["GetTvshows",names],getTvshows,{
+  //   enabled: status,
+  //   staleTime: 1000 * 10,
+  //   cacheTime :1000 * 60 * 5
+  // });
+  // const { isLoading:MoviesLoading, error:MoviesError, data:MoviesData } = useQuery("GetMovies", Mov,{
+  //   enabled: status1,
+  //   staleTime: 1000 * 10,
+  //   cacheTime :1000 * 60 * 5
+  // });
+  // const { isLoading:CollectionLoading, error:CollectionError, data:CollectionData } = useQuery("GetCollections", Coll,{
+  //   enabled: status2,
+  //   staleTime: 1000 * 10,
+  //   cacheTime :1000 * 60 * 5
+  // });
+  // const { isLoading:ActorsLoading, error:ActorsError, data:ActorsData } = useQuery("GetActors", Actors,{
+  //   enabled: status3,
+  //   staleTime: 1000 * 10,
+  //   cacheTime :1000 * 60 * 5
+  // });
+
+      if (error ) return <h1>{error}</h1>;
+      if (isLoading ) 
       return <HomepageSkeleton />
 
 
-      console.log(data,MoviesData,CollectionData)
+      // console.log(data,MoviesData,CollectionData)
   
  
   console.log("hai3");
 
   let marvel = [];
 
-  console.log("CollectionData",CollectionData);
+  // console.log("CollectionData",CollectionData);
 
   let collection = []
   let genereCollection = []
 
-  CollectionData.getCollections.map((i) => {
+  data.getCollections.map((i) => {
     if(i.type === 'genre') {
       collection.push(i)
     } else if(i.type === 'collection') {
@@ -343,24 +412,24 @@ let FreeTvshows = [];
 
 
 ImDBTvshows=[...data.getTVshow1];
-ImDBMovies=[...MoviesData.getMovies];
+ImDBMovies=[...data.getMovies];
 
-FreeMovies=[...MoviesData.getMovies];
+FreeMovies=[...data.getMovies];
 FreeTvshows=[...data.getTVshow1];
 
 console.log("ImDB",ImDBTvshows);
 
 
 
-  console.log("ActorsData",ActorsData);
-  console.log("marvel",marvel);
+  // console.log("ActorsData",ActorsData);
+  // console.log("marvel",marvel);
 
 let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
-  console.log(MoviesData);
+  // console.log(MoviesData);
 
   let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
   let some22 = ImDBTvshows.sort((a, b) => b.rating[0].imdb - a.rating[0].imdb).slice(0, 10);
-  let some1 = MoviesData.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat);
+  let some1 = data.getMovies.sort((a, b) => b.movieInfo[0].dateFormat - a.movieInfo[0].dateFormat);
   let some222 = ImDBMovies.sort((a, b) => b.rating[0].imdb - a.rating[0].imdb).slice(0, 10);
 
   let FreeMoviesSorted = [];
@@ -431,7 +500,7 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
     <div className="mt-60 w-full  ">
 
       <div className=" w-full lg:h-110 ">
-      <Homepage name="Tvshows"/>
+      <Homepage data={data.getMovies} name="Tvshows"/>
       </div>
  
     <div class="mt-5 m-10">
@@ -527,18 +596,18 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
     <div class="m-4"></div>
     <div class="flex flex-row" >
       {
-        ActorsData.getActors.length <=5 ? null : <button class="w-20" onClick={() => scroll4(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
+        data.getActors.length <=5 ? null : <button class="w-20" onClick={() => scroll4(-1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretLeft} /></button>
       }
     <div ref={ref4} class="scroll-smooth  m-2 lg:m-0 space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
      {
-         ActorsData.getActors.map((collection) => 
+         data.getActors.map((collection) => 
             <CollectionActorMov  collection={collection}/>
          
          )
       }
      </div>
      {
-       ActorsData.getActors.length <=5 ? null : <button class="w-20" onClick={() => scroll4(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
+       data.getActors.length <=5 ? null : <button class="w-20" onClick={() => scroll4(1000)}><FontAwesomeIcon color="white"  size="3x" icon={faCaretRight} /></button>
      }
      </div>
 

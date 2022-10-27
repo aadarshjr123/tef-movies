@@ -29,6 +29,8 @@ const scrollToTop = () => {
 };
 
 export const TvshowDetails = (movie) => {
+  console.log("movie",movie)
+    
   const ref = useRef(null);
   const ref1 = useRef(null);
   const ref2 = useRef(null);
@@ -36,6 +38,9 @@ export const TvshowDetails = (movie) => {
   const ref4 = useRef(null);
   const ref5 = useRef(null);
   const ref6 = useRef(null);
+  const ref7 = useRef(null);
+  const ref8 = useRef(null);
+
 
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = React.useState(false);
@@ -69,12 +74,19 @@ export const TvshowDetails = (movie) => {
     ref6.current.scrollLeft += scrollOffset;
   };
 
+  const scroll7 = (scrollOffset) => {
+    ref7.current.scrollLeft += scrollOffset;
+  };
+  const scroll8 = (scrollOffset) => {
+    ref8.current.scrollLeft += scrollOffset;
+  };
+
   const queryVariables = {};
   const datass = queryClient.getQueryData("GetTvshows");
 
   const getTvshows = ({ queryKey }) => {
     const [_, names] = queryKey;
-    console.log("season id", names);
+    // console.log("season id", names);
     const somes = request(
       "https://tefmovies.herokuapp.com/graphql",
       gql`
@@ -134,7 +146,7 @@ export const TvshowDetails = (movie) => {
     ).catch((e) => {
       console.log(e);
     });
-    console.log("getSeason", somes);
+    // console.log("getSeason", somes);
     return somes;
   };
   // console.log("queryCacahe",datass);
@@ -154,30 +166,31 @@ export const TvshowDetails = (movie) => {
   );
 
   // {/* {console.log("seasons",showSeason)}
-console.log("data",data);
+// console.log("data",data);
   // let some = data.getTVshow1.sort(
   //   (a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat
   // );
 
-  let CurrentMovieGenere = movie.movie[0].tvshowInfo[0].genre.map(i => {
+  let CurrentMovieGenere = movie.movie[0][0].tvshowInfo[0].genre.map(i => {
     return i.genre;
   })
 
-  console.log("CurrentMovieGenere",CurrentMovieGenere);
+  // console.log("CurrentMovieGenere",CurrentMovieGenere);
 
 
   
   // console.log(some);
-  console.log(movie);
-  console.log(width, height);
-  let Seasoninfos = movie.movie[0].seasons.filter(
+  // console.log(movie);
+  // console.log(width, height);
+  let Seasoninfos = movie.movie[0][0].seasons.filter(
     (i) => i.season === showSeason
   );
-  
-  let some1 = sortGenre(data, CurrentMovieGenere);
+  // console
+  let some1 = sortGenre(movie.movie[1], CurrentMovieGenere);
   // useEffect(() => {
   //   some1 = sortGenre(data, CurrentMovieGenere);
   // }, []);
+    // console.log("end")
 
   return (
     <div class=" mt-36 lg:mt-48  flex w-full h-auto  md:justify-center md:items-center  lg:justify-center lg:items-center ">
@@ -198,7 +211,7 @@ console.log("data",data);
             cloud_name="tefdb"
             loading="lazy"
             format="webp"
-            publicId={movie.movie[0].rectanglePosters[0].rectanglePosters}
+            publicId={movie.movie[0][0].rectanglePosters[0].rectanglePosters}
             // src={movie.movie[0].rectanglePosters[0].rectanglePosters}
             alt="Image"
           >
@@ -206,16 +219,16 @@ console.log("data",data);
           </Image>
           <div class=" absolute top-0 left-0 px-6 w-full py-2.5 rounded-md h-450 lg:h-full justify-center items-center  flex flex-col lg:flex-row">
             <div class=" lg:hidden w-full lg:h-full lg:w-2/6  flex justify-center items-center">
-              <CarouselPosters value={movie.movie[0].posters} />
+              <CarouselPosters value={movie.movie[0][0].posters} />
             </div>
             <div class=" lg:h-full lg:w-4/6 w-full lg:mt-5  flex flex-col justify-center ">
               <div class="font-RobotoMono text-white lg:text-left text-center mt-3 flex flex-col justify-center items-center md:justify-start md:items-start lg:justify-start lg:items-start w-full h-16 lg:h-auto md:w-4/5 lg:w-full font-extrabold text-xl md:text-lg lg:text-2xl">
-                {movie.movie[0].name}
+                {movie.movie[0][0].name}
               </div>
               <div class="font-RobotoMono  font-normal flex lg:justify-start lg:items-center justify-center items-center mt-2 text-white tracking-wider md:w-full lg:w-2/5 h-auto text-xs ">
-                {movie.movie[0].tvshowInfo[0].releaseDate} |{" "}
+                {movie.movie[0][0].tvshowInfo[0].releaseDate} |{" "}
                 {/* {movie.movie[0].tvshowInfo[0].runtime} |{" "} */}
-                {movie.movie[0].tvshowInfo[0].rating.map((i) => {
+                {movie.movie[0][0].tvshowInfo[0].rating.map((i) => {
                   // console.log( i.rating)
                   return (
                     <span class="font-RobotoMono m-2  lg:m-2 text-xs lg:text-sm inline-block text-white bg-gray-200 rounded-md px-1 lg:px-3 py-1 lg:py-0.5 font-semibold text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2">
@@ -225,7 +238,7 @@ console.log("data",data);
                 })}
               </div>
               <div class="flex lg:justify-start lg:items-start justify-center items-center  space-x-1 mt-5 lg:space-x-4 flex-row ">
-                {movie.movie[0].availLanguages.map((languages, index, row) => {
+                {movie.movie[0][0].availLanguages.map((languages, index, row) => {
                   if (index + 1 !== row.length) {
                     // console.log(index)
                     return (
@@ -246,10 +259,10 @@ console.log("data",data);
                   }
                 })}
               </div>
-              {movie.movie[0].storyline.split(" ").length >= 100 ? (
+              {movie.movie[0][0].storyline.split(" ").length >= 100 ? (
                 <div class=" text-center h-auto lg:h-auto flex flex-col justify-center items-center text-white mt-5 font-normal text-sm lg:text-left ">
                   <div className="font-RobotoMono ">
-                    {movie.movie[0].storyline.substring(0, 400)}
+                    {movie.movie[0][0].storyline.substring(0, 400)}
                     <a
                       className="font-RobotoMono text-white ml-3 font-bold"
                       // type="button"
@@ -261,7 +274,7 @@ console.log("data",data);
                 </div>
               ) : (
                 <div class="font-RobotoMono text-center h-auto lg:h-auto flex justify-center items-center text-white mt-5 font-normal text-sm lg:text-left ">
-                  {movie.movie[0].storyline}
+                  {movie.movie[0][0].storyline}
                 </div>
               )}
               {showModal ? (
@@ -273,7 +286,7 @@ console.log("data",data);
                         {/*header*/}
                         <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                           <h3 className="font-RobotoMono text-3xl font-semibold">
-                            {movie.movie[0].name}
+                            {movie.movie[0][0].name}
                           </h3>
                           <button
                             className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -287,7 +300,7 @@ console.log("data",data);
                         {/*body*/}
                         <div className="relative p-6 flex-auto">
                           <p className="font-RobotoMono my-4 text-slate-500 text-md leading-relaxed">
-                            {movie.movie[0].storyline}
+                            {movie.movie[0][0].storyline}
                           </p>
                         </div>
                         {/*footer*/}
@@ -307,7 +320,7 @@ console.log("data",data);
                 </>
               ) : null}
               <div class="mt-5 w-auto lg:w-auto space-x-1 flex flex-row lg:justify-start lg:items-start justify-center items-center">
-                {movie.movie[0].tvshowInfo[0].genre.slice(0, 3).map((i) => {
+                {movie.movie[0][0].tvshowInfo[0].genre.slice(0, 3).map((i) => {
                   return (
                     <div class="flex justify-center items-center">
                       <span class="font-RobotoMono text-xs lg:text-sm inline-block text-white bg-gray-200 rounded-md px-1 lg:px-3 py-1 lg:py-0.5 font-semibold text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 mr-1 lg:mr-2 lg:mb-2">
@@ -328,7 +341,7 @@ console.log("data",data);
                   </div>
                   {/* <p class="text-white text-sm font-thin  flex justify-center items-center h-1/4">Rating</p> */}
                   <p class="font-RobotoMono text-white text-sm font-thin flex justify-center items-center h-2/4">
-                    {movie.movie[0].rating[0].imdb}
+                    {movie.movie[0][0].rating[0].imdb}
                   </p>
                 </div>
 
@@ -343,7 +356,7 @@ console.log("data",data);
                   {/* <p class="text-white text-sm font-thin flex justify-center items-center h-1/4">Rating</p> */}
                   <p class="font-RobotoMono text-white text-sm font-thin  flex justify-center items-center h-2/4">
                     {" "}
-                    {movie.movie[0].rating[0].rottenTomatoes}
+                    {movie.movie[0][0].rating[0].rottenTomatoes}
                   </p>
                 </div>
               </div>
@@ -355,20 +368,20 @@ console.log("data",data);
             src={movie.movie[0].posters[0].posters}
             alt="Mountain"
           /> */}
-              <CarouselPosters value={movie.movie[0].posters} />
+              <CarouselPosters value={movie.movie[0][0].posters} />
             </div>
           </div>
         </div>
 
-        {/* Cast & Crew */}
+        {/* Videos to watch */}
         <div class=" m-10 md:m-10 lg:m-16" />
         <div class="font-RobotoMono w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
           Videos to watch
         </div>
         <div class="m-10 " />
         <div class="flex flex-row">
-          {movie.movie[0].tvshowInfo[0].link.length <= 5 ? null : (
-            <button class="w-20" onClick={() => scroll(-1000)}>
+          {movie.movie[0][0].tvshowInfo[0].link.length <= 5 ? null : (
+            <button class="w-20" onClick={() => scroll(-300)}>
               <FontAwesomeIcon color="white" size="3x" icon={faCaretLeft} />
             </button>
           )}
@@ -376,7 +389,7 @@ console.log("data",data);
             ref={ref}
             class="scroll-smooth flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar "
           >
-            {movie.movie[0].tvshowInfo[0].link.map((links, index) => {
+            {movie.movie[0][0].tvshowInfo[0].link.map((links, index) => {
               // console.log(cast)
               return (
                 <div class="space-y-2 w-32 h-56 lg:w-60 lg:h-60 m-1 lg:m-4 ">
@@ -456,8 +469,8 @@ console.log("data",data);
               );
             })}
           </div>
-          {movie.movie[0].tvshowInfo[0].link.length <= 5 ? null : (
-            <button class="w-20" onClick={() => scroll(1000)}>
+          {movie.movie[0][0].tvshowInfo[0].link.length <= 5 ? null : (
+            <button class="w-20" onClick={() => scroll(300)}>
               <FontAwesomeIcon color="white" size="3x" icon={faCaretRight} />
             </button>
           )}
@@ -470,27 +483,27 @@ console.log("data",data);
         <div class=" font-RobotoMono w-4/5  font-medium text-sm md:text-sm lg:text-sm dark:text-white">
           Seasons
         </div>
-        {movie.movie[0].hasOwnProperty("seasons") ? (
+        {movie.movie[0][0].hasOwnProperty("seasons") ? (
           <div class="">
             {/* <div className="border-2 border-indigo-600 border-dashed rounded w-auto h-auto lg:w-80 lg:max-h-20 mt-5 hide-scroll-bar"> */}
             <div className="flex flex-col m-3 text-white rounded-md justify-center items-start w-80 h-60 lg:w-fit lg:max-h-52 overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out">
               <p className="mt-2 flex flex-row font-RobotoMono font-extrabold  text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
                 <p className="text-white ">Original title :</p> &nbsp;{" "}
-                {movie.movie[0].tvshowInfo[0].originalTitle}
+                {movie.movie[0][0].tvshowInfo[0].originalTitle}
               </p>
               <p className="mt-2 flex flex-row font-RobotoMono font-extrabold  text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
                 <p className="text-white ">No of seasons :</p> &nbsp;{" "}
-                {movie.movie[0].tvshowInfo[0].noOfseasons}
+                {movie.movie[0][0].tvshowInfo[0].noOfseasons}
               </p>
               <p className="mt-2 flex flex-row font-RobotoMono font-extrabold  text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
                 <p className="text-white ">Status :</p> &nbsp;{" "}
-                {movie.movie[0].tvshowInfo[0].status === "Ended" || "Not Renewed for Next Season" ? (
+                {movie.movie[0][0].tvshowInfo[0].status === "Ended" || "Not Renewed for Next Season" ? (
                   <p className="mt-1 flex flex-row justify-center  text-xs lg:text-xs  text-white rounded-md px-1 lg:px-3 py-1 lg:py-0.5 font-semibold text-transparent bg-red-700 font-RobotoMono">
-                    {movie.movie[0].tvshowInfo[0].status}
+                    {movie.movie[0][0].tvshowInfo[0].status}
                   </p>
                 ) : (
                   <p className="mt-1 flex flex-row justify-center  text-xs lg:text-xs  text-white rounded-md px-1 lg:px-3 py-1 lg:py-0.5 font-semibold text-transparent bg-green-700 font-RobotoMono">
-                    {movie.movie[0].tvshowInfo[0].status}
+                    {movie.movie[0][0].tvshowInfo[0].status}
                   </p>
                 )}{" "}
               </p>
@@ -579,7 +592,7 @@ console.log("data",data);
         "
                   aria-labelledby="dropdownMenuButton1"
                 >
-                  {movie.movie[0].seasons.map((i) => {
+                  {movie.movie[0][0].seasons.map((i) => {
                     return (
                       <div>
                         <li>
@@ -614,8 +627,8 @@ console.log("data",data);
                   <FontAwesomeIcon color="white" size="3x" icon={faCaretLeft} />
                 </button>
                 <div class="m-10 flex flex-row w-80 md:w-full lg:w-11/12 h-64 border-white dark:text-white overflow-y-hidden overflow-x-scroll  hide-scroll-bar ">
-                  <ImageScroller ref={ref} hideScrollbar>
-                    {movie.movie[0].seasons.map((i) => {
+                  <ImageScroller ref={ref6} hideScrollbar>
+                    {movie.movie[0][0].seasons.map((i) => {
                       return i.season === showSeason ? (
                         i.episodes.map((j) => {
                           return (
@@ -660,8 +673,8 @@ console.log("data",data);
         <div class="m-10 " />
         <div class="m-10 " />
         <div class="flex flex-row ">
-          {movie.movie[0].casts.length <= 5 ? null : (
-            <button class="w-20" onClick={() => scroll1(-1000)}>
+          {movie.movie[0][0].casts.length <= 5 ? null : (
+            <button class="w-20" onClick={() => scroll1(-500)}>
               <FontAwesomeIcon color="white" size="3x" icon={faCaretLeft} />
             </button>
           )}
@@ -669,8 +682,8 @@ console.log("data",data);
             ref={ref1}
             class="scroll-smooth lg:grow flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-82 overflow-y-hidden overflow-x-scroll hide-scroll-bar "
           >
-            {movie.movie[0].casts.map((cast) => {
-              console.log(cast);
+            {movie.movie[0][0].casts.map((cast) => {
+              // console.log(cast);
               return cast.hasOwnProperty("image") ? (
                 <Link
                   to={{
@@ -746,8 +759,8 @@ console.log("data",data);
               );
             })}
           </div>
-          {movie.movie[0].casts.length <= 5 ? null : (
-            <button class="w-20" onClick={() => scroll1(1000)}>
+          {movie.movie[0][0].casts.length <= 5 ? null : (
+            <button class="w-20" onClick={() => scroll1(500)}>
               <FontAwesomeIcon color="white" size="3x" icon={faCaretRight} />
             </button>
           )}
@@ -759,7 +772,7 @@ console.log("data",data);
         </div>
         <div class="m-5" />
         <div class="flex flex-row">
-          {movie.movie[0].tvshowInfo[0].creator.length <= 5 ? null : (
+          {movie.movie[0][0].tvshowInfo[0].creator.length <= 5 ? null : (
             <button class="w-20" onClick={() => scroll2(-1000)}>
               <FontAwesomeIcon color="white" size="3x" icon={faCaretLeft} />
             </button>
@@ -768,8 +781,8 @@ console.log("data",data);
             ref={ref2}
             class="scroll-smooth flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-72 overflow-y-hidden overflow-x-scroll hide-scroll-bar "
           >
-            {movie.movie[0].tvshowInfo[0].creator.map((creator) => {
-              console.log(creator);
+            {movie.movie[0][0].tvshowInfo[0].creator.map((creator) => {
+              // console.log(creator);
               return creator.hasOwnProperty("image") ? (
                 <div class=" w-32 h-56 lg:w-40 lg:h-72 m-1 lg:m-2 ">
                   <div class=" flex box-border w-32 h-8 lg:w-40 lg:h-14 justify-center items-center  ">
@@ -821,7 +834,7 @@ console.log("data",data);
               );
             })}
           </div>
-          {movie.movie[0].tvshowInfo[0].creator.length <= 5 ? null : (
+          {movie.movie[0][0].tvshowInfo[0].creator.length <= 5 ? null : (
             <button class="w-20" onClick={() => scroll2(1000)}>
               <FontAwesomeIcon color="white" size="3x" icon={faCaretRight} />
             </button>
@@ -835,7 +848,7 @@ console.log("data",data);
 
         <div class="m-10 " />
         <div class="flex flex-row">
-          {movie.movie[0].posters.length <= 5 ? null : (
+          {movie.movie[0][0].posters.length <= 5 ? null : (
             <button class="w-20" onClick={() => scroll3(-1000)}>
               <FontAwesomeIcon color="white" size="3x" icon={faCaretLeft} />
             </button>
@@ -844,7 +857,7 @@ console.log("data",data);
             ref={ref3}
             class="scroll-smooth flex flex-row items-center grow w-80  h-60 md:w-full lg:w-full md:h-60 lg:h-60 overflow-y-hidden overflow-x-scroll hide-scroll-bar "
           >
-            {movie.movie[0].posters.map((posters, index) => {
+            {movie.movie[0][0].posters.map((posters, index) => {
               // console.log(cast)
               return (
                 <div class=" w-32 h-56 lg:w-40 lg:h-60 m-1 lg:m-4 ">
@@ -854,7 +867,7 @@ console.log("data",data);
                       class="cursor-pointer"
                       onClick={() => {
                         setShowPostersModal(true);
-                        console.log("linw 237", posters);
+                        // console.log("linw 237", posters);
                         setPostersLink(posters);
                       }}
                     >
@@ -882,7 +895,7 @@ console.log("data",data);
                       <div className=" justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none ">
                         <div className=" relative lg:w-150 lg:h-300 my-6 mx-auto max-w-3xl ">
                           {/*content*/}
-                          {console.log("videoLink", postersLink.posters)}
+                          {/* {console.log("videoLink", postersLink.posters)} */}
                           <div className=" dark:bg-black h-full rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                             <div class=" flex justify-center items-center md:justify-center md:items-center lg:justify-center lg:items-center w-80 md:h-72 lg:h-52 md:w-full lg:w-full md:grow lg:grow  ">
                               {/* <div class=" rounded-lg box-border h-full w-full"> */}
@@ -924,7 +937,7 @@ console.log("data",data);
               );
             })}
           </div>
-          {movie.movie[0].posters.length <= 5 ? null : (
+          {movie.movie[0][0].posters.length <= 5 ? null : (
             <button class="w-20" onClick={() => scroll3(1000)}>
               <FontAwesomeIcon color="white" size="3x" icon={faCaretRight} />
             </button>
@@ -936,7 +949,7 @@ console.log("data",data);
         <div class=" w-full font-medium text-sm  dark:text-white">
           <p class="font-RobotoMono">Watch now</p>
           <div class="flex flex-row">
-            {movie.movie[0].watchOn.length <= 5 ? null : (
+            {movie.movie[0][0].watchOn.length <= 5 ? null : (
               <button class="w-20" onClick={() => scroll4(-1000)}>
                 <FontAwesomeIcon color="white" size="3x" icon={faCaretLeft} />
               </button>
@@ -946,8 +959,8 @@ console.log("data",data);
               ref={ref4}
               class=" flex flex-row space-x-4 grow items-center w-80 h-60 md:w-full lg:w-full md:h-60 lg:h-80 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar "
             >
-              {movie.movie[0].watchOn.map((i) => {
-                console.log(i, "490");
+              {movie.movie[0][0].watchOn.map((i) => {
+                // console.log(i, "490");
                 {
                   return i.hasOwnProperty("image") ? (
                     <div class="mt-10 w-32 h-40 md:w-40 md:h-52 lg:w-40 lg:h-52 font-medium dark:border-gray-700 border-gray-500 text-sm border-1 rounded-lg ">
@@ -1017,7 +1030,7 @@ console.log("data",data);
                 }
               })}
             </div>
-            {movie.movie[0].watchOn.length <= 5 ? null : (
+            {movie.movie[0][0].watchOn.length <= 5 ? null : (
               <button class="w-20" onClick={() => scroll4(1000)}>
                 <FontAwesomeIcon color="white" size="3x" icon={faCaretRight} />
               </button>
@@ -1025,16 +1038,16 @@ console.log("data",data);
           </div>
         </div>
         <div class=" w-full font-medium text-sm  dark:text-white ">
-          <p class="font-RobotoMono">Suggested movies</p>
+          <p class="font-RobotoMono">Suggested tvshows</p>
           <div class="m-10"></div>
           <div class="flex flex-row">
             {some1.length <= 5 ? null : (
-              <button class="w-20" onClick={() => scroll5(-1000)}>
+              <button class="w-20" onClick={() => scroll7(-1000)}>
                 <FontAwesomeIcon color="white" size="3x" icon={faCaretLeft} />
               </button>
             )}
             <div
-              ref={ref5}
+              ref={ref7}
               class="scroll-smooth  flex flex-row space-x-4 grow items-center w-80 h-80 md:w-full lg:w-full md:h-60 lg:h-110 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar "
             >
               {
@@ -1045,23 +1058,23 @@ console.log("data",data);
               }
             </div>
             {some1.length <= 5 ? null : (
-              <button class="w-20" onClick={() => scroll5(1000)}>
+              <button class="w-20" onClick={() => scroll7(1000)}>
                 <FontAwesomeIcon color="white" size="3x" icon={faCaretRight} />
               </button>
             )}
           </div>
         </div>
-        <div class=" w-full font-medium text-sm  dark:text-white ">
-          <p class="font-RobotoMono">Similar Tvshows</p>
+        {/* <div class=" w-full font-medium text-sm  dark:text-white ">
+          <p class="font-RobotoMono">Similar tvshows</p>
           <div class="m-10"></div>
           <div class="flex flex-row">
             {some1.length <= 5 ? null : (
-              <button class="w-20" onClick={() => scroll5(-1000)}>
+              <button class="w-20" onClick={() => scroll8(-1000)}>
                 <FontAwesomeIcon color="white" size="3x" icon={faCaretLeft} />
               </button>
             )}
             <div
-              ref={ref5}
+              ref={ref8}
               class="scroll-smooth  flex flex-row space-x-4 grow items-center w-80 h-80 md:w-full lg:w-full md:h-60 lg:h-110 overflow-y-hidden overflow-x-scroll pb-10 hide-scroll-bar "
             >
               {
@@ -1072,12 +1085,12 @@ console.log("data",data);
               }
             </div>
             {some1.length <= 5 ? null : (
-              <button class="w-20" onClick={() => scroll5(1000)}>
+              <button class="w-20" onClick={() => scroll8(1000)}>
                 <FontAwesomeIcon color="white" size="3x" icon={faCaretRight} />
               </button>
             )}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
@@ -1086,17 +1099,25 @@ console.log("data",data);
 
 function sortGenre(data, CurrentMovieGenere) {
   let aaa = [];
-  data.getTVshow1.map(i => {
+  let idss = [];
+  console.log("data",data);
+  console.log("CurrentMovieGenere",CurrentMovieGenere.slice(0, 2));
+  // console.log("CurrentMovieGenere",);
+
+  data.map(i => {
     i.tvshowInfo[0].genre.map(j => {
-      if (CurrentMovieGenere.includes(j.genre)) {
-        // console.log(i);
-        aaa.push(i);
+      if (CurrentMovieGenere.slice(0, 2).includes(j.genre)) {
+        // console.log(idss);
+
+          aaa.push(i);
         // return i;
       }
     });
-  });
-  console.log("AllMovieGenre", aaa);
+  })
+  // console.log("AllMovieGenre", aaa);
   const uniqueIds = [];
+
+
 
   const unique = aaa.filter(element => {
     const isDuplicate = uniqueIds.includes(element.id);
@@ -1108,11 +1129,35 @@ function sortGenre(data, CurrentMovieGenere) {
       return false;
     }
 
-  }).sort(() => Math.random() - 0.5);
+  });
+
+  // const arr = [{id: 1, name: 'one'}, {id: 2, name: 'two'}, {id: 1, name: 'one'}]
+
+  // const ids = aaa.map(o => o.id)
+  // const filtered = aaa.filter(({id}, index) => !ids.includes(id, index + 1))
+
+  // let sossa =  aaa.sort(() => Math.random() * aaa.length)
+  // console.log("sossa", sossa);
+  // let sossa = shuffleArray(aaa);
+  // console.log(sossa)
 
   // console.log("unique", unique);
   // let some1 = unique
   // console.log(some1);
   return unique;
+}
+
+function shuffleArray(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+  
+      // Generate random number
+      var j = Math.floor(Math.random() * (i + 1));
+                  
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+  }
+      
+  return array;
 }
 

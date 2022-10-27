@@ -48,7 +48,7 @@ export const Collection = (collection) => (
 <Image 
             class="h-full w-full"
             cloud_name="tefdb"
-            loading="lazy"
+            // loading="lazy"
             format="webp"
             publicId={collection.collection.image}
             // src={movie.movie[0].rectanglePosters[0].rectanglePosters}

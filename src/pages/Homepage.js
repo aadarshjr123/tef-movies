@@ -27,9 +27,9 @@ function dynamicSort(property) {
   }
 }
 
-export function Homepage() {
+export function Homepage(data) {
 
-
+console.log("moviesdata",data);
   const getMovies = gql`
   query {
     getMovies {
@@ -95,12 +95,12 @@ export function Homepage() {
     // headers
   );
 
-  const {isLoading, error, data, refetch} = useQuery("GetMovies",Mov,{staleTime: 1000 * 10});
-    console.log()
+  // const {isLoading, error, data, refetch} = useQuery("GetMovies",Mov,{staleTime: 1000 * 10});
+  //   console.log()
 
-      if (error) return <h1>Something went wrong!</h1>;
-      if (isLoading) 
-      return <Cardskeleton />
+  //     if (error) return <h1>Something went wrong!</h1>;
+  //     if (isLoading) 
+  //     return <Cardskeleton />
 
   const url = (data) => {
     console.log(`/OneMovie?${data}`)
@@ -109,7 +109,7 @@ export function Homepage() {
 
   // let Latest = data.getMovies.slice(-5);
   // let Latest1 = data.getMovies.sort();
-  let Latest =  data.getMovies.slice().sort(dynamicSort("id")).slice(-5);
+  let Latest =  data.data.slice().sort(dynamicSort("id")).slice(-5);
   // console.log(Latest);
   console.log(Latest);
 
