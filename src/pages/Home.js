@@ -21,6 +21,7 @@ import request, { gql } from 'graphql-request';
 import { useQueryClient  } from 'react-query'
 import { CollectionActorMov } from "../components/CollectionActorMov";
 import { orderBy } from "lodash";
+import { TrialersPage } from "./TrialersPage";
 
 
 const Tvshows =  () => {
@@ -166,7 +167,7 @@ const Tvshows =  () => {
 
   const getTvshows = ({ queryKey }) => {
     const [_, names] = queryKey;
-    console.log("season id",names);
+    // console.log("season id",names);
     const somes = request(
       'https://tefmovies.herokuapp.com/graphql',
       gql `query GetTvshow($name: String!){
@@ -221,11 +222,12 @@ const Tvshows =  () => {
         }
 
         getActors {
-          
           name
           image
           description
         }
+
+
 
         getMovies {
           id
@@ -279,13 +281,19 @@ const Tvshows =  () => {
           image
           type
         }
+
+        getTrailers {    
+          name
+          link
+          date
+        }
             }
       `,
       { name: names }
     ).catch(e => {
       console.log(e);
     })
-    console.log("getSeason",somes);
+    // console.log("getSeason",somes);
     return somes;
   }
 
@@ -387,7 +395,7 @@ const Tvshows =  () => {
       // console.log(data,MoviesData,CollectionData)
   
  
-  console.log("hai3");
+  // console.log("hai3");
 
   let marvel = [];
 
@@ -417,7 +425,7 @@ ImDBMovies=[...data.getMovies];
 FreeMovies=[...data.getMovies];
 FreeTvshows=[...data.getTVshow1];
 
-console.log("ImDB",ImDBTvshows);
+// console.log("ImDB",ImDBTvshows);
 
 
 
@@ -436,13 +444,13 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
   FreeMovies.filter((i) => {
     freeOtt.map((j) => {
       // console.log(j);
-      console.log(i.watchOn[0].watchOn.includes(j),i.watchOn[0].watchOn,j);
+      // console.log(i.watchOn[0].watchOn.includes(j),i.watchOn[0].watchOn,j);
       if(i.watchOn[0].watchOn.includes(j)) {
         FreeMoviesSorted.push(i);
       }
     }) 
   })
-  console.log(FreeMoviesSorted);
+  // console.log(FreeMoviesSorted);
   
   
   
@@ -451,14 +459,14 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
   FreeTvshows.filter((i) => {
     freeOtt.map((j) => {
       // console.log(j);
-      console.log(i.watchOn[0].watchOn.includes(j),i.watchOn[0].watchOn,j);
+      // console.log(i.watchOn[0].watchOn.includes(j),i.watchOn[0].watchOn,j);
       if(i.watchOn[0].watchOn.includes(j)) {
         FreeTvshowsSorted.push(i);
       }
     }) 
   })
   // FreeTvshows.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
-  console.log(FreeTvshowsSorted);
+  // console.log(FreeTvshowsSorted);
   
 
   let netflix = [];
@@ -502,6 +510,8 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
       <div className=" w-full lg:h-110 ">
       <Homepage data={data.getMovies} name="Tvshows"/>
       </div>
+
+     
  
     <div class="mt-5 m-10">
      <div class="m-28"></div>
@@ -525,6 +535,22 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
 
 
      </div>
+
+     <div class="mt-5 m-10">
+     <div class="m-28"></div>
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Latest trailers</h3>  
+    <div class="m-4"></div>
+    {/* <div class="flex flex-row" > */}
+    <div>
+      <TrialersPage data={data.getTrailers}/>
+      </div>
+    {/* </div> */}
+
+
+     </div>
+
+ 
+
      <div class="mt-5  m-10">
      <div class="m-16"></div>
     <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Latest Tvshows</h3>  

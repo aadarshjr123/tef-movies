@@ -223,6 +223,9 @@ function FilterActor() {
       staleTime: 1000 * 10
     });
 
+    if (error || ActorsError) return <h1>Something went wrong!</h1>;
+if (isLoading || ActorsLoading) 
+return <h1 class="">Loading</h1>;
 
   console.log("start1");
   console.log(data);
@@ -232,9 +235,7 @@ function FilterActor() {
    let actorDetails = ActorsData.getActors.filter((item) => item.name === ddd);
 
 
-if (error || ActorsError) return <h1>Something went wrong!</h1>;
-if (isLoading || ActorsLoading) 
-return <h1 class="">Loading</h1>;
+
 
   return (
     

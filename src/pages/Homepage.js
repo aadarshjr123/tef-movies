@@ -29,7 +29,7 @@ function dynamicSort(property) {
 
 export function Homepage(data) {
 
-console.log("moviesdata",data);
+// console.log("moviesdata",data);
   const getMovies = gql`
   query {
     getMovies {
@@ -102,16 +102,16 @@ console.log("moviesdata",data);
   //     if (isLoading) 
   //     return <Cardskeleton />
 
-  const url = (data) => {
-    console.log(`/OneMovie?${data}`)
-  //  return `/OneMovie?${data}`
-  }
+  // const url = (data) => {
+  //   console.log(`/OneMovie?${data}`)
+  // //  return `/OneMovie?${data}`
+  // }
 
   // let Latest = data.getMovies.slice(-5);
   // let Latest1 = data.getMovies.sort();
   let Latest =  data.data.slice().sort(dynamicSort("id")).slice(-5);
   // console.log(Latest);
-  console.log(Latest);
+  // console.log(Latest);
 
 // console.log(window.location);
 
