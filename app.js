@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const { ApolloServer } = require("apollo-server-express");
 
-const schema = require("../schema");
+const schema = require("./schema");
 
 // Constants
 // "mongodb+srv://aadarshjr1234:***REMOVED***@tef.ygagb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
