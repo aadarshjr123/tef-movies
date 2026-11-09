@@ -1,24 +1,56 @@
 {
-  "name": "tef-movies-server",
-  "version": "2.0.0",
+  "name": "@tef/server",
+  "version": "3.0.0",
   "private": true,
-  "description": "GraphQL API for TEF Movies (Express + Apollo Server + MongoDB)",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js",
-    "dev": "node --watch app.js",
-    "seed": "node seed/index.js"
-  },
+  "description": "TEF Movies GraphQL API",
+  "type": "module",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsup",
+    "start": "node dist/server.js",
+    "seed": "tsx src/seed/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "apollo-server-express": "^2.9.8",
-    "cors": "^2.8.5",
-    "dotenv": "^18.0.10",
-    "express": "^4.17.1",
-    "mongodb-memory-server": "^11.3.0",
-    "mongoose": "^5.7.10"
+    "@apollo/server": "^5.5.1",
+    "@as-integrations/express5": "^1.1.2",
+    "@graphql-tools/schema": "^10.1.5",
+    "compression": "^1.8.2",
+    "cors": "^2.8.6",
+    "dataloader": "^2.2.3",
+    "dotenv": "^16.6.1",
+    "express": "^5.3.0",
+    "express-rate-limit": "^7.5.1",
+    "graphql": "^16.15.0",
+    "graphql-depth-limit": "^1.1.0",
+    "graphql-tag": "^2.12.7",
+    "helmet": "^8.3.0",
+    "mongoose": "^8.24.8",
+    "pino": "^9.14.0",
+    "pino-http": "^10.5.0",
+    "zod": "^3.25.76"
   },
-  "license": "MIT"
+  "devDependencies": {
+    "@types/compression": "^1.8.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/graphql-depth-limit": "^1.1.6",
+    "@types/node": "^22.20.5",
+    "@types/supertest": "^6.0.3",
+    "@vitest/coverage-v8": "^3.2.7",
+    "mongodb-memory-server": "^10.4.3",
+    "pino-pretty": "^13.2.0",
+    "supertest": "^7.3.2",
+    "tsup": "^8.5.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  }
 }

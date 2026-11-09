@@ -2,4 +2,8 @@ node_modules/
 .env
 .env.local
 .DS_Store
+dist/
+coverage/
 client/build/
+playwright-report/
+test-results/
