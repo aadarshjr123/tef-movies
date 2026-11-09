@@ -1,0 +1,37 @@
+mutation {
+  addMovie (
+    name: "Spidy", 
+    rating: [
+      {
+      imdb:"8.7"
+      ,
+      rottenTomatoes:"98%"
+    }
+    ],
+    storyline: "this is an good movies,this is an good movies,this is an good movies,this is an good movies,this is an good movies,this is an good movies,", 
+    casts:[
+      {
+        castName:"robert"
+      },
+      {
+        castName:"robert"
+      }
+    ],
+    movieInfo:{
+      rating:"u/a",
+      director:"John doe",
+      runtime:"98.00",
+      releaseDate:"2022/12/12"
+    },
+    posters:[
+      {posters:"https://sm.ign.com/t/ign_in/gallery/s/spider-man/spider-man-far-from-home-official-movie-posters_epch.1080.jpg"},
+      {posters:"https://sm.ign.com/t/ign_in/gallery/s/spider-man/spider-man-far-from-home-official-movie-posters_epch.1080.jpg"}
+    ],
+    availLanguages:[
+      {languages:"Tamil"},
+      {languages:"Malayalam"}
+    ]
+  ) {
+    name
+  }
+}

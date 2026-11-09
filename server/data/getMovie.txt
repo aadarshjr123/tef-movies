@@ -1,0 +1,26 @@
+query {
+  getMovie(name:"Spidy") {
+    id
+    name
+    storyline
+    casts{
+      castName
+    }
+    rating{
+      imdb
+      rottenTomatoes
+    }
+    posters{
+      posters
+    }
+    movieInfo{
+      rating
+      director
+      runtime
+      releaseDate
+    }
+    availLanguages{
+      languages
+    }
+  }
+}
