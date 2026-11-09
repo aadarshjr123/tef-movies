@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-white text-gray-900 antialiased;
+    color-scheme: light;
+  }
+  html.dark {
+    @apply bg-night text-gray-100;
+    color-scheme: dark;
+  }
+  body {
+    @apply font-mono;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-purple-500;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

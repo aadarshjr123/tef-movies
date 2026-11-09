@@ -10,7 +10,10 @@ export interface DatabaseConnection {
  * Connects to MONGODB_URI, or outside production starts a throwaway
  * in-memory MongoDB so the project runs with no setup.
  */
-export async function connectDatabase(env: Pick<Env, "MONGODB_URI" | "NODE_ENV">, logger: Logger): Promise<DatabaseConnection> {
+export async function connectDatabase(
+  env: Pick<Env, "MONGODB_URI" | "NODE_ENV">,
+  logger: Logger,
+): Promise<DatabaseConnection> {
   let uri = env.MONGODB_URI;
   let stopMemoryServer = async () => {};
 

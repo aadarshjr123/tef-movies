@@ -3,15 +3,41 @@
   "private": true,
   "description": "TEF Movies: a movie and TV show discovery site (React + Redux + GraphQL + MongoDB)",
   "workspaces": [
-    "server"
+    "server",
+    "client"
   ],
   "scripts": {
-    "codegen": "graphql-codegen --config codegen.ts"
+    "dev": "concurrently -n api,web -c magenta,cyan \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w server && npm run build -w client",
+    "codegen": "graphql-codegen --config codegen.ts",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "npm run typecheck -w server && npm run typecheck -w client",
+    "test": "npm run test -w server && npm run test -w client",
+    "test:e2e": "playwright test",
+    "verify": "npm run codegen && npm run lint && npm run format:check && npm run typecheck && npm run test && npm run build",
+    "seed": "npm run seed -w server"
   },
   "license": "MIT",
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@eslint/js": "^9.39.5",
     "@graphql-codegen/cli": "^5.0.7",
     "@graphql-codegen/typescript": "^4.1.6",
-    "@graphql-codegen/typescript-resolvers": "^4.5.2"
+    "@graphql-codegen/typescript-resolvers": "^4.5.2",
+    "@playwright/test": "^1.65.0",
+    "concurrently": "^9.2.5",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^15.15.0",
+    "prettier": "^3.9.10",
+    "typescript-eslint": "^8.72.1"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20"
   }
 }

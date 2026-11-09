@@ -71,7 +71,12 @@ export function createApp({ env, logger, services }: AppDependencies): App {
       await apollo.start();
       app.use(
         "/graphql",
-        rateLimit({ windowMs: 60_000, limit: env.RATE_LIMIT_PER_MINUTE, standardHeaders: "draft-7", legacyHeaders: false }),
+        rateLimit({
+          windowMs: 60_000,
+          limit: env.RATE_LIMIT_PER_MINUTE,
+          standardHeaders: "draft-7",
+          legacyHeaders: false,
+        }),
         express.json({ limit: "1mb" }),
         expressMiddleware(apollo, {
           context: async ({ req }) => ({

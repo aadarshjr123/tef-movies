@@ -51,9 +51,14 @@ describe("HTTP", () => {
 
 describe("queries", () => {
   it("lists movies newest first, with nested credits and platforms", async () => {
-    const { data, errors } = await gql<{ movies: { name: string; year: number; directors: { person: { imageUrl: string } | null }[]; watchOptions: { platform: { logoUrl: string | null } }[] }[] }>(
-      `{ movies(limit: 3) { name year directors { person { imageUrl } } watchOptions { platform { logoUrl } } } }`,
-    );
+    const { data, errors } = await gql<{
+      movies: {
+        name: string;
+        year: number;
+        directors: { person: { imageUrl: string } | null }[];
+        watchOptions: { platform: { logoUrl: string | null } }[];
+      }[];
+    }>(`{ movies(limit: 3) { name year directors { person { imageUrl } } watchOptions { platform { logoUrl } } } }`);
 
     expect(errors).toBeUndefined();
     expect(data!.movies.map((m) => m.name)).toEqual(["Dune: Part Two", "Oppenheimer", "Top Gun: Maverick"]);
@@ -73,7 +78,9 @@ describe("queries", () => {
   });
 
   it("sorts by IMDb rating", async () => {
-    const { data } = await gql<{ tvShows: { ratings: { imdb: number } }[] }>(`{ tvShows(sort: IMDB_RATING_DESC, limit: 5) { ratings { imdb } } }`);
+    const { data } = await gql<{ tvShows: { ratings: { imdb: number } }[] }>(
+      `{ tvShows(sort: IMDB_RATING_DESC, limit: 5) { ratings { imdb } } }`,
+    );
     const ratings = data!.tvShows.map((s) => s.ratings.imdb);
 
     expect(ratings).toEqual([...ratings].sort((a, b) => b - a));
@@ -83,7 +90,9 @@ describe("queries", () => {
     const list = await gql<{ tvShows: { id: string }[] }>(`{ tvShows(filter: { person: "Bryan Cranston" }) { id } }`);
     const id = list.data!.tvShows[0]!.id;
 
-    const { data } = await gql<{ tvShow: { name: string; seasons: { number: number; episodes: unknown[] }[]; similar: { __typename: string }[] } }>(
+    const { data } = await gql<{
+      tvShow: { name: string; seasons: { number: number; episodes: unknown[] }[]; similar: { __typename: string }[] };
+    }>(
       `query($id: ID!) { tvShow(id: $id) { name seasons { number episodes { name } } similar(limit: 3) { __typename } } }`,
       { id },
     );
@@ -95,14 +104,18 @@ describe("queries", () => {
   });
 
   it("returns null for unknown or malformed ids", async () => {
-    const { data, errors } = await gql(`{ a: movie(id: "000000000000000000000000") { name } b: movie(id: "not-an-id") { name } }`);
+    const { data, errors } = await gql(
+      `{ a: movie(id: "000000000000000000000000") { name } b: movie(id: "not-an-id") { name } }`,
+    );
 
     expect(errors).toBeUndefined();
     expect(data).toEqual({ a: null, b: null });
   });
 
   it("searches across movies and TV shows", async () => {
-    const { data } = await gql<{ search: { __typename: string; name: string }[] }>(`{ search(query: "crime") { __typename name } }`);
+    const { data } = await gql<{ search: { __typename: string; name: string }[] }>(
+      `{ search(query: "crime") { __typename name } }`,
+    );
     const types = new Set(data!.search.map((t) => t.__typename));
 
     expect(types).toEqual(new Set(["Movie", "TvShow"]));
@@ -193,7 +206,11 @@ describe("mutations", () => {
   });
 
   it("upserts a platform", async () => {
-    await gql(`mutation { upsertPlatform(input: { name: "Mubi", pricing: "Subscription" }) { name } }`, {}, ADMIN_TOKEN);
+    await gql(
+      `mutation { upsertPlatform(input: { name: "Mubi", pricing: "Subscription" }) { name } }`,
+      {},
+      ADMIN_TOKEN,
+    );
     const { data } = await gql<{ platforms: { name: string }[] }>(`{ platforms { name } }`);
 
     expect(data!.platforms.map((p) => p.name)).toContain("Mubi");

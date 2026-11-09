@@ -4,22 +4,22 @@ The API has a single endpoint, `POST /graphql`. Locally that's <http://localhost
 
 The schema is defined in [server/schema.js](../server/schema.js). Other routes:
 
-| Route | Purpose |
-| --- | --- |
+| Route         | Purpose                                         |
+| ------------- | ----------------------------------------------- |
 | `GET /health` | `{ "ok": true }` when the database is connected |
-| `GET /` | Redirects to `/graphql` |
+| `GET /`       | Redirects to `/graphql`                         |
 
 ## Data model
 
-| Type | Mongo collection | Key fields |
-| --- | --- | --- |
-| `Movie` | `movies` | `name`, `storyline`, `rating[]` (`imdb`, `rottenTomatoes`, `mydramalist`), `casts[]`, `posters[]`, `rectanglePosters[]` (backdrops), `watchOn[]`, `movieInfo[]` (director, runtime, trailer `link`s, `releaseDate`, `dateFormat`, genres), `availLanguages[]` |
-| `Tvshows` | `tvshows` | Same as `Movie`, plus `Type` (always `"Tvshows"`), and `tvshowInfo[]` (creators, `noOfseasons`, `status`, …) in place of `movieInfo` |
-| `Seasons` | `seasons` | One document per season: `seasonId` (the show's `id`), `season` (`"Season 1"`), `seasonStart`, `seasonEnd`, `episodes[]` |
-| `ActorSchema` | `actors` | `name`, `description`, `image`. Also used for directors and creators. |
-| `CollectionsSchema` | `collections` | `name`, `image`, `type` (`"genre"` or `"collection"`). A tile matches movies whose genre list contains its `name`. |
-| `OttSchema` | `otts` | Streaming platform: `name`, `image` (logo), `perMonth` (pricing label) |
-| `TrailerSchema` | `trailers` | `name`, `link` (YouTube URL), `date` |
+| Type                | Mongo collection | Key fields                                                                                                                                                                                                                                                    |
+| ------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Movie`             | `movies`         | `name`, `storyline`, `rating[]` (`imdb`, `rottenTomatoes`, `mydramalist`), `casts[]`, `posters[]`, `rectanglePosters[]` (backdrops), `watchOn[]`, `movieInfo[]` (director, runtime, trailer `link`s, `releaseDate`, `dateFormat`, genres), `availLanguages[]` |
+| `Tvshows`           | `tvshows`        | Same as `Movie`, plus `Type` (always `"Tvshows"`), and `tvshowInfo[]` (creators, `noOfseasons`, `status`, …) in place of `movieInfo`                                                                                                                          |
+| `Seasons`           | `seasons`        | One document per season: `seasonId` (the show's `id`), `season` (`"Season 1"`), `seasonStart`, `seasonEnd`, `episodes[]`                                                                                                                                      |
+| `ActorSchema`       | `actors`         | `name`, `description`, `image`. Also used for directors and creators.                                                                                                                                                                                         |
+| `CollectionsSchema` | `collections`    | `name`, `image`, `type` (`"genre"` or `"collection"`). A tile matches movies whose genre list contains its `name`.                                                                                                                                            |
+| `OttSchema`         | `otts`           | Streaming platform: `name`, `image` (logo), `perMonth` (pricing label)                                                                                                                                                                                        |
+| `TrailerSchema`     | `trailers`       | `name`, `link` (YouTube URL), `date`                                                                                                                                                                                                                          |
 
 Conventions the client relies on:
 
@@ -29,21 +29,21 @@ Conventions the client relies on:
 
 ## Queries
 
-| Query | Returns |
-| --- | --- |
-| `getMovies` | All movies |
-| `getMovie(name)` | Movies with that exact name |
-| `searchMovie(name)` | Movies whose title, genre or cast contains `name` (case-insensitive) |
-| `searchMovieautoComplete(name)` | Fuzzy title search. Uses an Atlas Search index named `default` on `name` when one exists, and falls back to a regex match otherwise. |
-| `searchActorMovie(casts)` | Movies featuring that cast member |
-| `getTVshows` / `getTVshow1(Type)` / `getTVshow(name)` | All shows / shows of a `Type` / shows with that exact name |
-| `searchTvshows(name)` | Shows whose title, genre or cast contains `name` |
-| `searchActorTvshows(casts)` | Shows featuring that cast member |
-| `getSeason(seasonId)` | All seasons of the show whose `id` is `seasonId` |
-| `getActors` / `getActor(name)` | People |
-| `getCollections` / `getCollection(name)` | Genre and collection tiles |
-| `getOtts` / `getOtt(name)` | Streaming platforms |
-| `getTrailers` / `getTrailer(name)` | Featured trailers |
+| Query                                                 | Returns                                                                                                                              |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `getMovies`                                           | All movies                                                                                                                           |
+| `getMovie(name)`                                      | Movies with that exact name                                                                                                          |
+| `searchMovie(name)`                                   | Movies whose title, genre or cast contains `name` (case-insensitive)                                                                 |
+| `searchMovieautoComplete(name)`                       | Fuzzy title search. Uses an Atlas Search index named `default` on `name` when one exists, and falls back to a regex match otherwise. |
+| `searchActorMovie(casts)`                             | Movies featuring that cast member                                                                                                    |
+| `getTVshows` / `getTVshow1(Type)` / `getTVshow(name)` | All shows / shows of a `Type` / shows with that exact name                                                                           |
+| `searchTvshows(name)`                                 | Shows whose title, genre or cast contains `name`                                                                                     |
+| `searchActorTvshows(casts)`                           | Shows featuring that cast member                                                                                                     |
+| `getSeason(seasonId)`                                 | All seasons of the show whose `id` is `seasonId`                                                                                     |
+| `getActors` / `getActor(name)`                        | People                                                                                                                               |
+| `getCollections` / `getCollection(name)`              | Genre and collection tiles                                                                                                           |
+| `getOtts` / `getOtt(name)`                            | Streaming platforms                                                                                                                  |
+| `getTrailers` / `getTrailer(name)`                    | Featured trailers                                                                                                                    |
 
 ### Examples
 
@@ -54,9 +54,20 @@ Latest movies, with what the cards need:
   getMovies {
     id
     name
-    posters { posters }
-    watchOn { watchOn watchOnLink }
-    movieInfo { releaseDate dateFormat genre { genre } }
+    posters {
+      posters
+    }
+    watchOn {
+      watchOn
+      watchOnLink
+    }
+    movieInfo {
+      releaseDate
+      dateFormat
+      genre {
+        genre
+      }
+    }
   }
 }
 ```
@@ -65,8 +76,12 @@ Search across movies and TV shows:
 
 ```graphql
 {
-  searchMovie(name: "nolan") { name }
-  searchTvshows(name: "crime") { name }
+  searchMovie(name: "nolan") {
+    name
+  }
+  searchTvshows(name: "crime") {
+    name
+  }
 }
 ```
 
@@ -76,7 +91,10 @@ A show and its episode guide:
 {
   getTVshow(name: "Breaking Bad") {
     id
-    tvshowInfo { noOfseasons status }
+    tvshowInfo {
+      noOfseasons
+      status
+    }
   }
 }
 
@@ -86,7 +104,11 @@ A show and its episode guide:
     season
     seasonStart
     seasonEnd
-    episodes { episodeName episodeDescription episodeDuration }
+    episodes {
+      episodeName
+      episodeDescription
+      episodeDuration
+    }
   }
 }
 ```
@@ -103,15 +125,15 @@ curl http://localhost:4000/graphql \
 
 Every collection has `add…`, `update…` and `delete…` mutations. Records are identified by `name`, and `update…` takes the new name as `changedName` (pass the same value to keep it).
 
-| Collection | Mutations |
-| --- | --- |
-| Movies | `addMovie`, `updateMovie`, `deleteMovie` |
-| TV shows | `addTvshow`, `updateTvshow`, `deleteTvshow` |
-| Seasons | `addSeason`, `updateSeason` (matched by `seasonId` + `season`), `deleteSeason(seasonId)` |
-| People | `addActors`, `updateActors`, `deleteActors` |
-| Trailers | `addTrailers`, `updateTrailers`, `deleteTrailers` |
-| Collections | `addCollections`, `updateCollections`, `deleteCollections` |
-| Platforms | `addOtt`, `updateOtt`, `deleteOtt` |
+| Collection  | Mutations                                                                                |
+| ----------- | ---------------------------------------------------------------------------------------- |
+| Movies      | `addMovie`, `updateMovie`, `deleteMovie`                                                 |
+| TV shows    | `addTvshow`, `updateTvshow`, `deleteTvshow`                                              |
+| Seasons     | `addSeason`, `updateSeason` (matched by `seasonId` + `season`), `deleteSeason(seasonId)` |
+| People      | `addActors`, `updateActors`, `deleteActors`                                              |
+| Trailers    | `addTrailers`, `updateTrailers`, `deleteTrailers`                                        |
+| Collections | `addCollections`, `updateCollections`, `deleteCollections`                               |
+| Platforms   | `addOtt`, `updateOtt`, `deleteOtt`                                                       |
 
 `update…` and `delete…` return an error when no record has that name.
 

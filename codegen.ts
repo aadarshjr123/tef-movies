@@ -30,6 +30,14 @@ const config: CodegenConfig = {
         },
       },
     },
+    // Typed operations for the client. documentMode "string" emits plain
+    // query strings, so the browser bundle needs no GraphQL runtime.
+    "client/src/graphql/__generated__/": {
+      documents: ["client/src/**/*.{ts,tsx}", "!client/src/graphql/__generated__/**"],
+      preset: "client",
+      presetConfig: { fragmentMasking: false },
+      config: { documentMode: "string", enumsAsTypes: true, useTypeImports: true },
+    },
   },
 };
 

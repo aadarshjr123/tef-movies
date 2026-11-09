@@ -1,9 +1,12 @@
 import { z } from "zod";
 
 /** Absolute http(s) URL, or a site-relative path such as "/images/logo.svg". */
-export const urlOrPath = z.string().trim().refine((value) => /^https?:\/\//.test(value) || value.startsWith("/"), {
-  message: "must be an http(s) URL or a path starting with /",
-});
+export const urlOrPath = z
+  .string()
+  .trim()
+  .refine((value) => /^https?:\/\//.test(value) || value.startsWith("/"), {
+    message: "must be an http(s) URL or a path starting with /",
+  });
 
 const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "must be an ISO date (YYYY-MM-DD)");
 const name = z.string().trim().min(1).max(200);
@@ -26,7 +29,10 @@ const titleInputBase = z.object({
       rottenTomatoes: z.number().int().min(0).max(100).nullable().default(null),
     })
     .default({}),
-  cast: z.array(z.object({ name, character: z.string().trim().max(200).nullable().default(null) })).max(200).default([]),
+  cast: z
+    .array(z.object({ name, character: z.string().trim().max(200).nullable().default(null) }))
+    .max(200)
+    .default([]),
   trailers: z
     .array(z.object({ name, youtubeId: z.string().regex(/^[\w-]{11}$/, "must be an 11-character YouTube video id") }))
     .max(50)

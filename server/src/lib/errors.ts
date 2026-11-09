@@ -17,8 +17,7 @@ export class AppError extends Error {
 
 export const notFound = (entity: string, key: string) => new AppError(`${entity} "${key}" was not found.`, "NOT_FOUND");
 export const badInput = (message: string) => new AppError(message, "BAD_USER_INPUT");
-export const unauthenticated = () =>
-  new AppError("This operation requires a valid admin token.", "UNAUTHENTICATED");
+export const unauthenticated = () => new AppError("This operation requires a valid admin token.", "UNAUTHENTICATED");
 
 /**
  * Maps domain and validation errors to GraphQL error codes, and hides the

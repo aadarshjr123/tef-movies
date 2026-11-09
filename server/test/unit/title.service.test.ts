@@ -80,7 +80,14 @@ describe("TitleService", () => {
     it("takes the first trailer of the newest titles that have one", async () => {
       titles.titles = [
         makeMovie({ name: "No trailer", releaseDate: "2025-01-01", trailers: [] }),
-        makeMovie({ name: "Newest", releaseDate: "2024-01-01", trailers: [{ name: "T1", youtubeId: "aaaaaaaaaaa" }, { name: "T2", youtubeId: "bbbbbbbbbbb" }] }),
+        makeMovie({
+          name: "Newest",
+          releaseDate: "2024-01-01",
+          trailers: [
+            { name: "T1", youtubeId: "aaaaaaaaaaa" },
+            { name: "T2", youtubeId: "bbbbbbbbbbb" },
+          ],
+        }),
         makeMovie({ name: "Older", releaseDate: "2020-01-01" }),
       ];
 
@@ -112,7 +119,13 @@ describe("TitleService", () => {
     it("creates a movie, filling defaults", async () => {
       const movie = await service.createMovie(validMovie);
 
-      expect(movie).toMatchObject({ kind: "MOVIE", name: "New Film", genres: [], directors: [], ratings: { imdb: null } });
+      expect(movie).toMatchObject({
+        kind: "MOVIE",
+        name: "New Film",
+        genres: [],
+        directors: [],
+        ratings: { imdb: null },
+      });
     });
 
     it("rejects invalid input with a ZodError", async () => {

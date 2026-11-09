@@ -29,8 +29,10 @@ export const titleResolvers: Resolvers = {
     updateTvShow: (_, { id, input }, ctx) => (requireAdmin(ctx), ctx.services.titles.updateTvShow(id, input)),
     deleteTvShow: (_, { id }, ctx) => (requireAdmin(ctx), ctx.services.titles.deleteTitle(id, "TV_SHOW")),
     setSeason: (_, { tvShowId, input }, ctx) => (requireAdmin(ctx), ctx.services.titles.setSeason(tvShowId, input)),
-    deleteSeason: (_, { tvShowId, number }, ctx) =>
-      (requireAdmin(ctx), ctx.services.titles.deleteSeason(tvShowId, number)),
+    deleteSeason: (_, { tvShowId, number }, ctx) => (
+      requireAdmin(ctx),
+      ctx.services.titles.deleteSeason(tvShowId, number)
+    ),
   },
 
   Title: {

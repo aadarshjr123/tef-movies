@@ -1,16 +1,7 @@
 import { badInput, notFound } from "../../lib/errors";
 import { clampLimit } from "../../lib/text";
 import type { SeasonRepository, TitleRepository } from "./title.repository";
-import type {
-  Movie,
-  Season,
-  Title,
-  TitleFilter,
-  TitleKind,
-  TitleSort,
-  Trailer,
-  TvShow,
-} from "./title.types";
+import type { Movie, Season, Title, TitleFilter, TitleKind, TitleSort, Trailer, TvShow } from "./title.types";
 import { movieInputSchema, seasonInputSchema, tvShowInputSchema } from "./title.validation";
 
 export interface ListTitlesArgs {

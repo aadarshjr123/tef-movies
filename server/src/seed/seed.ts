@@ -35,7 +35,11 @@ export async function seedDatabase(logger: Logger) {
     if (seasons.length > 0) {
       await SeasonModel.insertMany(seasons.map((season) => ({ ...(season as object), titleId: doc._id })));
     }
-    for (const name of [...title.cast.map((member) => member.name), ...(title.directors ?? []), ...(title.creators ?? [])]) {
+    for (const name of [
+      ...title.cast.map((member) => member.name),
+      ...(title.directors ?? []),
+      ...(title.creators ?? []),
+    ]) {
       credits.set(name, (credits.get(name) ?? 0) + 1);
     }
   }

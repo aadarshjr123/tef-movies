@@ -1,0 +1,8 @@
+**/dist
+**/coverage
+**/__generated__
+**/node_modules
+package-lock.json
+server/src/seed/data.json
+playwright-report
+test-results

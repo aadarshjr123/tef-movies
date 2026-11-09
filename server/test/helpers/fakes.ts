@@ -1,6 +1,15 @@
 import type { NamedRepository } from "../../src/lib/named-repository";
 import type { SeasonRepository, TitleRepository } from "../../src/modules/titles/title.repository";
-import type { Movie, Season, SeasonInput, Title, TitleInput, TitleKind, TitleQuery, TvShow } from "../../src/modules/titles/title.types";
+import type {
+  Movie,
+  Season,
+  SeasonInput,
+  Title,
+  TitleInput,
+  TitleKind,
+  TitleQuery,
+  TvShow,
+} from "../../src/modules/titles/title.types";
 
 let nextId = 1;
 const newId = () => (nextId++).toString(16).padStart(24, "0");
@@ -80,7 +89,10 @@ export class InMemoryTitleRepository implements TitleRepository {
 
   async findSimilar(title: Title, limit: number) {
     return this.titles
-      .filter((other) => other.kind === title.kind && other.id !== title.id && other.genres.some((g) => title.genres.includes(g)))
+      .filter(
+        (other) =>
+          other.kind === title.kind && other.id !== title.id && other.genres.some((g) => title.genres.includes(g)),
+      )
       .slice(0, limit);
   }
 

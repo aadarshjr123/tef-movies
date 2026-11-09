@@ -6,8 +6,8 @@ It's a full-stack JavaScript project with a **React** frontend and a **GraphQL A
 
 ![Home page](docs/screenshots/home.png)
 
-| Movie details | TV show with seasons | Mobile |
-| --- | --- | --- |
+| Movie details                                | TV show with seasons                            | Mobile                                      |
+| -------------------------------------------- | ----------------------------------------------- | ------------------------------------------- |
 | ![Movie details](docs/screenshots/movie.png) | ![TV show details](docs/screenshots/tvshow.png) | ![Mobile home](docs/screenshots/mobile.png) |
 
 ## Features
@@ -22,10 +22,10 @@ It's a full-stack JavaScript project with a **React** frontend and a **GraphQL A
 
 ## Tech stack
 
-| Layer | Technologies |
-| --- | --- |
-| Frontend | React 17, React Router 5, React Query 3, graphql-request, Tailwind CSS 3, Framer Motion, react-player |
-| API | Node.js, Express 4, Apollo Server 2 (GraphQL) |
+| Layer    | Technologies                                                                                                                   |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Frontend | React 17, React Router 5, React Query 3, graphql-request, Tailwind CSS 3, Framer Motion, react-player                          |
+| API      | Node.js, Express 4, Apollo Server 2 (GraphQL)                                                                                  |
 | Database | MongoDB with Mongoose 5; [mongodb-memory-server](https://github.com/typegoose/mongodb-memory-server) for zero-setup local runs |
 
 ## Architecture
@@ -80,14 +80,14 @@ The first run downloads a MongoDB binary for the in-memory database, which takes
 
 ### Configuration
 
-| Variable | Where | Default | Purpose |
-| --- | --- | --- | --- |
-| `MONGODB_URI` | server | *(in-memory)* | MongoDB connection string |
-| `PORT` | server | `4000` | API port |
-| `CORS_ORIGINS` | server | *(any origin)* | Comma-separated list of allowed origins |
-| `ADMIN_TOKEN` | server | *(unset)* | When set, mutations require `Authorization: Bearer <token>` |
-| `SEED_ON_START` | server | `true` | Seed sample data when the database is empty |
-| `REACT_APP_API_URL` | client | `http://localhost:4000/graphql` | GraphQL endpoint the site calls (set at build time) |
+| Variable            | Where  | Default                         | Purpose                                                     |
+| ------------------- | ------ | ------------------------------- | ----------------------------------------------------------- |
+| `MONGODB_URI`       | server | _(in-memory)_                   | MongoDB connection string                                   |
+| `PORT`              | server | `4000`                          | API port                                                    |
+| `CORS_ORIGINS`      | server | _(any origin)_                  | Comma-separated list of allowed origins                     |
+| `ADMIN_TOKEN`       | server | _(unset)_                       | When set, mutations require `Authorization: Bearer <token>` |
+| `SEED_ON_START`     | server | `true`                          | Seed sample data when the database is empty                 |
+| `REACT_APP_API_URL` | client | `http://localhost:4000/graphql` | GraphQL endpoint the site calls (set at build time)         |
 
 ## Documentation
 
@@ -98,11 +98,11 @@ The first run downloads a MongoDB binary for the in-memory database, which takes
 
 TEF Movies started in 2022 as four separate repositories, which this repo replaces:
 
-| Original repo | What it was | Now |
-| --- | --- | --- |
-| [MovieTEF-new](https://github.com/aadarshjr123/MovieTEF-new) | React frontend | `client/` |
-| [TEFBackend](https://github.com/aadarshjr123/TEFBackend) | GraphQL API (Heroku / Vercel) | `server/` |
-| [BackendTEF](https://github.com/aadarshjr123/BackendTEF) | Older copy of the same API | merged into `server/` |
+| Original repo                                                        | What it was                    | Now                   |
+| -------------------------------------------------------------------- | ------------------------------ | --------------------- |
+| [MovieTEF-new](https://github.com/aadarshjr123/MovieTEF-new)         | React frontend                 | `client/`             |
+| [TEFBackend](https://github.com/aadarshjr123/TEFBackend)             | GraphQL API (Heroku / Vercel)  | `server/`             |
+| [BackendTEF](https://github.com/aadarshjr123/BackendTEF)             | Older copy of the same API     | merged into `server/` |
 | [TEFMoviesBackend](https://github.com/aadarshjr123/TEFMoviesBackend) | Same API as a Netlify function | merged into `server/` |
 
 The git history of the frontend and the main API is preserved under `client/` and `server/`. Since then, the following has changed:

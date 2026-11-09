@@ -2,11 +2,11 @@
 
 The recommended setup uses free tiers throughout:
 
-| Part | Host | Why |
-| --- | --- | --- |
-| Database | MongoDB Atlas (M0 free cluster) | Managed MongoDB |
-| API (`server/`) | Render web service | Long-running Node process; blueprint included in [render.yaml](../render.yaml) |
-| Website (`client/`) | Vercel | Static React build; SPA routing in [client/vercel.json](../client/vercel.json) |
+| Part                | Host                            | Why                                                                            |
+| ------------------- | ------------------------------- | ------------------------------------------------------------------------------ |
+| Database            | MongoDB Atlas (M0 free cluster) | Managed MongoDB                                                                |
+| API (`server/`)     | Render web service              | Long-running Node process; blueprint included in [render.yaml](../render.yaml) |
+| Website (`client/`) | Vercel                          | Static React build; SPA routing in [client/vercel.json](../client/vercel.json) |
 
 Deploy them in that order, because each step needs a URL from the one before.
 
@@ -63,10 +63,10 @@ Back in Render, set `CORS_ORIGINS` to your Vercel URL (for example `https://tef-
 
 ## Troubleshooting
 
-| Symptom | Likely cause |
-| --- | --- |
-| Site shows "Something went wrong!" or loads forever | `REACT_APP_API_URL` is wrong, or the API is asleep or down. Check `/health`. |
-| Browser console shows a CORS error | The site's origin is missing from `CORS_ORIGINS` (it must match exactly, with no trailing slash). |
-| API logs `MongoServerSelectionError` | Atlas network access doesn't allow Render, or the user or password is wrong. |
-| Mutations return `UNAUTHENTICATED` | Send `Authorization: Bearer <ADMIN_TOKEN>`. |
-| Refreshing a page like `/Movies` gives a 404 | SPA rewrites are missing (see `client/vercel.json`). |
+| Symptom                                             | Likely cause                                                                                      |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Site shows "Something went wrong!" or loads forever | `REACT_APP_API_URL` is wrong, or the API is asleep or down. Check `/health`.                      |
+| Browser console shows a CORS error                  | The site's origin is missing from `CORS_ORIGINS` (it must match exactly, with no trailing slash). |
+| API logs `MongoServerSelectionError`                | Atlas network access doesn't allow Render, or the user or password is wrong.                      |
+| Mutations return `UNAUTHENTICATED`                  | Send `Authorization: Bearer <ADMIN_TOKEN>`.                                                       |
+| Refreshing a page like `/Movies` gives a 404        | SPA rewrites are missing (see `client/vercel.json`).                                              |

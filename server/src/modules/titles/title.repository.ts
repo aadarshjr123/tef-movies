@@ -152,7 +152,11 @@ export class MongoTitleRepository implements TitleRepository {
 
   async update(id: string, kind: TitleKind, input: TitleInput<Title>) {
     if (!isObjectId(id)) return null;
-    const doc = await TitleModel.findOneAndReplace({ _id: id, kind }, { ...input, kind }, { new: true, runValidators: true }).lean<TitleDocument>();
+    const doc = await TitleModel.findOneAndReplace(
+      { _id: id, kind },
+      { ...input, kind },
+      { new: true, runValidators: true },
+    ).lean<TitleDocument>();
     return doc ? toTitle(doc) : null;
   }
 

@@ -14,8 +14,7 @@ export const personResolvers: Resolvers = {
   },
 
   Person: {
-    movies: async (person, _, { services }) =>
-      (await services.titles.listByPerson("MOVIE", person.name)) as Movie[],
+    movies: async (person, _, { services }) => (await services.titles.listByPerson("MOVIE", person.name)) as Movie[],
     tvShows: async (person, _, { services }) =>
       (await services.titles.listByPerson("TV_SHOW", person.name)) as TvShow[],
   },

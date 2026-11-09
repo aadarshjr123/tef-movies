@@ -75,8 +75,12 @@ describe("createErrorFormatter", () => {
   it("masks unexpected errors only in production", () => {
     const unexpected = new GraphQLError("db password is hunter2");
 
-    expect(createErrorFormatter(true)({ message: "db password is hunter2" }, unexpected).message).toBe("Internal server error.");
-    expect(createErrorFormatter(false)({ message: "db password is hunter2" }, unexpected).message).toBe("db password is hunter2");
+    expect(createErrorFormatter(true)({ message: "db password is hunter2" }, unexpected).message).toBe(
+      "Internal server error.",
+    );
+    expect(createErrorFormatter(false)({ message: "db password is hunter2" }, unexpected).message).toBe(
+      "db password is hunter2",
+    );
   });
 });
 
