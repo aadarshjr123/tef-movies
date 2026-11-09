@@ -1,6 +1,7 @@
 import type {
   MovieDetailsQuery,
   TitleCardFragment,
+  TitleKind,
   TitleSpotlightFragment,
   TvShowDetailsQuery,
 } from "@/graphql/__generated__/graphql";
@@ -8,9 +9,14 @@ import type {
 let id = 0;
 const nextId = () => `id-${++id}`;
 
-export function cardFixture(overrides: Partial<TitleCardFragment> = {}): TitleCardFragment {
+/** The API sets __typename from kind; fixtures do the same. */
+const typename = (kind: TitleKind | undefined): "Movie" | "TvShow" => (kind === "TV_SHOW" ? "TvShow" : "Movie");
+
+type Overrides<T> = Partial<Omit<T, "__typename">>;
+
+export function cardFixture(overrides: Overrides<TitleCardFragment> = {}): TitleCardFragment {
   return {
-    __typename: "Movie",
+    __typename: typename(overrides.kind),
     id: nextId(),
     kind: "MOVIE",
     name: "Inception",
@@ -22,9 +28,9 @@ export function cardFixture(overrides: Partial<TitleCardFragment> = {}): TitleCa
   } as TitleCardFragment;
 }
 
-export function spotlightFixture(overrides: Partial<TitleSpotlightFragment> = {}): TitleSpotlightFragment {
+export function spotlightFixture(overrides: Overrides<TitleSpotlightFragment> = {}): TitleSpotlightFragment {
   return {
-    __typename: "Movie",
+    __typename: typename(overrides.kind),
     id: nextId(),
     kind: "MOVIE",
     name: "Dune: Part Two",

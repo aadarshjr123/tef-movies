@@ -134,6 +134,13 @@ describe("TitleService", () => {
       await expect(
         service.createMovie({ ...validMovie, trailers: [{ name: "t", youtubeId: "not-an-id" }] }),
       ).rejects.toBeInstanceOf(ZodError);
+      // Watch links are rendered as hrefs, so only http(s) is allowed.
+      await expect(
+        service.createMovie({
+          ...validMovie,
+          watchOptions: [{ platform: "X", type: "FREE", url: "javascript:alert(1)" }],
+        }),
+      ).rejects.toBeInstanceOf(ZodError);
     });
 
     it("throws NOT_FOUND when updating a missing movie", async () => {

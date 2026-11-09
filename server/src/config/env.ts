@@ -37,7 +37,7 @@ const envSchema = z
     // database or leave mutations open.
     for (const key of ["MONGODB_URI", "ADMIN_TOKEN"] as const) {
       if (!env[key]) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, path: [key], message: "is required in production" });
+        ctx.addIssue({ code: "custom", path: [key], message: "is required in production" });
       }
     }
   });

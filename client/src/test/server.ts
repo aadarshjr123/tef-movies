@@ -21,10 +21,7 @@ export const handlers = [
   graphql.query("TvShows", ({ variables }) =>
     HttpResponse.json({
       data: {
-        tvShows:
-          variables.filter?.watchType === "FREE"
-            ? []
-            : [cardFixture({ name: "Dark", kind: "TV_SHOW", __typename: "TvShow" } as never)],
+        tvShows: variables.filter?.watchType === "FREE" ? [] : [cardFixture({ name: "Dark", kind: "TV_SHOW" })],
       },
     }),
   ),

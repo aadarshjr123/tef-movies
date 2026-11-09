@@ -5,11 +5,6 @@ import type { Platform as PlatformModel, Collection as CollectionModel } from '.
 import type { GraphQLContext } from '../context';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -478,7 +473,7 @@ export type ResolverTypeWrapper<T> = Promise<T> | T;
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -515,27 +510,29 @@ export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, 
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+export type SubscriptionResolver<TResult, TKey extends string, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> =
   | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
-export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
+export type TypeResolveFn<TTypes, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>> = (
   parent: TParent,
   context: TContext,
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
-export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
+export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> = (
   next: NextResolverFn<TResult>,
   parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
+
+
 
 
 
@@ -554,12 +551,12 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Movie: ResolverTypeWrapper<MovieModel>;
   MovieInput: MovieInput;
-  Mutation: ResolverTypeWrapper<{}>;
+  Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Person: ResolverTypeWrapper<PersonModel>;
   PersonInput: PersonInput;
   Platform: ResolverTypeWrapper<PlatformModel>;
   PlatformInput: PlatformInput;
-  Query: ResolverTypeWrapper<{}>;
+  Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Ratings: ResolverTypeWrapper<Ratings>;
   RatingsInput: RatingsInput;
   Season: ResolverTypeWrapper<SeasonModel>;
@@ -592,12 +589,12 @@ export type ResolversParentTypes = {
   Int: Scalars['Int']['output'];
   Movie: MovieModel;
   MovieInput: MovieInput;
-  Mutation: {};
+  Mutation: Record<PropertyKey, never>;
   Person: PersonModel;
   PersonInput: PersonInput;
   Platform: PlatformModel;
   PlatformInput: PlatformInput;
-  Query: {};
+  Query: Record<PropertyKey, never>;
   Ratings: Ratings;
   RatingsInput: RatingsInput;
   Season: SeasonModel;
@@ -617,14 +614,12 @@ export type CollectionResolvers<ContextType = GraphQLContext, ParentType extends
   imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   kind?: Resolver<ResolversTypes['CollectionKind'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type CreditResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Credit'] = ResolversParentTypes['Credit']> = {
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   person?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType>;
   role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type EpisodeResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Episode'] = ResolversParentTypes['Episode']> = {
@@ -632,7 +627,6 @@ export type EpisodeResolvers<ContextType = GraphQLContext, ParentType extends Re
   number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   overview?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   runtimeMinutes?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MovieResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Movie'] = ResolversParentTypes['Movie']> = {
@@ -682,14 +676,12 @@ export type PersonResolvers<ContextType = GraphQLContext, ParentType extends Res
   movies?: Resolver<Array<ResolversTypes['Movie']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tvShows?: Resolver<Array<ResolversTypes['TvShow']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type PlatformResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Platform'] = ResolversParentTypes['Platform']> = {
   logoUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   pricing?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -708,7 +700,6 @@ export type QueryResolvers<ContextType = GraphQLContext, ParentType extends Reso
 export type RatingsResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Ratings'] = ResolversParentTypes['Ratings']> = {
   imdb?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   rottenTomatoes?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SeasonResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Season'] = ResolversParentTypes['Season']> = {
@@ -716,36 +707,16 @@ export type SeasonResolvers<ContextType = GraphQLContext, ParentType extends Res
   episodes?: Resolver<Array<ResolversTypes['Episode']>, ParentType, ContextType>;
   number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   startDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type TitleResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Title'] = ResolversParentTypes['Title']> = {
   __resolveType: TypeResolveFn<'Movie' | 'TvShow', ParentType, ContextType>;
-  backdropUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  cast?: Resolver<Array<ResolversTypes['Credit']>, ParentType, ContextType>;
-  certification?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  collections?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  genres?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  kind?: Resolver<ResolversTypes['TitleKind'], ParentType, ContextType>;
-  languages?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  originalName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  overview?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  posterUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  ratings?: Resolver<ResolversTypes['Ratings'], ParentType, ContextType>;
-  releaseDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  similar?: Resolver<Array<ResolversTypes['Title']>, ParentType, ContextType, RequireFields<TitleSimilarArgs, 'limit'>>;
-  trailers?: Resolver<Array<ResolversTypes['Trailer']>, ParentType, ContextType>;
-  watchOptions?: Resolver<Array<ResolversTypes['WatchOption']>, ParentType, ContextType>;
-  year?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
 };
 
 export type TrailerResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Trailer'] = ResolversParentTypes['Trailer']> = {
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['Title']>, ParentType, ContextType>;
   youtubeId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type TvShowResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['TvShow'] = ResolversParentTypes['TvShow']> = {
@@ -778,7 +749,6 @@ export type WatchOptionResolvers<ContextType = GraphQLContext, ParentType extend
   platform?: Resolver<ResolversTypes['Platform'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['WatchType'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = GraphQLContext> = {

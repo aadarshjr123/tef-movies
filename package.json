@@ -23,10 +23,11 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^9.39.5",
-    "@graphql-codegen/cli": "^5.0.7",
-    "@graphql-codegen/typescript": "^4.1.6",
-    "@graphql-codegen/typescript-resolvers": "^4.5.2",
+    "@graphql-codegen/cli": "^8.0.0",
+    "@graphql-codegen/typescript": "^7.0.0",
+    "@graphql-codegen/typescript-resolvers": "^7.0.0",
     "@playwright/test": "^1.65.0",
+    "@vitest/coverage-v8": "^4.1.12",
     "concurrently": "^9.2.5",
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
@@ -34,10 +35,19 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^15.15.0",
     "prettier": "^3.9.10",
-    "typescript-eslint": "^8.72.1"
+    "typescript-eslint": "^8.72.1",
+    "vitest": "^4.1.12"
   },
   "type": "module",
   "engines": {
     "node": ">=20"
+  },
+  "overrides": {
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "^11.0.1"
+    },
+    "graphql-config": {
+      "minimatch": "^11.0.1"
+    }
   }
 }

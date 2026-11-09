@@ -28,7 +28,8 @@ const titleInputBase = z.object({
       imdb: z.number().min(0).max(10).nullable().default(null),
       rottenTomatoes: z.number().int().min(0).max(100).nullable().default(null),
     })
-    .default({}),
+    // prefault (not default) so the nested null defaults are applied to {}.
+    .prefault({}),
   cast: z
     .array(z.object({ name, character: z.string().trim().max(200).nullable().default(null) }))
     .max(200)
@@ -42,7 +43,7 @@ const titleInputBase = z.object({
       z.object({
         platform: name,
         type: z.enum(["SUBSCRIPTION", "FREE", "RENT", "BUY"]),
-        url: z.string().url(),
+        url: z.url({ protocol: /^https?$/ }),
       }),
     )
     .max(20)
