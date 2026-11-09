@@ -1,5 +1,5 @@
 import React from "react";
-import {Image, Video, Transformation} from 'cloudinary-react';
+import {Image, Video, Transformation} from "./CloudImage";
 
 const randomPosters = (posters) => {
 

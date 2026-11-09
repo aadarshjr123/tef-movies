@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { API_URL } from "../config";
 // import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { MovieDetails } from "../components/MovieDetails";
@@ -143,7 +144,6 @@ some[0].movieInfo[0].director.map((castName) => {
 
   // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
-  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
   
   const getOtt = () => request(API_URL,
     getOtts,

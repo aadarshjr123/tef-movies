@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Swipe from "react-easy-swipe";
 import { Link } from "react-router-dom";
-import {Image, Video, Transformation} from 'cloudinary-react';
+import {Image, Video, Transformation} from "./CloudImage";
 
 
 export class CarouselPosters extends Component {

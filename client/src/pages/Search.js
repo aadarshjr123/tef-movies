@@ -15,6 +15,7 @@ import { SearchResults } from "../query/SearchResults";
 import SearchData from "./searchData";
 import { useQuery } from 'react-query';
 import request, { gql } from 'graphql-request';
+import { API_URL } from "../config";
 
 const Search =  () => {
 
@@ -36,7 +37,6 @@ const Search =  () => {
 
   // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
-  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
   
   const Coll = () => request(API_URL,
     getCollections,

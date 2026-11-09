@@ -1,0 +1,15 @@
+{
+  "name": "tef-movies",
+  "private": true,
+  "description": "TEF Movies: a movie and TV show discovery site (React + GraphQL + MongoDB)",
+  "scripts": {
+    "install:all": "npm install && npm ci --prefix server && npm ci --prefix client --legacy-peer-deps",
+    "dev": "concurrently -n api,web -c magenta,cyan \"npm run dev --prefix server\" \"npm start --prefix client\"",
+    "build": "npm run build --prefix client",
+    "seed": "npm run seed --prefix server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "license": "MIT"
+}

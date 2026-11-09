@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { API_URL } from "../config";
 // import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { MovieDetails } from "../components/MovieDetails";
@@ -86,7 +87,6 @@ export function Homepage(data) {
 
   // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
-  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
 
 
   const Mov = () => request(API_URL,

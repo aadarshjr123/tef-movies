@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { API_URL } from "../config";
 // import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { GetTvshows } from "../query/GetTvshows";
@@ -8,7 +9,7 @@ import { Carousel } from "../components/Carousel";
 import { CardColumn } from "../components/CardColumn";
 import { Link } from "react-router-dom";
 // import { OneMovie } from "../pages/OneMovie";
-import {Image, Video, Transformation} from 'cloudinary-react';
+import {Image, Video, Transformation} from "../components/CloudImage";
 import { useQuery } from 'react-query';
 import request, { gql } from 'graphql-request';
 import { useQueryClient  } from 'react-query'
@@ -39,7 +40,7 @@ export function TVShowHomepage(name) {
     const [_, names] = queryKey;
     console.log("season id",names);
     const somes = request(
-      'https://tefmovies.herokuapp.com/graphql',
+      API_URL,
       gql `query GetTvshow($name: String!){
         getTVshow1( Type: $name) {
           id

@@ -1,7 +1,0 @@
-mutation {
-  deleteMovie (
-    name: "GraphQL Movie", 
-  ) {
-    name
-  }
-}

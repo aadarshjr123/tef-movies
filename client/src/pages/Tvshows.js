@@ -1,4 +1,5 @@
 import React,{useRef, useState} from "react";
+import { API_URL } from "../config";
 // import { useQuery } from "@apollo/client";
 import { GetTvshows } from "../query/GetTvshows";
 import { TVShowHomepage } from "./TVShowHomepage";
@@ -71,7 +72,6 @@ const Tvshows =  () => {
 
   // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
-  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
   
 
   // const Tvshow = () => request(API_URL,
@@ -88,7 +88,7 @@ const Tvshows =  () => {
     const [_, names] = queryKey;
     console.log("season id",names);
     const somes = request(
-      'https://tefmovies.herokuapp.com/graphql',
+      API_URL,
       gql `query GetTvshow($name: String!){
         getTVshow1( Type: $name) {
           id
@@ -197,10 +197,10 @@ const Tvshows =  () => {
       if(j.watchOn === "Netflix") {
         // console.log("netflix");
         netflix.push(i); 
-      } else if(j.watchOn === "Amazon Prime Videos") {
+      } else if(j.watchOn === "Amazon Prime Video") {
         // console.log("netflix");
         Amazon.push(i); 
-      } else if(j.watchOn === "Disney Plus Hotstar") {
+      } else if(j.watchOn === "JioHotstar") {
         // console.log("netflix");
         Hotstar.push(i); 
       }
@@ -247,7 +247,7 @@ const Tvshows =  () => {
     </h1>
     <div class="mt-5 ">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Latest dubbed tvshoes</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Latest TV shows</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
       {
@@ -269,7 +269,7 @@ const Tvshows =  () => {
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Netflix tvshows</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Netflix TV shows</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
     {
@@ -292,7 +292,7 @@ const Tvshows =  () => {
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Amazon prime tvshows</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Amazon Prime Video TV shows</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
     {
@@ -315,7 +315,7 @@ const Tvshows =  () => {
      </div>
      <div class="mt-5 ">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Hotstar tvshows</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-10 text-sm md:text-2xl lg:text-xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">JioHotstar TV shows</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
     {

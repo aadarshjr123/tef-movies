@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { API_URL } from "../config";
 import ReactPlayer from "react-player";
 import logo from "../tomatometer-fresh.149b5e8adc3.svg";
 import logo1 from "../favicon_desktop_32x32._CB1582158068_.png";
@@ -9,7 +10,7 @@ import { CardLayout_2 } from "../components/CardLayout_2";
 // import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { FaGreaterThan } from 'react-icons/fa';
-import {Image, Video, Transformation} from 'cloudinary-react';
+import {Image, Video, Transformation} from "./CloudImage";
 import grabLink from "youtube-thumbnail-grabber";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/fontawesome-free-solid";
@@ -91,7 +92,6 @@ export const MovieDetails = (movie) => {
 
   // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
-  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
 
 
   const Mov = () => request(API_URL,

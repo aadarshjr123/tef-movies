@@ -1,4 +1,5 @@
 import React, { useEffect,useState } from "react";
+import { API_URL } from "../config";
 import { OneMovie } from "./OneMovie";
 import { Homepage } from "./Homepage";
 import { CardLayout } from "../components/CardLayout";
@@ -72,7 +73,6 @@ function FilterGenre() {
   console.log("somes",datass1);
   // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
-  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
 
   const Mov = () => request(API_URL,
     getMovies,

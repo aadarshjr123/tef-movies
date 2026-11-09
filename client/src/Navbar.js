@@ -12,14 +12,14 @@ const Navbar = () => {
     <a class="text-sm md:text-lg lg:text-lg text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:font-bold font-RobotoMono" href="/Home">Home</a>
   </li>
   <li class="mr-6">
-    <a class="text-sm md:text-lg lg:text-lg text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:font-bold font-RobotoMono" href="/Tvshows">Tvshows</a>
+    <a class="text-sm md:text-lg lg:text-lg text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:font-bold font-RobotoMono whitespace-nowrap" href="/Tvshows">TV Shows</a>
   </li>
   <li class="mr-6">
     <a class="text-sm md:text-lg lg:text-lg text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:font-bold font-RobotoMono" href="/Movies">Movies</a>
   </li>
-  {/* <li class="mr-6">
-    <a class="text-lg text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:font-bold" href="/Anime">Anime</a>
-  </li> */}
+  <li class="mr-6">
+    <a class="text-sm md:text-lg lg:text-lg text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:font-bold font-RobotoMono" href="/Welcome">About</a>
+  </li>
 </ul>
         
     </div>

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { API_URL } from "../config";
 // import { useQuery } from "@apollo/client";
 import { GetMovies } from "../query/GetMovies";
 import { MovieDetails } from "../components/MovieDetails";
@@ -7,7 +8,7 @@ import { Carousel } from "../components/Carousel";
 import { CardColumn } from "../components/CardColumn";
 import { Link } from "react-router-dom";
 // import { OneMovie } from "../pages/OneMovie";
-import {Image, Video, Transformation} from 'cloudinary-react';
+import {Image, Video, Transformation} from "../components/CloudImage";
 import { useQuery } from 'react-query';
 import request, { gql } from 'graphql-request';
 let array = [];
@@ -83,7 +84,6 @@ export function MoviesHomepage() {
 
   // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
-  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
 
   const Mov = () => request(API_URL,
     getMovies,

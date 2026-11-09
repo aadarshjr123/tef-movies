@@ -1,5 +1,10 @@
-const { gql, makeExecutableSchema } = require("apollo-server-express");
-const { Seasons } = require("./models/seasons");
+const {
+  gql,
+  makeExecutableSchema,
+  AuthenticationError,
+  UserInputError,
+} = require("apollo-server-express");
+
 
 const Movie = require("./models/movie").Movies;
 const Actor = require("./models/Actors").Actors;
@@ -533,789 +538,159 @@ const typeDefs = gql`
   }
 `;
 
-const resolvers = {
-  Query: {
-    getMovies: (parent, args) => {
-      return Movie.find({});
-    },
-    getMovie: (parent, args) => {
-      return Movie.find({name: args.name});
-    },
-    searchMovie: (parent, args) => {
-      return Movie.find({'movieInfo.genre.genre': args.name});
-                    // .then((data) => {
-                    //   // console.log(data.length);
-                    //   // console.log(data);
-                    //   let searchData = [];
-                    //   let tcshows = TVShow.find({ 'tvshowInfo.genre.genre': args.name});
-                    //   // console.log(tcshows);
-                    //   // console.log("tcshows",tcshows.length);
-                    //   if(data.length <=0 ||data.length === undefined) {
-                    //     searchData.push(tcshows);
-                    //     // console.log("tvshows");
-                    //     // console.log(searchData);
-                    //   } else if(tcshows.length <=0 || tcshows.length === undefined) {
-                    //     // console.log("movies");
-                    //     searchData.push(data);
-                    //   }
-                    //   else {
-                    //     // let tcshows = TVShow.find({ 'tvshowInfo.genre.genre': args.name});
-                    //     searchData.push(tcshows);
-                    //     searchData.push(data);
-                    //     // console.log("both")
-                    //     // console.log(searchData)
-                    //   }
+// Case-insensitive "contains" match, with user input escaped so it is never treated as a regex.
+const contains = (text) =>
+  new RegExp(String(text).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
 
-                    //   console.log(searchData);
-                    //   return searchData;
-                    // });
-    },
-    searchMovieautoComplete: (parent, args) => {
-        return Movie.aggregate([
-          {
-              "$search": {
-                  "autocomplete": {
-                      "query": `${args.name}`,
-                      "path": "name",
-                      "fuzzy": {
-                          "maxEdits": 2,
-                          "prefixLength": 3
-                      }
-                  }
-              }
-          }
-      ])
-    },
-    searchTvshows: (parent, args) => {
-      return TVShow.find({'tvshowInfo.genre.genre': args.name});
+// Mutations change shared demo data, so when ADMIN_TOKEN is set they require
+// a matching `Authorization: Bearer <token>` header.
+const requireAdmin = (context) => {
+  const token = process.env.ADMIN_TOKEN;
+  if (token && context.token !== token) {
+    throw new AuthenticationError("Mutations require a valid admin token.");
+  }
+};
 
-    },
-    searchActorMovie: (parent, args) => {
-      return Movie.find({'casts.castName': args.casts});
-    },
-    searchActorTvshows: (parent, args) => {
-      return TVShow.find({'casts.castName': args.casts});
-
-    },
-    getTVshow1: (parent, args) => {
-      return TVShow.find({ Type: args.Type});
-    },
-    getTVshows: (parent, args) => {
-      return TVShow.find({});
-    },
-    getTVshow: (parent, args) => {
-      return TVShow.find({name:args.name});
-    },
-    getTrailers: (parent, args) => {
-      return Trailer.find({});
-    },
-    getTrailer: (parent, args) => {
-      return Trailer.find({name:args.name});
-    },
-    getActors: (parent, args) => {
-      return Actor.find({});
-    },
-    getActor: (parent, args) => {
-      return Actor.find({name:args.name});
-    },
-    // getCollections: [CollectionsSchema]
-    // getCollection(name: String!): [CollectionsSchema]
-    getCollections: (parent, args) => {
-      return Collection.find({});
-    },
-    getCollection: (parent, args) => {
-      return Collection.find({name:args.name});
-    },
-
-    getOtts: (parent, args) => {
-      return Ott.find({});
-    },
-    getOtt: (parent, args) => {
-      return Ott.find({name:args.name});
-    },
-    getSeason: (parent, args) => {
-      return Season.find({seasonId:args.seasonId});
-    }
-    // getSeason(name: String!) : [Seasons]
+// Every collection is keyed by `name` (seasons by `seasonId` + `season`), and
+// update mutations pass the new name as `changedName`.
+const crud = (Model, fields) => ({
+  add: async (parent, args, context) => {
+    requireAdmin(context);
+    return Model.create(pick(args, fields));
   },
-  Mutation: {
+  update: async (parent, args, context) => {
+    requireAdmin(context);
+    const doc = await Model.findOneAndUpdate(
+      { name: args.name },
+      { $set: { ...pick(args, fields), name: args.changedName } },
+      { new: true }
+    );
+    if (!doc) throw new UserInputError(`No ${Model.modelName} named "${args.name}".`);
+    return doc;
+  },
+  remove: async (parent, args, context) => {
+    requireAdmin(context);
+    const doc = await Model.findOneAndDelete({ name: args.name });
+    if (!doc) throw new UserInputError(`No ${Model.modelName} named "${args.name}".`);
+    return doc;
+  },
+});
 
-    // addSeason(
-    //   seasonId: String!
-    //   name: String!
-    //   season: String!
-    //   seasonStart: String!
-    //   seasonEnd: String!
-    //   episodes: [watchOnSchemaSeasonInput]!
-    // ):Seasons
+const pick = (args, fields) =>
+  fields.reduce((out, f) => (args[f] === undefined ? out : { ...out, [f]: args[f] }), {});
 
-    //Season
-    addSeason:async (parent, args) => {
-      let newMovie = new Season({
-        seasonId: args.seasonId,
-        name: args.name,
-        season: args.season,
-        seasonStart: args.seasonStart,
-        seasonEnd: args.seasonEnd,
-        episodes: args.episodes,
-      });
+const movies = crud(Movie, ["name", "storyline", "rating", "casts", "movieInfo", "posters", "rectanglePosters", "watchOn", "availLanguages"]);
+const tvshows = crud(TVShow, ["name", "Type", "storyline", "rating", "casts", "tvshowInfo", "posters", "rectanglePosters", "watchOn", "availLanguages"]);
+const actors = crud(Actor, ["name", "description", "image"]);
+const trailers = crud(Trailer, ["name", "link", "date"]);
+const collections = crud(Collection, ["name", "image", "type"]);
+const otts = crud(Ott, ["name", "image", "perMonth"]);
+const seasonFields = ["seasonId", "name", "season", "seasonStart", "seasonEnd", "episodes"];
 
-      let somes;
-
-      await Season.findOne({ name: args.name }).then(
-        (data) => {
-          // console.log(data);
-          // if (data === null) {
-            console.log(newMovie);
-            somes = newMovie.save();
-            return somes;
-          // } else {
-          //   console.log("The Season name is already in your DB.if you need to update you can use update query");
-          
-          //   let names = {name : "The Season name is already in your DB.if you need to update you can use update query"}
-          //   somes = names;
-
-          //   return somes;
-          //   // console.log(sss);
-          // }
-        }
-      );
-      // console.log(DuplicateMovieName.schema);
-      // if()
-      return somes;
-    },
-    updateSeason: (parent, args) => {
-      // console.log(args); 
-      if (!args.name) return "No movies";
-      let some = Season.findOneAndUpdate(
-        {
-          name: args.name,
-        },
-        {
-          $set: {
-            seasonId: args.seasonId,
-        name: args.changedName,
-        season: args.season,
-        seasonStart: args.seasonStart,
-        seasonEnd: args.seasonEnd,
-        episodes: args.episodes,
-          },
-        },
-        { new: true },
-        (err, Season) => {
-          if (err) {
-            console.log("Something went wrong when updating the Season");
-          } else {
-            // console.log("199",Movie);
-            return Season;
-          }
-        }
-      );
-
-      // console.log("205",some);
-      console.log(some.name);
-      return some;
-    },
-    deleteMovie: async (parent, args) => {
-      // console.log(args);
-      let some = args;
-      let sss = '';
-      if (!args.name) return "No Seasons";
-
-      var myquery = { name: args.name };
-
-      await Season.deleteOne(myquery, function (err, obj) {
-        if (err) throw err;
-        if(obj.n === 1) {
-          console.log("1 document deleted");
-        }  else {
-          // console.log("No data to delete");
-          let names = {name : "No data to delete"}
-          some = names;
-          // console.log(sss);
-          return some;
-        }
-      })
-    
-      await console.log(some);
-      return some;
-      // .then(() => {
-      //  return args
-      // });
-    },
-    // Movies
-    addMovie:async (parent, args) => {
-      let newMovie = new Movie({
-        name: args.name,
-        storyline: args.storyline,
-        rating: args.rating,
-        casts: args.casts,
-        movieInfo: args.movieInfo,
-        posters: args.posters,
-        rectanglePosters: args.rectanglePosters,
-        watchOn: args.watchOn,
-        availLanguages: args.availLanguages,
-      });
-
-      let somes;
-
-      await Movie.findOne({ name: args.name }).then(
-        (data) => {
-          // console.log(data);
-          if (data === null) {
-            console.log(newMovie);
-            somes = newMovie.save();
-            return somes;
-          } else {
-            console.log("The movie name is already in your DB.if you need to update u can use update query");
-          
-            let names = {name : "The movie name is already in your DB.if you need to update you can use update query"}
-            somes = names;
-
-            return somes;
-            // console.log(sss);
-          }
-        }
-      );
-      // console.log(DuplicateMovieName.schema);
-      // if()
-      return somes;
-    },
-    updateMovie: (parent, args) => {
-      // console.log(args); 
-      if (!args.name) return "No movies";
-      let some = Movie.findOneAndUpdate(
-        {
-          name: args.name,
-        },
-        {
-          $set: {
-            name: args.changedName,
-            storyline: args.storyline,
-            rating: args.rating,
-            casts: args.casts,
-            movieInfo: args.movieInfo,
-            posters: args.posters,
-            rectanglePosters: args.rectanglePosters,
-            watchOn: args.watchOn,
-            availLanguages: args.availLanguages,
-          },
-        },
-        { new: true },
-        (err, Movie) => {
-          if (err) {
-            console.log("Something went wrong when updating the movie");
-          } else {
-            // console.log("199",Movie);
-            return Movie;
-          }
-        }
-      );
-
-      // console.log("205",some);
-      console.log(some.name);
-      return some;
-    },
-    deleteMovie: async (parent, args) => {
-      // console.log(args);
-      let some = args;
-      let sss = '';
-      if (!args.name) return "No movies";
-
-      var myquery = { name: args.name };
-
-      await Movie.deleteOne(myquery, function (err, obj) {
-        if (err) throw err;
-        if(obj.n === 1) {
-          console.log("1 document deleted");
-        }  else {
-          // console.log("No data to delete");
-          let names = {name : "No data to delete"}
-          some = names;
-          // console.log(sss);
-          return some;
-        }
-      })
-    
-      await console.log(some);
-      return some;
-      // .then(() => {
-      //  return args
-      // });
-    },
-
-    // Tvshows
-    addTvshow:async (parent, args) => {
-      let newMovie = new TVShow({
-        name: args.name,
-        Type: args.Type,
-        storyline: args.storyline,
-        rating: args.rating,
-        casts: args.casts,
-        tvshowInfo: args.tvshowInfo,
-        posters: args.posters,
-        rectanglePosters: args.rectanglePosters,
-        watchOn: args.watchOn,
-        availLanguages: args.availLanguages,
-      });
-
-      let somes;
-
-      await TVShow.findOne({ name: args.name }).then(
-        (data) => {
-          // console.log(data);
-          if (data === null) {
-            console.log(newMovie);
-            somes = newMovie.save();
-            return somes;
-          } else {
-            console.log("The tvshow name is already in your DB.if you need to update u can use update query");
-          
-            let names = {name : "The tvshow name is already in your DB.if you need to update you can use update query"}
-            somes = names;
-
-            return somes;
-            // console.log(sss);
-          }
-        }
-      );
-      // console.log(DuplicateMovieName.schema);
-      // if()
-      return somes;
-    },
-
-    updateTvshow: (parent, args) => {
-      // console.log(args); 
-      if (!args.name) return "No Tvshows";
-      let some = TVShow.findOneAndUpdate(
-        {
-          name: args.name,
-        },
-        {
-          $set: {
-            name: args.changedName,
-            Type: args.Type,
-            storyline: args.storyline,
-            rating: args.rating,
-            casts: args.casts,
-            tvshowInfo: args.tvshowInfo,
-            posters: args.posters,
-            rectanglePosters: args.rectanglePosters,
-            watchOn: args.watchOn,
-            availLanguages: args.availLanguages,
-          },
-        },
-        { new: true },
-        (err, Movie) => {
-          if (err) {
-            console.log("Something went wrong when updating the movie");
-          } else {
-            // console.log("199",Movie);
-            return Movie;
-          }
-        }
-      );
-
-      // console.log("205",some);
-      console.log(some.name);
-      return some;
-    },
-    deleteTvshow: async (parent, args) => {
-      // console.log(args);
-      let some = args;
-      let sss = '';
-      if (!args.name) return "No Tvshows";
-
-      var myquery = { name: args.name };
-
-      await TVShow.deleteOne(myquery, function (err, obj) {
-        if (err) throw err;
-        if(obj.n === 1) {
-          console.log("1 document deleted");
-        }  else {
-          // console.log("No data to delete");
-          let names = {name : "No data to delete"}
-          some = names;
-          // console.log(sss);
-          return some;
-        }
-      })
-    
-      await console.log(some);
-      return some;
-      // .then(() => {
-      //  return args
-      // });
-    },
-
-    // Actors
-    addActors:async (parent, args) => {
-      let newActors = new Actor({
-        name: args.name,
-        description: args.description,
-        image: args.image
-      });
-
-      let somes;
-
-      await Actor.findOne({ name: args.name }).then(
-        (data) => {
-          // console.log(data);
-          if (data === null) {
-            console.log(newActors);
-            somes = newActors.save();
-            return somes;
-          } else {
-            console.log("The actor name is already in your DB.if you need to update u can use update query");
-          
-            let names = {name : "The actor name is already in your DB.if you need to update you can use update query"}
-            somes = names;
-
-            return somes;
-            // console.log(sss);
-          }
-        }
-      );
-      // console.log(DuplicateMovieName.schema);
-      // if()
-      return somes;
-    },
-
-
-    updateActors: (parent, args) => {
-      // console.log(args); 
-      // let somee = args.name;
-      if (!args.name) return "No actor";
-      let some = Actor.findOneAndUpdate(
-        {
-          name: args.name,
-        },
-        {
-          $set: {
-            name: args.changedName,
-            description: args.description,
-            image: args.image
-          },
-        },
-        { new: true },
-        (err, Actor) => {
-          if (err) {
-            console.log("Something went wrong when updating the Actors");
-          } else {
-            return Actor;
-          }
-        }
-      );
-
-
-      // console.log(some);
-      return some;
-    },
-
-    deleteActors: async (parent, args) => {
-      // console.log(args);
-      let some = args;
-      let sss = '';
-      if (!args.name) return "No actors";
-
-      var myquery = { name: args.name };
-
-      await Actor.deleteOne(myquery, function (err, obj) {
-        if (err) throw err;
-        if(obj.n === 1) {
-          console.log("1 document deleted");
-        }  else {
-          // console.log("No data to delete");
-          let names = {name : "No data to delete"}
-          some = names;
-          // console.log(sss);
-          return some;
-        }
-      })
-    
-      await console.log(some);
-      return some;
-      // .then(() => {
-      //  return args
-      // });
-    },
-
-    //trailers
-    
-    addTrailers:async (parent, args) => {
-      let newActors = new Trailer({
-        name: args.name,
-        link: args.link,
-        date: args.date
-      });
-
-      let somes;
-
-      await Trailer.findOne({ name: args.name }).then(
-        (data) => {
-          // console.log(data);
-          if (data === null) {
-            console.log(newActors);
-            somes = newActors.save();
-            return somes;
-          } else {
-            console.log("The trailer name is already in your DB.if you need to update u can use update query");
-          
-            let names = {name : "The trailer name is already in your DB.if you need to update you can use update query"}
-            somes = names;
-
-            return somes;
-            // console.log(sss);
-          }
-        }
-      );
-      // console.log(DuplicateMovieName.schema);
-      // if()
-      return somes;
-    },
-
-    updateTrailers: (parent, args) => {
-      // console.log(args); 
-      // let somee = args.name;
-      if (!args.name) return "No trailer";
-      let some = Trailer.findOneAndUpdate(
-        {
-          name: args.name,
-        },
-        {
-          $set: {
-            name: args.changedName,
-            link: args.link,
-            date: args.date
-          },
-        },
-        { new: true },
-        (err, Trailer) => {
-          if (err) {
-            console.log("Something went wrong when updating the Trailer");
-          } else {
-            return Trailer;
-          }
-        }
-      );
-
-
-      // console.log(some);
-      return some;
-    },
-
-    deleteTrailers: async (parent, args) => {
-      // console.log(args);
-      let some = args;
-      let sss = '';
-      if (!args.name) return "No Trailer";
-
-      var myquery = { name: args.name };
-
-      await Trailer.deleteOne(myquery, function (err, obj) {
-        if (err) throw err;
-        if(obj.n === 1) {
-          console.log("1 document deleted");
-        }  else {
-          // console.log("No data to delete");
-          let names = {name : "No data to delete"}
-          some = names;
-          // console.log(sss);
-          return some;
-        }
-      })
-    
-      await console.log(some);
-      return some;
-      // .then(() => {
-      //  return args
-      // });
-    },
-
-
-    //Collection 
-
-    addCollections:async (parent, args) => {
-          let newCollections = new Collection({
-            name: args.name,
-            image: args.image,
-            type: args.type,
-          });
-    
-          let somes;
-    
-          await Collection.findOne({ name: args.name }).then(
-            (data) => {
-              // console.log(data);
-              if (data === null) {
-                console.log(newCollections);
-                somes = newCollections.save();
-                return somes;
-              } else {
-                console.log("The Collections name is already in your DB.if you need to update you can use update query");
-              
-                let names = {name : "The Collections name is already in your DB.if you need to update you can use update query"}
-                somes = names;
-    
-                return somes;
-                // console.log(sss);
-              }
-            }
-          );
-          // console.log(DuplicateMovieName.schema);
-          // if()
-          return somes;
-        },
-        updateCollections: (parent, args) => {
-          // console.log(args); 
-          // let somee = args.name;
-          if (!args.name) return "No Collection";
-          let some = Collection.findOneAndUpdate(
-            {
-              name: args.name,
-            },
-            {
-              $set: {
-                name: args.changedName,
-                image: args.image,
-                type: args.type
+const resolvers = {
+  Owner: {
+    __resolveType: (obj) => (obj.Type ? "Tvshows" : "Movie"),
+  },
+  Query: {
+    getMovies: () => Movie.find({}),
+    getMovie: (parent, args) => Movie.find({ name: args.name }),
+    // Matches title, genre or cast member.
+    searchMovie: (parent, args) =>
+      Movie.find({
+        $or: [
+          { name: contains(args.name) },
+          { "movieInfo.genre.genre": contains(args.name) },
+          { "casts.castName": contains(args.name) },
+        ],
+      }),
+    // Uses an Atlas Search index when one exists; falls back to a plain regex
+    // match on a local or in-memory MongoDB.
+    searchMovieautoComplete: async (parent, args) => {
+      try {
+        return await Movie.aggregate([
+          {
+            $search: {
+              autocomplete: {
+                query: `${args.name}`,
+                path: "name",
+                fuzzy: { maxEdits: 2, prefixLength: 3 },
               },
             },
-            { new: true },
-            (err, Collection) => {
-              if (err) {
-                console.log("Something went wrong when updating the Collection");
-              } else {
-                return Collection;
-              }
-            }
-          );
-    
-    
-          // console.log(some);
-          return some;
-        },
-
-        deleteCollections: async (parent, args) => {
-          // console.log(args);
-          let some = args;
-          let sss = '';
-          if (!args.name) return "No Collection";
-    
-          var myquery = { name: args.name };
-    
-          await Collection.deleteOne(myquery, function (err, obj) {
-            if (err) throw err;
-            if(obj.n === 1) {
-              console.log("1 document deleted");
-            }  else {
-              // console.log("No data to delete");
-              let names = {name : "No data to delete"}
-              some = names;
-              // console.log(sss);
-              return some;
-            }
-          })
-        
-          await console.log(some);
-          return some;
-          // .then(() => {
-          //  return args
-          // });
-        },
-
-// Ott
-addOtt:async (parent, args) => {
-  let newOtt = new Ott({
-    name: args.name,
-    image: args.image,
-    perMonth: args.perMonth
-  });
-
-  let somes;
-
-  await Ott.findOne({ name: args.name }).then(
-    (data) => {
-      // console.log(data);
-      if (data === null) {
-        console.log(newOtt);
-        somes = newOtt.save();
-        return somes;
-      } else {
-        console.log("The Ott name is already in your DB.if you need to update u can use update query");
-      
-        let names = {name : "The Ott name is already in your DB.if you need to update you can use update query"}
-        somes = names;
-
-        return somes;
-        // console.log(sss);
+          },
+        ]);
+      } catch (err) {
+        return Movie.find({ name: contains(args.name) });
       }
-    }
-  );
-  // console.log(DuplicateMovieName.schema);
-  // if()
-  return somes;
-},
-
-
-updateOtt: (parent, args) => {
-  // console.log(args); 
-  // let somee = args.name;
-  if (!args.name) return "No Ott";
-  let some = Ott.findOneAndUpdate(
-    {
-      name: args.name,
     },
-    {
-      $set: {
-        name: args.changedName,
-        image: args.image,
-        perMonth: args.perMonth
-
-      },
+    searchTvshows: (parent, args) =>
+      TVShow.find({
+        $or: [
+          { name: contains(args.name) },
+          { "tvshowInfo.genre.genre": contains(args.name) },
+          { "casts.castName": contains(args.name) },
+        ],
+      }),
+    searchActorMovie: (parent, args) => Movie.find({ "casts.castName": args.casts }),
+    searchActorTvshows: (parent, args) => TVShow.find({ "casts.castName": args.casts }),
+    getTVshow1: (parent, args) => TVShow.find({ Type: args.Type }),
+    getTVshows: () => TVShow.find({}),
+    getTVshow: (parent, args) => TVShow.find({ name: args.name }),
+    getTrailers: () => Trailer.find({}),
+    getTrailer: (parent, args) => Trailer.find({ name: args.name }),
+    getActors: () => Actor.find({}),
+    getActor: (parent, args) => Actor.find({ name: args.name }),
+    getCollections: () => Collection.find({}),
+    getCollection: (parent, args) => Collection.find({ name: args.name }),
+    getOtts: () => Ott.find({}),
+    getOtt: (parent, args) => Ott.find({ name: args.name }),
+    getSeason: (parent, args) => Season.find({ seasonId: args.seasonId }).sort({ season: 1 }),
+  },
+  Mutation: {
+    addSeason: async (parent, args, context) => {
+      requireAdmin(context);
+      return Season.create(pick(args, seasonFields));
     },
-    { new: true },
-    (err, Ott) => {
-      if (err) {
-        console.log("Something went wrong when updating the Ott");
-      } else {
-        return Ott;
-      }
-    }
-  );
+    // A show has one document per season, so seasons are matched by seasonId + season.
+    updateSeason: async (parent, args, context) => {
+      requireAdmin(context);
+      const doc = await Season.findOneAndUpdate(
+        { seasonId: args.seasonId, season: args.season },
+        { $set: { ...pick(args, seasonFields), name: args.changedName } },
+        { new: true }
+      );
+      if (!doc) throw new UserInputError(`No ${args.season} for show ${args.seasonId}.`);
+      return doc;
+    },
+    deleteSeason: async (parent, args, context) => {
+      requireAdmin(context);
+      const doc = await Season.findOneAndDelete({ seasonId: args.seasonId });
+      if (!doc) throw new UserInputError(`No season with seasonId ${args.seasonId}.`);
+      return doc;
+    },
 
+    addMovie: movies.add,
+    updateMovie: movies.update,
+    deleteMovie: movies.remove,
 
-  // console.log(some);
-  return some;
-},
+    addTvshow: tvshows.add,
+    updateTvshow: tvshows.update,
+    deleteTvshow: tvshows.remove,
 
-deleteOtt: async (parent, args) => {
-  // console.log(args);
-  let some = args;
-  let sss = '';
-  if (!args.name) return "No Ott";
+    addActors: actors.add,
+    updateActors: actors.update,
+    deleteActors: actors.remove,
 
-  var myquery = { name: args.name };
+    addTrailers: trailers.add,
+    updateTrailers: trailers.update,
+    deleteTrailers: trailers.remove,
 
-  await Ott.deleteOne(myquery, function (err, obj) {
-    if (err) throw err;
-    if(obj.n === 1) {
-      console.log("1 document deleted");
-    }  else {
-      // console.log("No data to delete");
-      let names = {name : "No data to delete"}
-      some = names;
-      // console.log(sss);
-      return some;
-    }
-  })
+    addCollections: collections.add,
+    updateCollections: collections.update,
+    deleteCollections: collections.remove,
 
-  await console.log(some);
-  return some;
-  // .then(() => {
-  //  return args
-  // });
-},
+    addOtt: otts.add,
+    updateOtt: otts.update,
+    deleteOtt: otts.remove,
   },
 };
 

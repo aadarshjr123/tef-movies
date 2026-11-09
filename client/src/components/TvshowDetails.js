@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from "react";
+import { API_URL } from "../config";
 import ReactPlayer from "react-player";
 import logo from "../tomatometer-fresh.149b5e8adc3.svg";
 import logo1 from "../favicon_desktop_32x32._CB1582158068_.png";
 import logo2 from "../404-error.png";
 import logo3 from "../Frames1.png";
-import { Image, Video, Transformation } from "cloudinary-react";
+import { Image, Video, Transformation } from "./CloudImage";
 import { CarouselPosters } from "./CarouselPosters";
 import { CardLayoutTvshow_2 } from "../components/CardLayoutTvshow_2";
 // import { useQuery } from "@apollo/client";
@@ -88,7 +89,7 @@ export const TvshowDetails = (movie) => {
     const [_, names] = queryKey;
     // console.log("season id", names);
     const somes = request(
-      "https://tefmovies.herokuapp.com/graphql",
+      API_URL,
       gql`
         query GetTvshow($name: String!) {
           getTVshow1(Type: $name) {
@@ -787,7 +788,7 @@ export const TvshowDetails = (movie) => {
                 <div class=" w-32 h-56 lg:w-40 lg:h-72 m-1 lg:m-2 ">
                   <div class=" flex box-border w-32 h-8 lg:w-40 lg:h-14 justify-center items-center  ">
                     <div class="font-RobotoMono font-normal text-xs text-center dark:text-white">
-                      {creator.director}
+                      {creator.creator}
                     </div>
                   </div>
                   <div class=" flex justify-center items-center h-40 lg:w-40 lg:h-56 max-w-xs overflow-hidden bg-white dark:bg-black hover:shadow-xl  transition-shadow duration-300 ease-in-out">

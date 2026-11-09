@@ -2,7 +2,7 @@ import React from "react";
 
 import { GetMovies } from "../query/GetMovies";
 import { Link } from "react-router-dom";
-import {Image, Video, Transformation} from 'cloudinary-react';
+import {Image, Video, Transformation} from "./CloudImage";
 
 const scrollToTop = () =>{
   window.scrollTo({

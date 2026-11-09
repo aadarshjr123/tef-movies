@@ -1,7 +1,7 @@
 import React from "react";
 import { GetMovies } from "../query/GetMovies";
 import { Link } from "react-router-dom";
-import {Image, Video, Transformation} from 'cloudinary-react';
+import {Image, Video, Transformation} from "./CloudImage";
 
 const scrollToTop = () =>{
   window.scrollTo({
@@ -48,13 +48,13 @@ export const CardLayoutTvshow = ({ user: { name, watchOn,storyline, posters,Type
       </div>
       <div class="flex mt-3 box-border h-5 md:h-10 lg:h-10 w-full justify-center items-center ">
           {
-            watchOn[0].watchOn === "Disney Plus Hotstar" ?
+            watchOn[0].watchOn === "JioHotstar" ?
             <div class="font-RobotoMono font-bold text-blue-500 text-xs text-center">{watchOn[0].watchOn}</div>
             : watchOn[0].watchOn === "GooglePlay" ?
             <div class="font-RobotoMono font-bold  text-red-500 text-xs text-center">{watchOn[0].watchOn}</div>
             : watchOn[0].watchOn === "BookMyShow" ?
             <div class="font-RobotoMono font-bold  text-gray-400 text-xs text-center">{watchOn[0].watchOn}</div>
-            :watchOn[0].watchOn === "Amazon Prime Videos" ?
+            :watchOn[0].watchOn === "Amazon Prime Video" ?
             <div class="font-RobotoMono font-bold  text-blue-400 text-xs text-center">{watchOn[0].watchOn}</div>
             :watchOn[0].watchOn === "Itunes" ?
             <div class="font-RobotoMono font-bold  text-gray-500 text-xs text-center">{watchOn[0].watchOn}</div>

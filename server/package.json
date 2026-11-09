@@ -1,31 +1,24 @@
 {
-  "name": "graphql-crud",
-  "version": "1.0.0",
-  "description": "",
+  "name": "tef-movies-server",
+  "version": "2.0.0",
+  "private": true,
+  "description": "GraphQL API for TEF Movies (Express + Apollo Server + MongoDB)",
   "main": "app.js",
-  "dependencies": {
-    "apollo-server-express": "^2.9.8",
-    "body-parser": "^1.19.0",
-    "color-it": "^1.2.12",
-    "cors": "^2.8.5",
-    "emojic": "^1.1.16",
-    "express": "^4.17.1",
-    "mongoose": "^5.7.10",
-    "node-emoji": "^1.11.0"
-  },
-  "devDependencies": {},
   "scripts": {
     "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --watch app.js",
+    "seed": "node seed/index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/saqibameen/GraphQL-CRUD.git"
+  "engines": {
+    "node": ">=18"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/saqibameen/GraphQL-CRUD/issues"
+  "dependencies": {
+    "apollo-server-express": "^2.9.8",
+    "cors": "^2.8.5",
+    "dotenv": "^18.0.10",
+    "express": "^4.17.1",
+    "mongodb-memory-server": "^11.3.0",
+    "mongoose": "^5.7.10"
   },
-  "homepage": "https://github.com/saqibameen/GraphQL-CRUD#readme"
+  "license": "MIT"
 }

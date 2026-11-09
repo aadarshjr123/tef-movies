@@ -4,7 +4,7 @@ import { GetMovies } from "../query/GetMovies";
 import { Link } from "react-router-dom";
 import LazyLoad from 'react-lazy-load';
 import logo1 from "../009afde4-1fd0-409e-8db6-7a04e0f1b62d.webp";
-import {Image, Video, Transformation} from 'cloudinary-react';
+import {Image, Video, Transformation} from "./CloudImage";
 
 
 
@@ -36,7 +36,7 @@ export const Collection = (collection) => (
         <div class="font-bold text-xs text-center dark:text-white">{collection.collection.name}</div>
       </div> */}
       <div
-        class="mt-3 ml-2  lg:ml-4  animate-fade-in-down w-36 md:w-52 lg:w-48 h-44 md:h-48 lg:h-48 max-w-xs overflow-hidden  shadow-md bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out"
+        class="relative mt-3 ml-2  lg:ml-4  animate-fade-in-down w-36 md:w-52 lg:w-48 h-44 md:h-48 lg:h-48 max-w-xs overflow-hidden  shadow-md bg-white dark:bg-black hover:shadow-xl transition-shadow duration-300 ease-in-out"
       >
           {/* <a href="https://i.imgur.com/fe0T4nw.png"> */}
           {/* <img
@@ -46,7 +46,7 @@ export const Collection = (collection) => (
           /> */}
 
 <Image 
-            class="h-full w-full"
+            class="h-full w-full object-cover"
             cloud_name="tefdb"
             // loading="lazy"
             format="webp"
@@ -56,6 +56,9 @@ export const Collection = (collection) => (
           >
             <Transformation quality="85"/>
           </Image>
+          <div class="absolute inset-0 flex items-end bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3">
+            <p class="font-RobotoMono font-bold text-sm text-white">{collection.collection.name}</p>
+          </div>
         {/* </a> */}
       </div>
     </div>

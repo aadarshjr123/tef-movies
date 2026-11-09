@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { API_URL } from "../config";
 // import { useQuery } from "@apollo/client";
 import { GetTvshows } from "../query/GetTvshows";
 import { TvshowDetails } from "../components/TvshowDetails";
@@ -114,7 +115,7 @@ some[0].tvshowInfo[0].creator.map((castName) => {
     const [_, names,sss1] = queryKey;
     // console.log("season id",names);
     const somes = request(
-      'https://tefmovies.herokuapp.com/graphql',
+      API_URL,
       gql `query GetTvshow($name: String!, $seasonId: String!) {
         getTVshow1( Type: $name) {
           id
@@ -232,7 +233,6 @@ some[0].tvshowInfo[0].creator.map((castName) => {
 
   // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
-  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
   
   const getOtt = () => request(API_URL,
     getOtts,
@@ -250,7 +250,7 @@ some[0].tvshowInfo[0].creator.map((castName) => {
     const [_, names] = queryKey;
     // console.log("season id",names);
     const somes = request(
-      'https://tefmovies.herokuapp.com/graphql',
+      API_URL,
       gql`
         query GetSeason($seasonId: String!) {
 getSeason(seasonId:$seasonId) {
@@ -307,7 +307,6 @@ getSeason(seasonId:$seasonId) {
   return (
     <main class="w-full">
       {/* {MovieDetailsss(data)}  */}
-      <p className="text-white border-1 border-white">Hai</p>
       <TvshowDetails movie={MovieDetailsss(MoviesData.getTVshow1,MoviesData.getOtts,MoviesData.getActors,MoviesData.getSeason)} />
     </main>
   );

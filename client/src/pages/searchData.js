@@ -1,4 +1,5 @@
 import React, { useEffect,useState } from "react";
+import { API_URL } from "../config";
 import { OneMovie } from "./OneMovie";
 import { Homepage } from "./Homepage";
 import { CardLayout } from "../components/CardLayout";
@@ -21,7 +22,7 @@ function SearchData(names) {
     const [_, names] = queryKey;
     console.log("season id",names);
     const somes = request(
-      'https://tefmovies.herokuapp.com/graphql',
+      API_URL,
       gql `query SearchMovie($name: String!){
           searchMovie(name:$name){
       id
@@ -238,7 +239,6 @@ function SearchData(names) {
 
   // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
-  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
   
   // const SearchResults = (names) => request(API_URL,
   //   searchDatas(names),

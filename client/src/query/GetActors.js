@@ -16,11 +16,10 @@
 // useRequest.js
 import { useQuery } from "react-query";
 import { GraphQLClient, gql } from "graphql-request";
+import { API_URL } from "../config";
 
-const API_URL = 'https://tefmovies.herokuapp.com/graphql';
 
 const graphQLClient = new GraphQLClient(API_URL);
-console.log(graphQLClient);
 
 export function GetActors() {
   return useQuery("getActors", async () => {

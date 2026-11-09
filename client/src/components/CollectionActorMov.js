@@ -4,7 +4,7 @@ import { GetMovies } from "../query/GetMovies";
 import { Link } from "react-router-dom";
 import LazyLoad from 'react-lazy-load';
 import logo1 from "../009afde4-1fd0-409e-8db6-7a04e0f1b62d.webp";
-import {Image, Video, Transformation} from 'cloudinary-react';
+import {Image, Video, Transformation} from "./CloudImage";
 
 
 

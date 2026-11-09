@@ -1,4 +1,5 @@
 import React,{useEffect, useRef} from "react";
+import { API_URL } from "../config";
 // import { useQuery } from "@apollo/client";
 // import { GetTvshows } from "../query/GetTvshows";
 import { Homepage } from "./Homepage";
@@ -169,7 +170,7 @@ const Tvshows =  () => {
     const [_, names] = queryKey;
     // console.log("season id",names);
     const somes = request(
-      'https://tefmovies.herokuapp.com/graphql',
+      API_URL,
       gql `query GetTvshow($name: String!){
         getTVshow1( Type: $name) {
           id
@@ -301,7 +302,6 @@ const Tvshows =  () => {
 
   // const headers = { Authorization: `Bearer ${user._accessToken}` }
 
-  const API_URL = 'https://tefmovies.herokuapp.com/graphql';
   
   const Coll = () => request(API_URL,
     getCollections,
@@ -432,7 +432,8 @@ FreeTvshows=[...data.getTVshow1];
   // console.log("ActorsData",ActorsData);
   // console.log("marvel",marvel);
 
-let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
+// watchOn values ending in "-Free" (e.g. "YouTube-Free") are free to stream.
+let freeOtt = ["-Free"]
   // console.log(MoviesData);
 
   let some = data.getTVshow1.sort((a, b) => b.tvshowInfo[0].dateFormat - a.tvshowInfo[0].dateFormat);
@@ -515,7 +516,7 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
  
     <div class="mt-5 m-10">
      <div class="m-28"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Latest dubbed movies</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Latest movies</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
       {
@@ -553,7 +554,7 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
 
      <div class="mt-5  m-10">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Latest Tvshows</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Latest TV shows</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
       {
@@ -618,7 +619,7 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
      </div>
      <div class="mt-5  m-10">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Actors</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Popular people</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
       {
@@ -626,7 +627,7 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
       }
     <div ref={ref4} class="scroll-smooth  m-2 lg:m-0 space-x-1 flex h-full overflow-x-scroll overflow-y-hidden  hide-scroll-bar ">
      {
-         data.getActors.map((collection) => 
+         data.getActors.slice(0, 24).map((collection) => 
             <CollectionActorMov  collection={collection}/>
          
          )
@@ -640,7 +641,7 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
      </div>
      <div class="mt-5  m-10">
      <div class="m-16"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Top 10 Tvshows from IMDB</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Top 10 TV shows on IMDb</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
       {
@@ -661,7 +662,7 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
      </div>
      <div class="mt-5 m-10">
      <div class="m-28"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Top 10 Movies from IMDB</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Top 10 movies on IMDb</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
       {
@@ -704,7 +705,7 @@ let freeOtt = ["Mx Player","Youtube","Disney Plus Hotstar Free"]
      </div>
      <div class="mt-5 m-10">
      <div class="m-28"></div>
-    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Free Tvshows</h3>  
+    <h3 class=" font-black m-7 md:ml:10 lg:ml-0 text-sm md:text-2xl lg:text-base text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-RobotoMono">Free TV shows</h3>  
     <div class="m-4"></div>
     <div class="flex flex-row" >
       {
