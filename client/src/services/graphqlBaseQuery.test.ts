@@ -41,3 +41,14 @@ describe("graphqlBaseQuery", () => {
     expect(await run()).toMatchObject({ error: { status: "FETCH_ERROR" } });
   });
 });
+
+describe("isTransient", () => {
+  it("retries only failures that can resolve on their own", async () => {
+    const { isTransient } = await import("./api");
+
+    expect(isTransient({ status: "FETCH_ERROR", message: "" })).toBe(true);
+    expect(isTransient({ status: 503, message: "" })).toBe(true);
+    expect(isTransient({ status: "GRAPHQL_ERROR", message: "", code: "NOT_FOUND" })).toBe(false);
+    expect(isTransient({ status: 400, message: "" })).toBe(false);
+  });
+});

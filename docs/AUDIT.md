@@ -1,4 +1,4 @@
-# Audit and improvements
+# Engineering notes
 
 This document records where the 2022 codebase was weak, what was changed, and the measured results. It was a refactor, not a feature project: every page and feature of the original site still exists, and the visual design (dark navy, purple–pink gradients, Roboto Mono) is kept.
 
@@ -16,7 +16,7 @@ Measured locally with Lighthouse 12 (mobile preset unless noted) and the project
 | Page weight, home                       | 4.5 MB                     | **2.2 MB**                                                   |
 | JavaScript (gzip)                       | 448 KB in one bundle       | 131 KB cached vendor + ~9 KB app entry + 0.5–2.5 KB per page |
 | Frontend source                         | ~9,000 lines of JavaScript | ~2,550 lines of TypeScript                                   |
-| Automated tests                         | 0                          | 51 API + 39 frontend + 46 end-to-end                         |
+| Automated tests                         | 0                          | 51 API + 40 frontend + 46 end-to-end                         |
 | Test coverage                           | —                          | API 92%, frontend 88% (statements)                           |
 | Type safety                             | none                       | strict TypeScript; API types generated from the schema       |
 

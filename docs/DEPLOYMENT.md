@@ -1,95 +1,133 @@
-# Deployment guide
+# Deployment: free hosting
 
-| Part     | Recommended host                | Config in this repo                                                      |
-| -------- | ------------------------------- | ------------------------------------------------------------------------ |
-| Database | MongoDB Atlas (free M0 cluster) | —                                                                        |
-| API      | Render (Docker web service)     | [render.yaml](../render.yaml), [server/Dockerfile](../server/Dockerfile) |
-| Website  | Vercel (static build)           | [client/vercel.json](../client/vercel.json)                              |
+This guide puts TEF Movies online at no cost, permanently. It takes about 30 minutes.
 
-Deploy them in this order, because each step needs a URL from the previous one.
+```mermaid
+flowchart LR
+    V(["Visitor"]) --> W["Website<br/>Vercel · Hobby"]
+    W --> A["API<br/>Render · Free"]
+    A --> D[("Database<br/>MongoDB Atlas · M0")]
+    M["UptimeRobot · Free"] -. "ping every 5 min" .-> A
+```
 
-## 1. MongoDB Atlas
+| Service                                        | Plan                             | Cost | Card needed | If a limit is reached                                          |
+| ---------------------------------------------- | -------------------------------- | ---- | ----------- | -------------------------------------------------------------- |
+| [Vercel](https://vercel.com)                   | Hobby                            | $0   | No          | Paused until the next 30-day period; never billed              |
+| [Render](https://render.com)                   | Free web service                 | $0   | No          | Suspended until next month; never billed without a card        |
+| [MongoDB Atlas](https://www.mongodb.com/atlas) | M0 cluster (512 MB)              | $0   | No          | Writes stop at the storage limit; this project uses about 1 MB |
+| [UptimeRobot](https://uptimerobot.com)         | Free (50 monitors, 5-min checks) | $0   | No          | —                                                              |
 
-1. Create a free **M0** cluster at <https://cloud.mongodb.com>.
-2. Under **Database Access**, add a user with a generated password.
-3. Under **Network Access**, allow `0.0.0.0/0` (Render's free tier has no fixed outbound IP).
-4. Copy the connection string from **Connect → Drivers** and add a database name:
-   `mongodb+srv://<user>:<password>@<cluster>.mongodb.net/tefmovies?retryWrites=true&w=majority`
+## Rules that keep it free
 
-The API seeds the sample data the first time it connects to an empty database.
+1. **Never add a payment card** to Vercel, Render or Atlas. Without one, nothing can be billed; at worst a service pauses.
+2. **Keep only one free web service** in the Render workspace. Render gives 750 free hours per month, and one service running all month uses about 744.
+3. **Use the free subdomains** (`*.vercel.app`, `*.onrender.com`). A custom domain is optional and is the only thing here that costs money.
+4. **Keep it a personal showcase.** Vercel's Hobby plan is for non-commercial use.
 
-## 2. API on Render
+## Before you start
 
-1. In Render, choose **New → Blueprint** and select this repository. Render reads `render.yaml` and builds `server/Dockerfile`.
-2. Set `MONGODB_URI` to the Atlas string. `ADMIN_TOKEN` is generated for you; copy it from the **Environment** tab when you need to run mutations.
-3. Deploy, then check `https://<your-api>.onrender.com/health` (it should return `{"ok":true}`).
+- The code pushed to a GitHub repository (all three services deploy from GitHub)
+- A GitHub account to sign in to each service
 
-Production refuses to start without `MONGODB_URI` and `ADMIN_TOKEN`, so a misconfigured deploy fails loudly instead of running against an empty in-memory database. Free Render services sleep after 15 idle minutes, and the first request afterwards takes about 30 seconds.
+---
 
-## 3. Website on Vercel
+## Step 1: Database (MongoDB Atlas)
 
-1. **Add New → Project**, import the repository, and set **Root Directory** to `client`.
-2. Add the environment variable `VITE_API_URL` = `https://<your-api>.onrender.com/graphql`.
-3. Deploy. `vercel.json` adds SPA rewrites and long-lived caching for hashed assets.
+1. Sign up at <https://www.mongodb.com/cloud/atlas/register>.
+2. Create a cluster: choose **M0 / Free**, provider **AWS**, region **Singapore (ap-southeast-1)** (the closest free region to the API host below). Name it `tef-movies`.
+3. **Database Access → Add New Database User**: username `tef-api`, click **Autogenerate Secure Password**, and copy the password. Role: **Read and write to any database**.
+4. **Network Access → Add IP Address → Allow Access from Anywhere** (`0.0.0.0/0`). Render's free plan has no fixed IP address, so this is required; the password still protects the database.
+5. **Database → Connect → Drivers** and copy the connection string. Insert the password, and add the database name `tefmovies` before the `?`:
 
-`VITE_API_URL` is compiled into the build, so redeploy after changing it.
+   ```
+   mongodb+srv://tef-api:<password>@tef-movies.xxxxx.mongodb.net/tefmovies?retryWrites=true&w=majority
+   ```
 
-## 4. Lock down CORS
+Keep this string private. You don't need to load any data: the API fills an empty database with the sample data on its first start.
 
-In Render, set `CORS_ORIGINS` to the Vercel URL (for example `https://tef-movies.vercel.app`; several origins can be comma-separated) and save.
+## Step 2: API (Render)
+
+1. Sign up at <https://render.com> with GitHub.
+2. **New → Blueprint**, and select the repository. Render reads [`render.yaml`](../render.yaml), which defines a free Node web service in Singapore.
+3. When asked for environment values:
+   - `MONGODB_URI`: the connection string from step 1
+   - `CORS_ORIGINS`: leave empty for now
+   - `ADMIN_TOKEN` is generated automatically
+4. **Apply**. The first build takes a few minutes.
+5. Open `https://<your-service>.onrender.com/health`. It should show `{"ok":true}`.
+
+Note the API address: `https://<your-service>.onrender.com/graphql`.
+
+The service refuses to start if `MONGODB_URI` or `ADMIN_TOKEN` is missing, so a configuration mistake shows up immediately in the Render logs instead of as a broken site.
+
+## Step 3: Website (Vercel)
+
+1. Sign up at <https://vercel.com> with GitHub, on the **Hobby** plan.
+2. **Add New → Project**, and import the repository.
+3. Set **Root Directory** to `client`. Vercel detects Vite; leave the build settings as they are.
+4. Under **Environment Variables**, add `VITE_API_URL` = `https://<your-service>.onrender.com/graphql`.
+5. **Deploy**.
+
+The site is now at `https://<your-project>.vercel.app`. [`client/vercel.json`](../client/vercel.json) makes page refreshes work on any URL, and caches the hashed asset files for a year.
+
+`VITE_API_URL` is built into the site, so redeploy on Vercel whenever you change it.
+
+## Step 4: Allow the website to call the API
+
+In Render, open the service → **Environment**, set `CORS_ORIGINS` to the Vercel address (for example `https://tef-movies.vercel.app`, with no trailing slash), and save. Render restarts the service.
+
+To allow Vercel preview deployments too, list several addresses separated by commas.
+
+## Step 5: Keep the API awake (UptimeRobot)
+
+Free Render services stop after 15 minutes without traffic and take about a minute to start again. A monitor that calls the API every 5 minutes keeps it running, and also emails you if the site goes down.
+
+1. Sign up at <https://uptimerobot.com> (free, no card).
+2. **New monitor**: type **HTTP(s)**, URL `https://<your-service>.onrender.com/health`, interval **5 minutes**.
+3. Save.
+
+If the API ever does fall asleep, the website retries for about 70 seconds while showing loading placeholders, so visitors see a slow first load rather than an error.
+
+## Step 6: Check it
+
+- [ ] The home page shows posters and rows
+- [ ] A movie page shows cast photos and trailers, and a trailer plays
+- [ ] Search for "nolan" returns results
+- [ ] Refreshing a page such as `/movies` works
+- [ ] It looks right on a phone
+- [ ] UptimeRobot shows the monitor as up
+
+## Updating the site
+
+Push to the `main` branch. Vercel and Render both rebuild automatically. GitHub Actions runs the checks and tests on every push and pull request.
+
+Render free builds come out of a monthly build-minute allowance. Normal use stays well inside it, and without a card, running out only pauses builds until the next month.
 
 ## Environment variables
 
-### API (`server/.env`)
+| Variable                   | Set on | Value                                                             |
+| -------------------------- | ------ | ----------------------------------------------------------------- |
+| `MONGODB_URI`              | Render | Atlas connection string                                           |
+| `ADMIN_TOKEN`              | Render | Generated by Render; needed only for data changes through the API |
+| `CORS_ORIGINS`             | Render | The Vercel address                                                |
+| `NODE_ENV`, `NODE_VERSION` | Render | Set by `render.yaml`                                              |
+| `VITE_API_URL`             | Vercel | The Render API address ending in `/graphql`                       |
 
-| Variable                | Default                       | Notes                                    |
-| ----------------------- | ----------------------------- | ---------------------------------------- |
-| `NODE_ENV`              | `development`                 | `production` in the Docker image         |
-| `MONGODB_URI`           | _(in-memory)_                 | Required in production                   |
-| `ADMIN_TOKEN`           | _(unset: mutations disabled)_ | ≥16 characters; required in production   |
-| `PORT`                  | `4000`                        |                                          |
-| `CORS_ORIGINS`          | _(any origin)_                | Comma-separated                          |
-| `SEED_ON_START`         | `true`                        | Seeds sample data into an empty database |
-| `LOG_LEVEL`             | `info`                        | `fatal` … `trace`, or `silent`           |
-| `RATE_LIMIT_PER_MINUTE` | `300`                         | Per IP, on `/graphql`                    |
-
-### Website (`client/.env`)
-
-| Variable       | Default                         |
-| -------------- | ------------------------------- |
-| `VITE_API_URL` | `http://localhost:4000/graphql` |
-
-## Docker
-
-A production-like stack (MongoDB, the API image and the site served by nginx) runs with one command:
-
-```bash
-docker compose up --build
-# site: http://localhost:8080   API: http://localhost:4000/graphql
-```
-
-The images can also be built and pushed on their own. The build context is the repository root, because the workspaces share one lockfile:
-
-```bash
-docker build -f server/Dockerfile -t tef-movies-api .
-docker build -f client/Dockerfile --build-arg VITE_API_URL=https://api.example.com/graphql -t tef-movies-web .
-```
-
-The API image runs as a non-root user, contains only production dependencies, and has a `HEALTHCHECK` on `/health`. The web image is nginx with SPA routing, security headers and immutable caching for `/assets`.
-
-## Continuous integration
-
-`.github/workflows/ci.yml` runs on every push to `main` and every pull request:
-
-1. **verify:** install, check generated GraphQL types are committed, lint, check formatting, typecheck, run unit and integration tests with coverage, build both packages.
-2. **e2e:** start the API and the production client build, then run the Playwright suite on desktop and mobile viewports. On failure, the HTML report is uploaded as an artifact.
+Optional API settings: `PORT`, `SEED_ON_START` (default `true`), `LOG_LEVEL` (default `info`), `RATE_LIMIT_PER_MINUTE` (default `300`).
 
 ## Troubleshooting
 
-| Symptom                                            | Likely cause                                                                               |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Rows show "Couldn't reach the server"              | `VITE_API_URL` is wrong, or the API is asleep or down. Check `/health`.                    |
-| CORS error in the browser console                  | The site's origin isn't in `CORS_ORIGINS` (it must match exactly, with no trailing slash). |
-| API exits with "Invalid environment configuration" | A required variable is missing or invalid; the message names it.                           |
-| `MongooseServerSelectionError` in API logs         | Atlas network access or credentials                                                        |
-| Mutations return `UNAUTHENTICATED`                 | Missing or wrong `Authorization: Bearer <ADMIN_TOKEN>` header                              |
+| Symptom                                         | Cause and fix                                                                                                                     |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Rows show "Couldn't reach the server"           | `VITE_API_URL` is wrong (fix it and redeploy on Vercel), or the API is down (check `/health` and the Render logs)                 |
+| Browser console shows a CORS error              | `CORS_ORIGINS` on Render doesn't exactly match the site address                                                                   |
+| Render log: "Invalid environment configuration" | A required variable is missing; the log names it                                                                                  |
+| Render log: `MongooseServerSelectionError`      | Atlas network access isn't set to `0.0.0.0/0`, or the password in `MONGODB_URI` is wrong (special characters must be URL-encoded) |
+| First visit after a quiet period is slow        | The API was asleep; check the UptimeRobot monitor is active                                                                       |
+| Vercel build fails                              | Check that Root Directory is `client`                                                                                             |
+
+---
+
+## Running the production setup locally (optional)
+
+`docker compose up --build` starts MongoDB, the API image and the website served by nginx, at <http://localhost:8080>. It needs Docker Desktop. The images in [`server/Dockerfile`](../server/Dockerfile) and [`client/Dockerfile`](../client/Dockerfile) can also be deployed to any container host.

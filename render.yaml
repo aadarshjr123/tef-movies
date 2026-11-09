@@ -1,12 +1,18 @@
-# Render blueprint for the API: https://render.com/docs/blueprint-spec
+# Render blueprint for the API on the free plan: https://render.com/docs/blueprint-spec
 services:
   - type: web
     name: tef-movies-api
-    runtime: docker
-    dockerfilePath: server/Dockerfile
-    dockerContext: .
+    plan: free
+    runtime: node
+    region: singapore
+    buildCommand: npm ci --include=dev && npm run build -w server
+    startCommand: npm start -w server
     healthCheckPath: /health
     envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
       - key: MONGODB_URI
         sync: false
       - key: CORS_ORIGINS
