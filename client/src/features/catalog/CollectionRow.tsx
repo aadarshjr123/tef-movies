@@ -22,7 +22,7 @@ export function CollectionTile({ collection }: { collection: Collection }) {
         alt=""
         widths={IMAGE_WIDTHS.backdrop}
         defaultWidth={300}
-        sizes="208px"
+        sizes="(min-width: 640px) 208px, 160px"
         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
       />
       <span className="absolute inset-0 flex items-end bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 font-mono text-sm font-bold text-white">

@@ -56,7 +56,9 @@ export function createApp({ env, logger, services }: AppDependencies): App {
   // to the frontend host; the other helmet headers still apply.
   app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
   app.use(compression());
-  app.use(cors({ origin: env.CORS_ORIGINS.length > 0 ? env.CORS_ORIGINS : true }));
+  // maxAge lets browsers cache the CORS preflight for 10 minutes, saving a
+  // round trip before most API calls.
+  app.use(cors({ origin: env.CORS_ORIGINS.length > 0 ? env.CORS_ORIGINS : true, maxAge: 600 }));
 
   app.get("/health", (_req, res) => {
     const ready = isDatabaseReady();

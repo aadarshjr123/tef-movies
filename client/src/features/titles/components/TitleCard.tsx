@@ -42,7 +42,8 @@ export function TitleCard({ title, layout = "row" }: TitleCardProps) {
       <div className="aspect-[2/3] overflow-hidden rounded-lg bg-gray-200 shadow-md transition-shadow duration-300 group-hover:shadow-xl dark:bg-night-raised">
         <Img
           src={title.posterUrl}
-          alt={title.name}
+          // The title is visible text in the same link; the poster adds no information.
+          alt=""
           widths={IMAGE_WIDTHS.poster}
           defaultWidth={342}
           sizes="(min-width: 1024px) 176px, (min-width: 640px) 160px, 128px"

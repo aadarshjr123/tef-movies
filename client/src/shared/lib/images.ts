@@ -3,8 +3,8 @@ const TMDB_SIZE = /(image\.tmdb\.org\/t\/p\/)[^/]+\//;
 /** Widths TMDB serves for each image type. */
 export const IMAGE_WIDTHS = {
   poster: [185, 342, 500, 780],
-  backdrop: [300, 780, 1280],
-  logo: [92, 154],
+  backdrop: [300, 500, 780, 1280],
+  profile: [185, 300],
 } as const;
 
 export interface ResponsiveImage {

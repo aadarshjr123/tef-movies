@@ -40,7 +40,7 @@ describe("responsiveImage", () => {
 
     expect(image.src).toBe("https://image.tmdb.org/t/p/w780/abc.jpg");
     expect(image.srcSet).toBe(
-      "https://image.tmdb.org/t/p/w300/abc.jpg 300w, https://image.tmdb.org/t/p/w780/abc.jpg 780w, https://image.tmdb.org/t/p/w1280/abc.jpg 1280w",
+      "https://image.tmdb.org/t/p/w300/abc.jpg 300w, https://image.tmdb.org/t/p/w500/abc.jpg 500w, https://image.tmdb.org/t/p/w780/abc.jpg 780w, https://image.tmdb.org/t/p/w1280/abc.jpg 1280w",
     );
   });
 

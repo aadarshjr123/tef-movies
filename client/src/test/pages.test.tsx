@@ -29,7 +29,9 @@ describe("Home page", () => {
     );
     const { user } = renderApp("/");
 
-    const alerts = await screen.findAllByRole("alert");
+    // Three rows on Home use the Movies query: latest, top 10 and free.
+    await waitFor(() => expect(screen.getAllByRole("alert")).toHaveLength(3));
+    const alerts = screen.getAllByRole("alert");
     expect(alerts[0]).toHaveTextContent("Database unavailable");
     // Rows fail independently; the TV rows still render.
     expect(await screen.findByRole("list", { name: "Latest TV shows" })).toBeInTheDocument();

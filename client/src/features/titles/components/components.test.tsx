@@ -12,7 +12,9 @@ describe("TitleCard", () => {
 
     const link = screen.getByRole("link", { name: /Dark/ });
     expect(link).toHaveAttribute("href", "/tv/42");
-    expect(within(link).getByRole("img", { name: "Dark" })).toHaveAttribute("srcset", expect.stringContaining("w185"));
+    // Decorative poster (the name is visible text), served from a srcset.
+    expect(link.querySelector("img")).toHaveAttribute("alt", "");
+    expect(link.querySelector("img")).toHaveAttribute("srcset", expect.stringContaining("w185"));
     expect(within(link).getByText("Netflix")).toBeInTheDocument();
   });
 });

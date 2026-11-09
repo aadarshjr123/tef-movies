@@ -81,7 +81,7 @@ export function SpotlightCarousel({ titles = [], isLoading }: SpotlightCarouselP
         </Link>
       ))}
 
-      <div className="absolute inset-x-0 bottom-3 flex justify-center gap-2">
+      <div className="absolute inset-x-0 bottom-1 flex justify-center">
         {titles.map((title, index) => (
           <button
             key={title.id}
@@ -89,8 +89,13 @@ export function SpotlightCarousel({ titles = [], isLoading }: SpotlightCarouselP
             aria-label={`Show ${title.name}`}
             aria-current={index === current}
             onClick={() => setCurrent(index)}
-            className={`h-1.5 rounded-full transition-all ${index === current ? "w-8 bg-white" : "w-4 bg-white/50 hover:bg-white/80"}`}
-          />
+            // The button is a 24px-tall touch target; the bar inside is the visual.
+            className="group/dot flex h-6 items-center px-1"
+          >
+            <span
+              className={`block h-1.5 rounded-full transition-all ${index === current ? "w-8 bg-white" : "w-4 bg-white/50 group-hover/dot:bg-white/80"}`}
+            />
+          </button>
         ))}
       </div>
     </section>

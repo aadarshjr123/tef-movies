@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import type { CreditFieldsFragment } from "@/graphql/__generated__/graphql";
+import { IMAGE_WIDTHS } from "@/shared/lib/images";
 import { paths } from "@/shared/lib/routes";
 import { HorizontalScroller } from "@/shared/ui/HorizontalScroller";
 import { Img } from "@/shared/ui/Img";
@@ -22,8 +23,10 @@ export function CreditRow({ title, credits }: { title: string; credits: readonly
               {credit.person?.imageUrl ? (
                 <Img
                   src={credit.person.imageUrl}
-                  alt={credit.name}
-                  sizes="144px"
+                  alt=""
+                  widths={IMAGE_WIDTHS.profile}
+                  defaultWidth={185}
+                  sizes="(min-width: 640px) 144px, 112px"
                   className="h-full w-full object-cover transition-transform group-hover:scale-105"
                 />
               ) : (

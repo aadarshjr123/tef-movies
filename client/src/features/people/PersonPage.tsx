@@ -3,6 +3,7 @@ import { NotFoundPage } from "@/app/NotFoundPage";
 import { TitleGrid } from "@/features/titles/components/TitleGrid";
 import { useDocumentTitle } from "@/shared/hooks/useDocumentTitle";
 import { ErrorState, PageSpinner } from "@/shared/ui/feedback";
+import { IMAGE_WIDTHS } from "@/shared/lib/images";
 import { Img } from "@/shared/ui/Img";
 import { Section, gradientText } from "@/shared/ui/Section";
 import { useGetPersonQuery } from "./people.api";
@@ -21,7 +22,15 @@ export default function PersonPage() {
     <article className="pt-4">
       <header className="flex flex-col items-center gap-6 px-4 font-mono sm:flex-row sm:items-end sm:px-8">
         <div className="aspect-[2/3] w-40 shrink-0 overflow-hidden rounded-lg bg-gray-200 shadow-lg sm:w-48 dark:bg-night-raised">
-          <Img src={person.imageUrl} alt={person.name} sizes="192px" priority className="h-full w-full object-cover" />
+          <Img
+            src={person.imageUrl}
+            alt={person.name}
+            widths={IMAGE_WIDTHS.profile}
+            defaultWidth={300}
+            sizes="(min-width: 640px) 192px, 160px"
+            priority
+            className="h-full w-full object-cover"
+          />
         </div>
         <div className="text-center sm:text-left">
           <h1 className={`text-2xl font-black sm:text-3xl ${gradientText}`}>{person.name}</h1>

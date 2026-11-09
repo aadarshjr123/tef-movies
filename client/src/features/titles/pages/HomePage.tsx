@@ -1,3 +1,4 @@
+import { latestArgs, spotlightArgs } from "@/app/prefetch";
 import { useGetCollectionsQuery } from "@/features/catalog/catalog.api";
 import { CollectionRow } from "@/features/catalog/CollectionRow";
 import { PeopleRow } from "@/features/people/PeopleRow";
@@ -39,9 +40,9 @@ export default function HomePage() {
   useDocumentTitle(null);
   // Each row is an independent query: rows render as their data arrives, and
   // RTK Query shares results with other pages that ask for the same list.
-  const spotlight = useGetSpotlightQuery({ kind: "MOVIE", limit: 5 });
-  const latestMovies = useGetTitlesQuery({ kind: "MOVIE", limit: 20 });
-  const latestTvShows = useGetTitlesQuery({ kind: "TV_SHOW", limit: 20 });
+  const spotlight = useGetSpotlightQuery(spotlightArgs("MOVIE"));
+  const latestMovies = useGetTitlesQuery(latestArgs("MOVIE"));
+  const latestTvShows = useGetTitlesQuery(latestArgs("TV_SHOW"));
   const topTvShows = useGetTitlesQuery({ kind: "TV_SHOW", sort: "IMDB_RATING_DESC", limit: 10 });
   const topMovies = useGetTitlesQuery({ kind: "MOVIE", sort: "IMDB_RATING_DESC", limit: 10 });
   const freeMovies = useGetTitlesQuery({ kind: "MOVIE", filter: { watchType: "FREE" }, limit: 20 });

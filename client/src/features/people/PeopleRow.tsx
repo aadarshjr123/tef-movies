@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { IMAGE_WIDTHS } from "@/shared/lib/images";
 import { paths } from "@/shared/lib/routes";
 import { HorizontalScroller } from "@/shared/ui/HorizontalScroller";
 import { CardRowSkeleton, ErrorState } from "@/shared/ui/feedback";
@@ -23,8 +24,10 @@ export function PeopleRow() {
               <div className="aspect-[2/3] overflow-hidden rounded-lg bg-gray-200 dark:bg-night-raised">
                 <Img
                   src={person.imageUrl}
-                  alt={person.name}
-                  sizes="144px"
+                  alt=""
+                  widths={IMAGE_WIDTHS.profile}
+                  defaultWidth={185}
+                  sizes="(min-width: 640px) 144px, 112px"
                   className="h-full w-full object-cover transition-transform group-hover:scale-105"
                 />
               </div>

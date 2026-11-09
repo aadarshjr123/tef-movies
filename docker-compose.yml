@@ -1,0 +1,39 @@
+# Production-like local stack: MongoDB, the API and the static site.
+#   docker compose up --build   →   http://localhost:8080
+services:
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/tefmovies
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-local-compose-admin-token}
+      CORS_ORIGINS: http://localhost:8080
+    ports:
+      - "4000:4000"
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+      args:
+        VITE_API_URL: http://localhost:4000/graphql
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+volumes:
+  mongo-data:
