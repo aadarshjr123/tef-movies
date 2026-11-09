@@ -1,72 +1,95 @@
 # Deployment guide
 
-The recommended setup uses free tiers throughout:
+| Part     | Recommended host                | Config in this repo                                                      |
+| -------- | ------------------------------- | ------------------------------------------------------------------------ |
+| Database | MongoDB Atlas (free M0 cluster) | —                                                                        |
+| API      | Render (Docker web service)     | [render.yaml](../render.yaml), [server/Dockerfile](../server/Dockerfile) |
+| Website  | Vercel (static build)           | [client/vercel.json](../client/vercel.json)                              |
 
-| Part                | Host                            | Why                                                                            |
-| ------------------- | ------------------------------- | ------------------------------------------------------------------------------ |
-| Database            | MongoDB Atlas (M0 free cluster) | Managed MongoDB                                                                |
-| API (`server/`)     | Render web service              | Long-running Node process; blueprint included in [render.yaml](../render.yaml) |
-| Website (`client/`) | Vercel                          | Static React build; SPA routing in [client/vercel.json](../client/vercel.json) |
-
-Deploy them in that order, because each step needs a URL from the one before.
+Deploy them in this order, because each step needs a URL from the previous one.
 
 ## 1. MongoDB Atlas
 
 1. Create a free **M0** cluster at <https://cloud.mongodb.com>.
-2. Under **Database Access**, add a database user with a generated password.
-3. Under **Network Access**, allow `0.0.0.0/0`. Render's free tier has no fixed outbound IP.
-4. Under **Connect → Drivers**, copy the connection string and add a database name before the `?`:
-
-   ```
-   mongodb+srv://<user>:<password>@<cluster>.mongodb.net/tefdatabase?retryWrites=true&w=majority
-   ```
+2. Under **Database Access**, add a user with a generated password.
+3. Under **Network Access**, allow `0.0.0.0/0` (Render's free tier has no fixed outbound IP).
+4. Copy the connection string from **Connect → Drivers** and add a database name:
+   `mongodb+srv://<user>:<password>@<cluster>.mongodb.net/tefmovies?retryWrites=true&w=majority`
 
 The API seeds the sample data the first time it connects to an empty database.
 
-**Optional:** for fuzzy autocomplete (`searchMovieautoComplete`), create an Atlas Search index named `default` on the `movies` collection, with an `autocomplete` mapping on `name`. Without it, the query falls back to a regex match.
-
 ## 2. API on Render
 
-1. In Render, choose **New → Blueprint** and select this repository. Render reads `render.yaml` and creates the `tef-movies-api` service.
-2. When prompted, fill in the environment variables:
-   - `MONGODB_URI`: the Atlas connection string from step 1.
-   - `CORS_ORIGINS`: leave empty for now; you'll set it in step 4.
-   - `ADMIN_TOKEN`: generated automatically. Copy it from the service's **Environment** tab when you need to run mutations.
-3. Deploy. When it's live, check `https://<your-api>.onrender.com/health` (it should return `{"ok":true}`) and open `/graphql` to see the Playground.
+1. In Render, choose **New → Blueprint** and select this repository. Render reads `render.yaml` and builds `server/Dockerfile`.
+2. Set `MONGODB_URI` to the Atlas string. `ADMIN_TOKEN` is generated for you; copy it from the **Environment** tab when you need to run mutations.
+3. Deploy, then check `https://<your-api>.onrender.com/health` (it should return `{"ok":true}`).
 
-Free Render services sleep after 15 minutes of inactivity, so the first request after a pause takes around 30 seconds.
-
-<details>
-<summary>Manual setup (without the blueprint)</summary>
-
-Create a **Web Service** with root directory `server`, build command `npm ci`, start command `npm start` and health check path `/health`. Then add the environment variables above.
-</details>
+Production refuses to start without `MONGODB_URI` and `ADMIN_TOKEN`, so a misconfigured deploy fails loudly instead of running against an empty in-memory database. Free Render services sleep after 15 idle minutes, and the first request afterwards takes about 30 seconds.
 
 ## 3. Website on Vercel
 
-1. In Vercel, choose **Add New → Project** and import this repository.
-2. Set **Root Directory** to `client`. Vercel detects Create React App.
-3. Add the environment variable `REACT_APP_API_URL` = `https://<your-api>.onrender.com/graphql`.
-4. Deploy.
+1. **Add New → Project**, import the repository, and set **Root Directory** to `client`.
+2. Add the environment variable `VITE_API_URL` = `https://<your-api>.onrender.com/graphql`.
+3. Deploy. `vercel.json` adds SPA rewrites and long-lived caching for hashed assets.
 
-`REACT_APP_API_URL` is baked in at build time, so redeploy the site after changing it.
+`VITE_API_URL` is compiled into the build, so redeploy after changing it.
 
 ## 4. Lock down CORS
 
-Back in Render, set `CORS_ORIGINS` to your Vercel URL (for example `https://tef-movies.vercel.app`) and save. The service restarts with the new setting.
+In Render, set `CORS_ORIGINS` to the Vercel URL (for example `https://tef-movies.vercel.app`; several origins can be comma-separated) and save.
 
-## Alternatives
+## Environment variables
 
-- **Railway / Fly.io / any Node host** can run the API the same way: run `npm ci && npm start` in `server/` with the same environment variables.
-- **Netlify** can host the site. Set the base directory to `client`, the build command to `npm run build` and the publish directory to `build`, and add a `client/public/_redirects` file containing `/* /index.html 200` for client-side routing.
-- **Without Atlas:** if `MONGODB_URI` is unset, the API runs on an in-memory database seeded at startup. That's fine for a demo, but changes are lost on every restart.
+### API (`server/.env`)
+
+| Variable                | Default                       | Notes                                    |
+| ----------------------- | ----------------------------- | ---------------------------------------- |
+| `NODE_ENV`              | `development`                 | `production` in the Docker image         |
+| `MONGODB_URI`           | _(in-memory)_                 | Required in production                   |
+| `ADMIN_TOKEN`           | _(unset: mutations disabled)_ | ≥16 characters; required in production   |
+| `PORT`                  | `4000`                        |                                          |
+| `CORS_ORIGINS`          | _(any origin)_                | Comma-separated                          |
+| `SEED_ON_START`         | `true`                        | Seeds sample data into an empty database |
+| `LOG_LEVEL`             | `info`                        | `fatal` … `trace`, or `silent`           |
+| `RATE_LIMIT_PER_MINUTE` | `300`                         | Per IP, on `/graphql`                    |
+
+### Website (`client/.env`)
+
+| Variable       | Default                         |
+| -------------- | ------------------------------- |
+| `VITE_API_URL` | `http://localhost:4000/graphql` |
+
+## Docker
+
+A production-like stack (MongoDB, the API image and the site served by nginx) runs with one command:
+
+```bash
+docker compose up --build
+# site: http://localhost:8080   API: http://localhost:4000/graphql
+```
+
+The images can also be built and pushed on their own. The build context is the repository root, because the workspaces share one lockfile:
+
+```bash
+docker build -f server/Dockerfile -t tef-movies-api .
+docker build -f client/Dockerfile --build-arg VITE_API_URL=https://api.example.com/graphql -t tef-movies-web .
+```
+
+The API image runs as a non-root user, contains only production dependencies, and has a `HEALTHCHECK` on `/health`. The web image is nginx with SPA routing, security headers and immutable caching for `/assets`.
+
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on every push to `main` and every pull request:
+
+1. **verify:** install, check generated GraphQL types are committed, lint, check formatting, typecheck, run unit and integration tests with coverage, build both packages.
+2. **e2e:** start the API and the production client build, then run the Playwright suite on desktop and mobile viewports. On failure, the HTML report is uploaded as an artifact.
 
 ## Troubleshooting
 
-| Symptom                                             | Likely cause                                                                                      |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Site shows "Something went wrong!" or loads forever | `REACT_APP_API_URL` is wrong, or the API is asleep or down. Check `/health`.                      |
-| Browser console shows a CORS error                  | The site's origin is missing from `CORS_ORIGINS` (it must match exactly, with no trailing slash). |
-| API logs `MongoServerSelectionError`                | Atlas network access doesn't allow Render, or the user or password is wrong.                      |
-| Mutations return `UNAUTHENTICATED`                  | Send `Authorization: Bearer <ADMIN_TOKEN>`.                                                       |
-| Refreshing a page like `/Movies` gives a 404        | SPA rewrites are missing (see `client/vercel.json`).                                              |
+| Symptom                                            | Likely cause                                                                               |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Rows show "Couldn't reach the server"              | `VITE_API_URL` is wrong, or the API is asleep or down. Check `/health`.                    |
+| CORS error in the browser console                  | The site's origin isn't in `CORS_ORIGINS` (it must match exactly, with no trailing slash). |
+| API exits with "Invalid environment configuration" | A required variable is missing or invalid; the message names it.                           |
+| `MongooseServerSelectionError` in API logs         | Atlas network access or credentials                                                        |
+| Mutations return `UNAUTHENTICATED`                 | Missing or wrong `Authorization: Bearer <ADMIN_TOKEN>` header                              |

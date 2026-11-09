@@ -1,113 +1,122 @@
 # GraphQL API reference
 
-The API has a single endpoint, `POST /graphql`. Locally that's <http://localhost:4000/graphql>; open it in a browser to use GraphQL Playground, which has autocomplete and a schema explorer.
+The API has a single endpoint, `POST /graphql` (locally <http://localhost:4000/graphql>). Opening it in a browser shows Apollo's Explorer, with autocomplete and the full schema.
 
-The schema is defined in [server/schema.js](../server/schema.js). Other routes:
+The schema lives in `server/src/modules/*/*.typeDefs.ts`, and TypeScript types for both server and client are generated from it (`npm run codegen`).
 
-| Route         | Purpose                                         |
-| ------------- | ----------------------------------------------- |
-| `GET /health` | `{ "ok": true }` when the database is connected |
-| `GET /`       | Redirects to `/graphql`                         |
+| Route           | Purpose                                                      |
+| --------------- | ------------------------------------------------------------ |
+| `POST /graphql` | GraphQL queries and mutations                                |
+| `GET /health`   | `200 {"ok":true}` when connected to MongoDB, `503` otherwise |
 
-## Data model
+## Types
 
-| Type                | Mongo collection | Key fields                                                                                                                                                                                                                                                    |
-| ------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Movie`             | `movies`         | `name`, `storyline`, `rating[]` (`imdb`, `rottenTomatoes`, `mydramalist`), `casts[]`, `posters[]`, `rectanglePosters[]` (backdrops), `watchOn[]`, `movieInfo[]` (director, runtime, trailer `link`s, `releaseDate`, `dateFormat`, genres), `availLanguages[]` |
-| `Tvshows`           | `tvshows`        | Same as `Movie`, plus `Type` (always `"Tvshows"`), and `tvshowInfo[]` (creators, `noOfseasons`, `status`, …) in place of `movieInfo`                                                                                                                          |
-| `Seasons`           | `seasons`        | One document per season: `seasonId` (the show's `id`), `season` (`"Season 1"`), `seasonStart`, `seasonEnd`, `episodes[]`                                                                                                                                      |
-| `ActorSchema`       | `actors`         | `name`, `description`, `image`. Also used for directors and creators.                                                                                                                                                                                         |
-| `CollectionsSchema` | `collections`    | `name`, `image`, `type` (`"genre"` or `"collection"`). A tile matches movies whose genre list contains its `name`.                                                                                                                                            |
-| `OttSchema`         | `otts`           | Streaming platform: `name`, `image` (logo), `perMonth` (pricing label)                                                                                                                                                                                        |
-| `TrailerSchema`     | `trailers`       | `name`, `link` (YouTube URL), `date`                                                                                                                                                                                                                          |
+```graphql
+interface Title {            # implemented by Movie and TvShow
+  id: ID!
+  kind: TitleKind!           # MOVIE | TV_SHOW
+  name: String!
+  overview: String!
+  posterUrl: String
+  backdropUrl: String
+  releaseDate: String!       # ISO date, e.g. "2010-07-15"
+  year: Int!
+  certification: String
+  genres: [String!]!
+  collections: [String!]!    # curated collections, e.g. "Christopher Nolan"
+  languages: [String!]!
+  ratings: Ratings!          # { imdb: Float, rottenTomatoes: Int }
+  cast: [Credit!]!           # { name, role, person { imageUrl … } }
+  trailers: [Trailer!]!      # { name, youtubeId }
+  watchOptions: [WatchOption!]!  # { platform { name logoUrl pricing }, type: SUBSCRIPTION|FREE|RENT|BUY, url }
+  similar(limit: Int = 12): [Title!]!
+}
 
-Conventions the client relies on:
-
-- `releaseDate` is a display string (`"July 15, 2010"`), and `dateFormat` is the same date as a sortable `YYYYMMDD` string.
-- `watchOn[].watchOn` is a platform name, optionally followed by an offer type: `"Netflix"`, `"Apple TV-Rent"`, `"YouTube-Free"`. The part before `-` must match an `OttSchema.name` for its logo to show.
-- Images are full URLs. Bare Cloudinary public IDs from the 2022 data still work when `REACT_APP_CLOUDINARY_CLOUD` is set.
+type Movie implements Title { …; runtimeMinutes: Int; directors: [Credit!]! }
+type TvShow implements Title { …; creators: [Credit!]!; status: String; seasonCount: Int!; seasons: [Season!]! }
+type Season { number: Int!; startDate: String; endDate: String; episodes: [Episode!]! }
+type Person { name: String!; imageUrl: String; bio: String; movies: [Movie!]!; tvShows: [TvShow!]! }
+type Collection { name: String!; kind: CollectionKind!; imageUrl: String }   # GENRE | COLLECTION
+type Platform { name: String!; logoUrl: String; pricing: String }
+```
 
 ## Queries
 
-| Query                                                 | Returns                                                                                                                              |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `getMovies`                                           | All movies                                                                                                                           |
-| `getMovie(name)`                                      | Movies with that exact name                                                                                                          |
-| `searchMovie(name)`                                   | Movies whose title, genre or cast contains `name` (case-insensitive)                                                                 |
-| `searchMovieautoComplete(name)`                       | Fuzzy title search. Uses an Atlas Search index named `default` on `name` when one exists, and falls back to a regex match otherwise. |
-| `searchActorMovie(casts)`                             | Movies featuring that cast member                                                                                                    |
-| `getTVshows` / `getTVshow1(Type)` / `getTVshow(name)` | All shows / shows of a `Type` / shows with that exact name                                                                           |
-| `searchTvshows(name)`                                 | Shows whose title, genre or cast contains `name`                                                                                     |
-| `searchActorTvshows(casts)`                           | Shows featuring that cast member                                                                                                     |
-| `getSeason(seasonId)`                                 | All seasons of the show whose `id` is `seasonId`                                                                                     |
-| `getActors` / `getActor(name)`                        | People                                                                                                                               |
-| `getCollections` / `getCollection(name)`              | Genre and collection tiles                                                                                                           |
-| `getOtts` / `getOtt(name)`                            | Streaming platforms                                                                                                                  |
-| `getTrailers` / `getTrailer(name)`                    | Featured trailers                                                                                                                    |
+| Query                                                          | Returns                                                                                        |
+| -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `movies(filter, sort, limit)` / `tvShows(filter, sort, limit)` | Filtered, sorted list (`limit` 1–100, default 20)                                              |
+| `movie(id)` / `tvShow(id)`                                     | One title, or `null`                                                                           |
+| `search(query, limit)`                                         | Movies and TV shows whose title, genre, collection or cast contains `query` (2–100 characters) |
+| `latestTrailers(limit)`                                        | The first trailer of the most recently released titles                                         |
+| `people(limit)` / `person(name)`                               | Most-credited people first / one person (case-insensitive) with their titles                   |
+| `collections(kind)` / `platforms`                              | Browse tiles / streaming services                                                              |
+
+`TitleFilter` fields can be combined:
+
+| Field                   | Matches                                             |
+| ----------------------- | --------------------------------------------------- |
+| `genre`                 | `genres` (case-insensitive)                         |
+| `collection`            | `collections`                                       |
+| `person`                | Cast members, directors or creators                 |
+| `platform`, `watchType` | A watch option with that platform and/or offer type |
+
+`TitleSort` is one of `RELEASE_DATE_DESC` (default), `IMDB_RATING_DESC` or `NAME_ASC`.
 
 ### Examples
 
-Latest movies, with what the cards need:
+Top-rated movies streaming on Netflix:
 
 ```graphql
 {
-  getMovies {
-    id
+  movies(filter: { platform: "Netflix", watchType: SUBSCRIPTION }, sort: IMDB_RATING_DESC, limit: 3) {
     name
-    posters {
-      posters
+    ratings {
+      imdb
     }
-    watchOn {
-      watchOn
-      watchOnLink
-    }
-    movieInfo {
-      releaseDate
-      dateFormat
-      genre {
-        genre
+  }
+}
+```
+
+A TV show with its episode guide, cast photos and similar shows, in one request:
+
+```graphql
+query ($id: ID!) {
+  tvShow(id: $id) {
+    name
+    seasons {
+      number
+      episodes {
+        number
+        name
+        runtimeMinutes
       }
     }
-  }
-}
-```
-
-Search across movies and TV shows:
-
-```graphql
-{
-  searchMovie(name: "nolan") {
-    name
-  }
-  searchTvshows(name: "crime") {
-    name
-  }
-}
-```
-
-A show and its episode guide:
-
-```graphql
-{
-  getTVshow(name: "Breaking Bad") {
-    id
-    tvshowInfo {
-      noOfseasons
-      status
+    cast {
+      name
+      role
+      person {
+        imageUrl
+      }
+    }
+    similar(limit: 6) {
+      name
     }
   }
 }
+```
 
-# then, with the id from above:
+Search across both kinds, with type-specific fields:
+
+```graphql
 {
-  getSeason(seasonId: "<show id>") {
-    season
-    seasonStart
-    seasonEnd
-    episodes {
-      episodeName
-      episodeDescription
-      episodeDuration
+  search(query: "nolan") {
+    __typename
+    name
+    ... on Movie {
+      runtimeMinutes
+    }
+    ... on TvShow {
+      seasonCount
     }
   }
 }
@@ -116,56 +125,62 @@ A show and its episode guide:
 From the command line:
 
 ```bash
-curl http://localhost:4000/graphql \
-  -H 'content-type: application/json' \
-  -d '{"query":"{ getOtts { name perMonth } }"}'
+curl http://localhost:4000/graphql -H 'content-type: application/json' \
+  -d '{"query":"{ platforms { name pricing } }"}'
 ```
 
 ## Mutations
 
-Every collection has `add…`, `update…` and `delete…` mutations. Records are identified by `name`, and `update…` takes the new name as `changedName` (pass the same value to keep it).
+Mutations require `Authorization: Bearer <ADMIN_TOKEN>`. If the server has no `ADMIN_TOKEN` configured, all mutations are rejected.
 
-| Collection  | Mutations                                                                                |
-| ----------- | ---------------------------------------------------------------------------------------- |
-| Movies      | `addMovie`, `updateMovie`, `deleteMovie`                                                 |
-| TV shows    | `addTvshow`, `updateTvshow`, `deleteTvshow`                                              |
-| Seasons     | `addSeason`, `updateSeason` (matched by `seasonId` + `season`), `deleteSeason(seasonId)` |
-| People      | `addActors`, `updateActors`, `deleteActors`                                              |
-| Trailers    | `addTrailers`, `updateTrailers`, `deleteTrailers`                                        |
-| Collections | `addCollections`, `updateCollections`, `deleteCollections`                               |
-| Platforms   | `addOtt`, `updateOtt`, `deleteOtt`                                                       |
+| Mutation                                                             | Notes                                                       |
+| -------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `createMovie(input)`, `updateMovie(id, input)`, `deleteMovie(id)`    | `update` replaces every field                               |
+| `createTvShow(input)`, `updateTvShow(id, input)`, `deleteTvShow(id)` | Deleting a show also deletes its seasons                    |
+| `setSeason(tvShowId, input)`, `deleteSeason(tvShowId, number)`       | `setSeason` creates or replaces the season with that number |
+| `upsertPerson(input)`, `deletePerson(name)`                          |                                                             |
+| `upsertCollection(input)`, `deleteCollection(name)`                  |                                                             |
+| `upsertPlatform(input)`, `deletePlatform(name)`                      |                                                             |
 
-`update…` and `delete…` return an error when no record has that name.
-
-### Authorisation
-
-When the server has `ADMIN_TOKEN` set, every mutation requires that token:
+Inputs are validated: URLs must be `http(s)` or site-relative, dates must be ISO `YYYY-MM-DD`, IMDb ratings are 0–10, Rotten Tomatoes 0–100, YouTube IDs are 11 characters.
 
 ```bash
-curl http://localhost:4000/graphql \
-  -H 'content-type: application/json' \
-  -H 'Authorization: Bearer <ADMIN_TOKEN>' \
-  -d '{"query":"mutation { addOtt(name: \"MX Player\", image: \"https://example.com/mx.png\", perMonth: \"Free\") { name } }"}'
+curl http://localhost:4000/graphql -H 'content-type: application/json' \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  -d '{"query":"mutation { upsertPlatform(input: { name: \"MUBI\", pricing: \"Subscription\" }) { name } }"}'
 ```
 
-Without a valid token, the response is an `UNAUTHENTICATED` error. When `ADMIN_TOKEN` isn't set, mutations are open. That's convenient locally, but always set the token on a public deployment.
+In Explorer, add the header under **Headers**.
 
-In GraphQL Playground, add the header in the **HTTP HEADERS** panel:
+## Errors
+
+Errors follow the GraphQL spec, with a machine-readable `extensions.code`:
+
+| Code                        | When                                                                              |
+| --------------------------- | --------------------------------------------------------------------------------- |
+| `BAD_USER_INPUT`            | Invalid input. `extensions.issues` lists `{ path, message }` per field.           |
+| `UNAUTHENTICATED`           | A mutation without a valid admin token                                            |
+| `NOT_FOUND`                 | Updating or deleting something that doesn't exist (queries return `null` instead) |
+| `GRAPHQL_VALIDATION_FAILED` | Malformed query, unknown field, or nesting deeper than 8 levels                   |
+| `INTERNAL_SERVER_ERROR`     | Unexpected failure (details hidden in production, logged on the server)           |
 
 ```json
-{ "Authorization": "Bearer <ADMIN_TOKEN>" }
-```
-
-### Example: add a person
-
-```graphql
-mutation {
-  addActors(
-    name: "Florence Pugh"
-    description: "Known for Oppenheimer, Dune: Part Two."
-    image: "https://image.tmdb.org/t/p/w300_and_h450_face/<path>.jpg"
-  ) {
-    name
-  }
+{
+  "errors": [
+    {
+      "message": "Invalid input.",
+      "extensions": {
+        "code": "BAD_USER_INPUT",
+        "issues": [{ "path": "releaseDate", "message": "must be an ISO date (YYYY-MM-DD)" }]
+      }
+    }
+  ]
 }
 ```
+
+## Limits
+
+- Lists return at most 100 items; search at most 50.
+- Queries nested deeper than 8 levels are rejected.
+- `/graphql` allows `RATE_LIMIT_PER_MINUTE` requests per IP (default 300); responses include `RateLimit` headers.
+- Request bodies are limited to 1 MB.
