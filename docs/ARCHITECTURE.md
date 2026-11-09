@@ -198,7 +198,7 @@ Tests find elements by role and label, the way screen readers do, so they surviv
 | React 19                       | Largest ecosystem and hiring pool                                            | Vue, Svelte: smaller ecosystems                     |
 | Redux Toolkit + RTK Query      | One store for server and app state, with caching built in                    | TanStack Query + Zustand: two libraries for one job |
 | React Router 7                 | Per-page code splitting, loaders, per-route error pages                      | TanStack Router: less widely known                  |
-| Vite                           | Fast builds; Create React App is deprecated                                  | Next.js: server rendering not needed here           |
+| Vite                           | Instant dev server and optimised production builds                           | Next.js: server rendering not needed here           |
 | Tailwind CSS                   | Quick to build with, tiny CSS output                                         | CSS Modules: more files, same result                |
 | GraphQL                        | Different pages need differently shaped data, in one request                 | REST: many endpoints or over-fetching               |
 | Apollo Server 5 + Express 5    | Supported versions with standard security middleware                         | GraphQL Yoga: equally valid                         |
@@ -212,10 +212,9 @@ Tests find elements by role and label, the way screen readers do, so they surviv
 
 ## 8. Known limits
 
-| Limit                                               | Next step if it mattered                                                                     |
-| --------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| Rendered in the browser, so search engines see less | Server rendering (React Router framework mode or Next.js)                                    |
-| Lists stop at 100 items                             | Cursor-based pagination                                                                      |
-| Search is a simple text match                       | A search engine (Atlas Search, Elasticsearch)                                                |
-| Free API host sleeps when idle                      | Kept awake by a monitor (see [Deployment](DEPLOYMENT.md)); a paid instance removes the issue |
-| No admin screen                                     | The protected mutations already exist; a UI could be added                                   |
+| Limit                                               | Next step if it mattered                                   |
+| --------------------------------------------------- | ---------------------------------------------------------- |
+| Rendered in the browser, so search engines see less | Server rendering (React Router framework mode or Next.js)  |
+| Lists stop at 100 items                             | Cursor-based pagination                                    |
+| Search is a simple text match                       | A search engine (Atlas Search, Elasticsearch)              |
+| No admin screen                                     | The protected mutations already exist; a UI could be added |

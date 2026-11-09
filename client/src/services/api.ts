@@ -3,7 +3,7 @@ import { graphqlBaseQuery, type ApiError } from "./graphqlBaseQuery";
 
 export const API_URL: string = import.meta.env.VITE_API_URL ?? "http://localhost:4000/graphql";
 
-/** Delays between attempts; about 70s in total, enough for a sleeping free-tier server to wake. */
+/** Delays between attempts; about 70s in total, enough for an idle API host to start up. */
 const RETRY_DELAYS_MS = [2_000, 4_000, 8_000, 16_000, 20_000, 20_000];
 
 /**

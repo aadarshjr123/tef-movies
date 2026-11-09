@@ -1,7 +1,6 @@
 import type { SVGProps } from "react";
 
-// Inline SVG icons: a few hundred bytes instead of three icon libraries and
-// Lottie animations in the old bundle.
+// Inline SVG icons: no icon library in the bundle.
 type IconProps = SVGProps<SVGSVGElement>;
 
 const base = (props: IconProps) => ({

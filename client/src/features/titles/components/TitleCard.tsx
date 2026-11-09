@@ -5,7 +5,7 @@ import { paths } from "@/shared/lib/routes";
 import { Img } from "@/shared/ui/Img";
 import { useTitlesPrefetch } from "../titles.api";
 
-// Brand colours from the original cards, in shades that keep 4.5:1 contrast
+// Platform brand colours, in shades that keep 4.5:1 contrast
 // on both the light and dark backgrounds.
 const PLATFORM_COLOR: Record<string, string> = {
   Netflix: "text-red-600 dark:text-red-500",

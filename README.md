@@ -8,7 +8,7 @@ A website for deciding what to watch. Browse movies and TV shows, watch trailers
 
 People spend more time choosing what to watch than they'd like. The information is spread across IMDb, YouTube and five streaming apps. TEF Movies puts it on one page per title and ends with a single "Watch now" link.
 
-This repository is also a frontend engineering showcase. It is built the way a production product would be: typed end to end, tested at every level, measured for performance and accessibility, and deployable for free.
+It is built like a production product: typed end to end, tested at every level, and measured for performance and accessibility.
 
 ## What a visitor can do
 
@@ -48,7 +48,7 @@ It works on phones, tablets and desktops, in light and dark themes.
 | API       | GraphQL, Apollo Server, Express, Node.js              | Each page requests exactly the data it shows, in one round trip                               |
 | Database  | MongoDB, Mongoose                                     | A title with its cast, trailers and offers maps naturally to one document                     |
 | Testing   | Vitest, Testing Library, MSW, Playwright, axe-core    | Unit, integration and browser tests, including accessibility checks                           |
-| Delivery  | GitHub Actions, Docker, Vercel, Render, MongoDB Atlas | Every change is checked automatically; hosting runs on free tiers                             |
+| Delivery  | GitHub Actions, Docker, Vercel, Render, MongoDB Atlas | Every change is linted, tested and built automatically                                        |
 
 ## Architecture
 
@@ -87,16 +87,10 @@ The website runs at http://localhost:5173 and the GraphQL explorer at http://loc
 
 ## Documentation
 
-| Document                             | Contents                                                                 |
-| ------------------------------------ | ------------------------------------------------------------------------ |
-| [Architecture](docs/ARCHITECTURE.md) | How the system fits together, and why each tool was chosen               |
-| [Deployment](docs/DEPLOYMENT.md)     | Hosting on free tiers, step by step                                      |
-| [API reference](docs/API.md)         | Queries, mutations, errors and limits                                    |
-| [Engineering notes](docs/AUDIT.md)   | What was wrong with the 2022 version, what changed, and the measurements |
-
-## History
-
-TEF Movies began in 2022 as four repositories: one React frontend and three copies of the API for different hosts. They were merged here, keeping their git history, and rebuilt in TypeScript with a layered API, Redux on the frontend and automated tests.
+| Document                             | Contents                                                   |
+| ------------------------------------ | ---------------------------------------------------------- |
+| [Architecture](docs/ARCHITECTURE.md) | How the system fits together, and why each tool was chosen |
+| [API reference](docs/API.md)         | Queries, mutations, errors and limits                      |
 
 ## Credits
 

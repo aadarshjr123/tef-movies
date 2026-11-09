@@ -9,7 +9,7 @@ export default {
         mono: ['"Roboto Mono Variable"', "ui-monospace", "monospace"],
       },
       colors: {
-        // The original site's dark background.
+        // Dark theme surfaces.
         night: { DEFAULT: "#131A27", raised: "#1B2436", border: "#2A3448" },
       },
       keyframes: {

@@ -10,7 +10,6 @@ interface HorizontalScrollerProps {
 /**
  * A horizontally scrolling row. Touch users swipe (with scroll snapping);
  * pointer users also get previous/next buttons, which disable at the ends.
- * Replaces 32 copy-pasted scroll handlers in the old code.
  */
 export function HorizontalScroller({ children, label }: HorizontalScrollerProps) {
   const listRef = useRef<HTMLUListElement>(null);
